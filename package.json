@@ -34,6 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@vercel/analytics": "^1.1.0",
 		"stripe": "^13.9.0"
 	}
 }

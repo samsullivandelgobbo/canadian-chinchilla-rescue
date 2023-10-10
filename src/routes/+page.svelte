@@ -6,7 +6,7 @@
 	<title>Canadian Chinchilla Rescue</title>
 	<meta
 		name="description"
-		content="Canadian Chinchilla Rescue is a registered charity that rescues chinchillas and educates owners on chinchilla care."
+		content="Canadian Chinchilla Rescue is a non-profit organization that rescues chinchillas and educates owners on chinchilla care. Dedicated to the rescue, rehabilitation, and responsible placement of chinchillas in need."
 	/>
 </svelte:head>
 
