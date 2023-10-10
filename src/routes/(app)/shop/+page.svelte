@@ -1,6 +1,15 @@
 <script lang="ts">
 </script>
 
+<svelte:head>
+	<!-- Seo -->
+	<title>Shop | Canadian Chinchilla Rescue</title>
+	<meta
+		name="description"
+		content="Shop for chinchilla toys, we have chew toys, wood sticks, treats and more, no matter how picky your chinchilla is, we have something for them."
+	/>
+</svelte:head>
+
 <div class="bg-white">
 	<div class="flex w-full relative">
 		<img class="w-full object-cover object-top lg:h-1/2" src="/img/shop_hero.png" alt="" />

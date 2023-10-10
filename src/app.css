@@ -46,12 +46,7 @@
   font-weight: 400;
   src: url('/fonts/onest/Onest-Regular.ttf') format('truetype');
 }
-@font-face {
-  font-family: 'Onest';
-  font-style: normal;
-  font-weight: 600;
-  src: url('/fonts/onest/Onest-Semibold.ttf') format('truetype');
-}
+
 @font-face {
   font-family: 'Onest';
   font-style: normal;

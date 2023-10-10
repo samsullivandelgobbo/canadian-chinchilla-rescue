@@ -1,3 +1,12 @@
+<svelte:head>
+	<!-- Seo -->
+	<title>Adopt | Canadian Chinchilla Rescue</title>
+	<meta
+		name="description"
+		content="We have a lot of chinchillas that need a home. If you are interested in adopting a chinchilla, please contact us. We will help you find the perfect chinchilla for you."
+	/>
+</svelte:head>
+
 <div class="bg-gray-50">
 	<div class="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4">
 		<div class="mx-auto max-w-2xl px-4 lg:max-w-none">

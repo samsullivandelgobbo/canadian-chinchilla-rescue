@@ -1,3 +1,11 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import type { Post } from '@prisma/client';
+
+	export let data: PageData;
+	let posts = data.posts as Post[];
+</script>
+
 <div class="bg-white py-24 sm:py-32">
 	<div class="mx-auto max-w-7xl px-6 lg:px-8">
 		<div class="mx-auto max-w-2xl lg:max-w-4xl">

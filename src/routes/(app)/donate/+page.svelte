@@ -1,9 +1,28 @@
 <script lang="ts">
 	import Dialog from '$lib/components/Dialog.svelte';
+	import { onMount } from 'svelte';
+	import { loadStripe } from '@stripe/stripe-js';
+	import { enhance } from '$app/forms';
+	import { createEventDispatcher } from 'svelte';
+	import type { PageData } from './$types';
+
+	const dispatch = createEventDispatcher();
+
+	let dialog;
 
 	let showMoreInfoModal = false;
 	let showModal = false;
+	let paymentModalOpen;
 </script>
+
+<svelte:head>
+	<!-- Seo -->
+	<title>Donate | Canadian Chinchilla Rescue</title>
+	<meta
+		name="description"
+		content="We have a lot of chinchillas to take care of, and we need your help to do it. We are a non-profit organization, and we rely on donations to keep our chinchillas happy and healthy. We appreciate any amount you can give."
+	/>
+</svelte:head>
 
 <div class="bg-white py-24 sm:py-32">
 	<div class="mx-auto max-w-7xl px-6 lg:px-8">
@@ -30,19 +49,19 @@
 						/>
 					</div>
 				</div>
-				<dl class="mt-10 grid grid-cols-2 gap-8 border-t border-gray-900/10 pt-10 sm:grid-cols-4">
+				<dl class="mt-10 grid grid-cols-2 gap-8 border-t border-gray-900/10 pt-10 sm:grid-cols-2">
 					<div>
 						<dt class="text-sm font-semibold leading-6 text-gray-600">Founded</dt>
-						<dd class="mt-2 text-3xl font-bold leading-10 tracking-tight text-gray-900">2010</dd>
+						<dd class="mt-2 text-3xl font-bold leading-10 tracking-tight text-gray-900">2008</dd>
 					</div>
 					<div>
 						<dt class="text-sm font-semibold leading-6 text-gray-600">Chinchillas</dt>
 						<dd class="mt-2 text-3xl font-bold leading-10 tracking-tight text-gray-900">21</dd>
 					</div>
-					<div>
+					<!-- <div>
 						<dt class="text-sm font-semibold leading-6 text-gray-600">Countries</dt>
 						<dd class="mt-2 text-3xl font-bold leading-10 tracking-tight text-gray-900">2</dd>
-					</div>
+					</div> -->
 				</dl>
 			</div>
 			<div>
@@ -67,16 +86,14 @@
 							will let you know how you can help.
 						</p>
 						<p class="mt-8">
-							<button
-								on:click={() => (showModal = true)}
+							<a
+								href="/donate/checkout"
 								class="text-base font-semibold leading-6 text-red-400/80 hover:text-red-400"
 							>
-								More info &rarr;
-							</button>
+								Get started &rarr;
+							</a>
 						</p>
 					</div>
-
-					<!-- Donation amount range slider -->
 				</div>
 			</div>
 		</div>
@@ -126,7 +143,7 @@
 					</p>
 					<div class="mt-8">
 						<!-- Sponsor amount select buttons -->
-						<div class="flex flex-col sm:flex-row sm:space-x-4">
+						<div class="grid grid-cols-2 sm:grid-cols-1 gap-4">
 							<button
 								class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-400 hover:bg-red-500 md:py-4 md:text-lg md:px-10"
 							>
@@ -140,7 +157,7 @@
 							<button
 								class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-400 hover:bg-red-500 md:py-4 md:text-lg md:px-10"
 							>
-								$20
+								$25
 							</button>
 							<button
 								class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-400 hover:bg-red-500 md:py-4 md:text-lg md:px-10"
@@ -154,5 +171,3 @@
 		</div>
 	</div>
 </div>
-
-<Dialog modalId="1" bind:showModal>Hello</Dialog>

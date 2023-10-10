@@ -1,6 +1,15 @@
 <script lang="ts">
 </script>
 
+<svelte:head>
+	<!-- Seo -->
+	<title>About us | Canadian Chinchilla Rescue</title>
+	<meta
+		name="description"
+		content="For over 15 years, we have been rescuing chinchillas from all over the world. We provide a safe and loving environment for them to live in. We have rescued countless chinchillas from abusive homes and have given them a second chance at life. We understand the complexities of chinchilla care and are dedicated to educating prospective owners, as well as providing a safe haven for chinchillas in need."
+	/>
+</svelte:head>
+
 <div class=" py-24 sm:py-32 relative">
 	<div
 		class="absolute inset-x-0 -z-10 flex transform-gpu justify-center overflow-hidden blur-3xl"
@@ -197,7 +206,9 @@
 					continue our mission, please consider donating or volunteering.
 				</p>
 				<p class="mt-8" />
-				<h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contact us</h1>
+				<h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+					Get in touch
+				</h1>
 				<p class="mt-8">
 					If you have any questions, or would like to get involved with our rescue, please contact
 					us. We are always happy for any help we can get.

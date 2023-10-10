@@ -1,6 +1,15 @@
 <script lang="ts">
 </script>
 
+<svelte:head>
+	<!-- Seo -->
+	<title>Adoption Application | Canadian Chinchilla Rescue</title>
+	<meta
+		name="description"
+		content="We are excited that you are interested in adopting a chinchilla. Please fill out the form below to start the adoption process."
+	/>
+</svelte:head>
+
 <div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
 	<div class="mx-auto max-w-2xl text-center">
 		<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">

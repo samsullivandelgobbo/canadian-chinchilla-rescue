@@ -34,7 +34,15 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@prisma/client": "^5.4.2",
+		"@stripe/stripe-js": "^2.1.7",
+		"@toast-ui/editor": "^3.2.2",
+		"@toast-ui/editor-plugin-color-syntax": "^3.1.0",
 		"@vercel/analytics": "^1.1.0",
+		"bcrypt": "^5.1.1",
+		"codemirror": "^6.0.1",
+		"jsonwebtoken": "^9.0.2",
+		"markdown-it": "^13.0.2",
 		"stripe": "^13.9.0"
 	}
 }

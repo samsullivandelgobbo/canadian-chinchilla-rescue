@@ -250,7 +250,7 @@
 						</li>
 					</ul>
 					<div class="mt-10 flex">
-						<a href="#" class="text-sm font-semibold leading-6 text-red-400"
+						<a href="/donate" class="text-sm font-semibold leading-6 text-red-400"
 							>Donate now <span aria-hidden="true">&rarr;</span></a
 						>
 					</div>

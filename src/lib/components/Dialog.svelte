@@ -25,6 +25,7 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog
 	class="dialog max-w-md absolute bottom-0 lg:static md:max-w-4xl p-8 rounded-xl"
 	bind:this={dialog}
@@ -49,6 +50,7 @@
 			<path d="M6 6l12 12" />
 		</svg>
 	</button>
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div on:click|stopPropagation>
 		<slot />
 
