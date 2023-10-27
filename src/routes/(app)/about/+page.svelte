@@ -124,8 +124,8 @@
 						</h1>
 						<p class="mt-8">
 							Our mission is to provide a safe and loving environment for chinchillas in need and to
-							educate prospective owners on the complexities of chinchilla care. . We are dedicated
-							to helping chinchillas in need and will continue to do so for as long as we can. The
+							educate prospective owners on the complexities of chinchilla care. We are dedicated to
+							helping chinchillas in need and will continue to do so for as long as we can. The
 							Canadian Chinchilla Rescue is a non-profit organization that relies on donations to
 							keep our doors open. We are always looking for new ways to raise money, so if you have
 							any ideas please let us know!

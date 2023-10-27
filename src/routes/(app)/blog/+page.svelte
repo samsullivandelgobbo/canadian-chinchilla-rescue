@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { Post } from '@prisma/client';
+	import type { Post, User } from '@prisma/client';
 	import PostCard from '$lib/components/PostCard.svelte';
 
 	export let data: PageData;
-	let posts = data.posts as Post[];
+	console.log(data);
+	let posts: Post & { author: User }[] = data.posts;
 </script>
 
 <div class="bg-white py-24 sm:py-32">

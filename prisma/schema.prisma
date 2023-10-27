@@ -26,7 +26,7 @@ model Post {
   id          Int      @id @default(autoincrement())
   title       String
   content     String
-  image       String
+  image       String?
   category    String
   description String
   slug        String   @unique

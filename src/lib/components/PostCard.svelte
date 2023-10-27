@@ -2,6 +2,8 @@
 	import type { Post, User } from '@prisma/client';
 
 	export let post: Post & { author: User };
+
+	export let admin = false;
 </script>
 
 <article class="relative isolate flex flex-col gap-8 lg:flex-row">
@@ -19,7 +21,7 @@
 				{new Date(post.createdAt).toLocaleDateString()}
 			</time>
 			<a
-				href={post.slug}
+				href={admin ? `/admin/blog/${post.slug}` : `/blog/${post.slug}`}
 				class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
 			>
 				Shop
@@ -27,7 +29,7 @@
 		</div>
 		<div class="group relative max-w-xl">
 			<h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-				<a href={post.slug}>
+				<a href={admin ? `/admin/blog/${post.slug}` : `/blog/${post.slug}`}>
 					<span class="absolute inset-0" />
 					{post.title}
 				</a>
@@ -38,11 +40,7 @@
 		</div>
 		<div class="mt-6 flex border-t border-gray-900/5 pt-6 min-w-[16rem]">
 			<div class="relative flex items-center gap-x-4">
-				<img
-					src={post.author.avatar ? post.author.avatar : '/logo.png'}
-					alt={post.title}
-					class="h-10 w-10 rounded-full bg-gray-50"
-				/>
+				<img src={'/logo.png'} alt={post.title} class="h-10 w-10 rounded-full bg-gray-50" />
 				<div class="text-sm leading-6">
 					<p class="font-semibold text-gray-900">
 						<span class="absolute inset-0" />

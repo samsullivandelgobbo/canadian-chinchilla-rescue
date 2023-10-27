@@ -16,6 +16,7 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@tailwindcss/typography": "^0.5.10",
 		"@types/node": "^20.8.4",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.28.0",
@@ -45,6 +46,7 @@
 		"codemirror": "^6.0.1",
 		"jsonwebtoken": "^9.0.2",
 		"markdown-it": "^13.0.2",
+		"marked": "^9.1.2",
 		"stripe": "^13.9.0"
 	}
 }

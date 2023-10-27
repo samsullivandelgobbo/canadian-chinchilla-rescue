@@ -96,15 +96,6 @@
 		<div
 			class="mx-auto flex max-w-7xl flex-col items-center gap-x-8 gap-y-10 px-6 sm:gap-y-8 lg:px-8 xl:flex-row xl:items-stretch"
 		>
-			<div class="-mt-8 w-full max-w-2xl xl:-mb-8 xl:w-96 xl:flex-none">
-				<div class="relative aspect-[2/1] h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
-					<img
-						class="absolute inset-0 h-full w-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
-						src={ChinchillaTuxedo}
-						alt=""
-					/>
-				</div>
-			</div>
 			<div class="w-full max-w-2xl xl:max-w-none xl:flex-auto xl:px-16 xl:py-24">
 				<figure class="relative isolate pt-6 sm:pt-12">
 					<svg
@@ -133,15 +124,24 @@
 					</p>
 				</figure>
 			</div>
+			<div class="-mt-8 w-full max-w-2xl xl:-mb-8 xl:w-96 xl:flex-none">
+				<div class="relative aspect-[2/1] h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
+					<img
+						class="absolute inset-0 h-full w-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
+						src={ChinchillaTuxedo}
+						alt=""
+					/>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
 <div class="bg-gray-100 py-24 sm:py-32">
 	<div class="relative isolate">
-		<div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
 			<div
-				class="mx-auto flex max-w-2xl flex-col gap-16 bg-white/5 px-6 py-16 ring-1 ring-white/10 sm:rounded-3xl sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-20"
+				class="mx-auto flex max-w-2xl flex-col gap-16 bg-white/5 px-6 py-16 ring-1 ring-white/10 sm:rounded-3xl sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20"
 			>
 				<img
 					class="h-96 w-full flex-none rounded-2xl object-cover shadow-xl lg:aspect-square lg:h-auto lg:max-w-sm"
