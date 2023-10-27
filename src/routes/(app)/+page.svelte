@@ -1,6 +1,6 @@
 <script>
 	import TiltCard from '$lib/components/TiltCard.svelte';
-	import Hero from '$lib/img/hero.png?format=webp&h=720';
+	import Hero from '$lib/img/hero.png?format=webp&cache=false';
 	import ShopCause from '$lib/img/shop_cause.png?format=webp&w=500&h=300';
 	import ChinchillaBlog from '$lib/img/chinchilla_blog.png?format=webp&w=500&h=300';
 	import ContactChinchilla from '$lib/img/contact_chinchilla.png?format=webp&w=500&h=300';
@@ -14,9 +14,14 @@
 		content="Canadian Chinchilla Rescue is a non-profit organization that rescues chinchillas and educates owners on chinchilla care. Dedicated to the rescue, rehabilitation, and responsible placement of chinchillas in need."
 	/>
 </svelte:head>
-
-<div class=" w-full">
-	<img class="w-full object-center object-cover h-72 lg:h-full" src={Hero} alt="" />
+<div class="mx-auto max-w-7xl">
+	<div class=" w-full px-4 -ml-2-2">
+		<img
+			class="w-full object-center object-cover h-72 lg:h-full lg:rounded-lg"
+			src={Hero}
+			alt="Canadian Chinchilla Rescue"
+		/>
+	</div>
 </div>
 
 <div class="flex justify-center py-24">

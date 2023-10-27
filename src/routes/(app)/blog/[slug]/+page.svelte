@@ -7,12 +7,16 @@
 </script>
 
 {#if post}
-	<div class="bg-white py-16 sm:py-24">
+	<div class="bg-white py-8 lg:py-16 sm:py-24">
 		<div class="mx-auto max-w-3xl px-4 sm:px-6">
 			<div class="flex flex-col items-center">
-				<div class="flex flex-row gap-12 w-full">
+				<div class="flex flex-col lg:flex-row gap-12 w-full">
 					<!-- Image -->
-					<img class=" rounded-xl object-fit h-64 w-auto mb-8" src={post.image} alt={post.title} />
+					<img
+						class=" rounded-xl object-fit lg:h-72 h-auto w-auto lg:mb-8"
+						src={post.image}
+						alt={post.title}
+					/>
 
 					<div class="flex flex-col">
 						<!-- Date -->
@@ -41,8 +45,12 @@
 								{post.description}
 							</p>
 						</div>
+
+						<p class="font-semibold text-gray-900">
+							by {post.author.name}
+						</p>
 						<!-- Author -->
-						<div class="mt-6 flex border-t border-gray-900/5 pt-6 min-w-[16rem]">
+						<div class="mt-6 border-t border-gray-900/5 pt-6 min-w-[16rem] lg:flex hidden">
 							<div class="relative flex items-center gap-x-4">
 								<img
 									src={post.author.avatar ? post.author.avatar : '/logo.png'}

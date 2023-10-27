@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { cubicOut } from 'svelte/easing';
+	import { fade, fly, slide } from 'svelte/transition';
 	let menuOpen = false;
 	// check if user switched pages and close menu
 	const unsubscribe = page.subscribe(() => {
@@ -56,7 +58,7 @@
 	</nav>
 	<!-- Mobile menu, show/hide based on menu open state. -->
 	{#if menuOpen}
-		<div class="lg:hidden" role="dialog" aria-modal="true">
+		<div class="lg:hidden" role="dialog" aria-modal="true" transition:fade={{ duration: 300 }}>
 			<!-- Background backdrop, show/hide based on slide-over state. -->
 			<div class="fixed inset-0 z-10" />
 			<div
@@ -112,8 +114,8 @@
 						<div class="py-6">
 							<a
 								href="/donate"
-								class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-								>Donate
+								class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-red-400 hover:bg-gray-50"
+								>Donate <span aria-hidden="true">&rarr;</span>
 							</a>
 						</div>
 					</div>

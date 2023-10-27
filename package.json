@@ -32,7 +32,7 @@
 		"ts-node": "^10.9.1",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.2",
-		"vite-imagetools": "^6.0.0"
+		"vite-imagetools": "^6.1.0"
 	},
 	"type": "module",
 	"dependencies": {
