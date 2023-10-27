@@ -1,20 +1,29 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import Editor from '@toast-ui/editor';
 	import '@toast-ui/editor/dist/toastui-editor.css';
 
-	export let initialValue = '';
+	const dispatch = createEventDispatcher();
 
 	let editor: any;
 	let editorContainer: any;
 
+	export let content: string = '';
+
 	onMount(() => {
 		editor = new Editor({
 			el: editorContainer,
-			height: '400px',
-			initialValue,
-			initialEditType: 'markdown',
-			placeholder: 'Write here...'
+			height: '600px',
+
+			initialValue: content,
+			initialEditType: 'wysiwyg',
+			placeholder: 'Write here...',
+			events: {
+				change: () => {
+					dispatch('change', getMarkdown());
+				}
+			}
 			// ... other configuration options
 		});
 
@@ -28,4 +37,9 @@
 	}
 </script>
 
-<div bind:this={editorContainer} />
+<div
+	bind:this={editorContainer}
+	on:input={() => {
+		dispatch('change', getMarkdown());
+	}}
+/>

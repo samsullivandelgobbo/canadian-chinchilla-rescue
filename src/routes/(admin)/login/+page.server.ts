@@ -1,49 +1,17 @@
-import type { Actions, Action } from './$types';
-import User from '@prisma/client';
-import { db } from '$lib/data/db';
-import bcrypt from 'bcrypt';
-import { fail } from '@sveltejs/kit';
-import jwt from 'jsonwebtoken';
+import type { Actions, Action, PageServerLoad } from './$types';
 
-const login: Action = async ({ params, request, locals, cookies }) => {
-	// authenticate the user
-	const data = await request.formData();
-	const email = data.get('email') as string;
-	const password = data.get('password') as string;
+import { fail, redirect } from '@sveltejs/kit';
 
-	// validate the email and password
-	try {
-		if (!email || !password) {
-			return fail(400, { invalidCredentials: true });
-		}
+export const load: PageServerLoad = async ({ request, params, cookies, locals }) => {
+	const client_id = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
+	const redirect_uri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+	const scope =
+		'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
+	const response_type = 'code';
+	const access_type = 'offline';
 
-		const user = await db.user.findUnique({
-			where: {
-				email: email
-			}
-		});
-		if (!user) {
-			return fail(400, { invalidCredentials: true });
-		}
-		if (!user.password) {
-			return fail(400, { invalidCredentials: true });
-		}
-		const valid = await bcrypt.compare(password, user.password);
-		if (!valid) {
-			return fail(400, { invalidCredentials: true });
-		}
-
-		if (valid && user) {
-			// set cookies and locals
-			locals.user = user;
-
-			// create jwt
-		}
-	} catch (error) {
-		console.log(error);
-	}
-};
-
-export const actions: Actions = {
-	default: login
+	throw redirect(
+		302,
+		`https://accounts.google.com/o/oauth2/v2/auth?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}&response_type=${response_type}&access_type=${access_type}&include_granted_scopes=true`
+	);
 };

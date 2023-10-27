@@ -113,8 +113,8 @@
 					<div class="max-w-xl">
 						<p class="mt-6">
 							For over 15 years, we have been rescuing chinchillas from all over the world. We
-							provide a safe and loving environment for them to live in. We have rescued countless
-							chinchillas from abusive homes and have given them a second chance at life. We
+							provide a safe and loving environment for them to live in. We have helped countless
+							chinchillas find their forever homes and have given them a second chance at life . We
 							understand the complexities of chinchilla care and are dedicated to educating
 							prospective owners, as well as providing a safe haven for chinchillas in need.
 						</p>
@@ -123,11 +123,12 @@
 							Our mission
 						</h1>
 						<p class="mt-8">
-							Our mission is to rescue chinchillas from abusive homes and give them a second chance
-							at life. We are dedicated to helping chinchillas in need and will continue to do so
-							for as long as we can. The Canadian Chinchilla Rescue is a non-profit organization
-							that relies on donations to keep our doors open. We are always looking for new ways to
-							raise money, so if you have any ideas please let us know!
+							Our mission is to provide a safe and loving environment for chinchillas in need and to
+							educate prospective owners on the complexities of chinchilla care. . We are dedicated
+							to helping chinchillas in need and will continue to do so for as long as we can. The
+							Canadian Chinchilla Rescue is a non-profit organization that relies on donations to
+							keep our doors open. We are always looking for new ways to raise money, so if you have
+							any ideas please let us know!
 						</p>
 
 						<p class="mt-8">

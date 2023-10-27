@@ -1,5 +1,10 @@
 <script>
 	import TiltCard from '$lib/components/TiltCard.svelte';
+	import Hero from '$lib/img/hero.png?format=webp&h=720';
+	import ShopCause from '$lib/img/shop_cause.png?format=webp&w=500&h=300';
+	import ChinchillaBlog from '$lib/img/chinchilla_blog.png?format=webp&w=500&h=300';
+	import ContactChinchilla from '$lib/img/contact_chinchilla.png?format=webp&w=500&h=300';
+	import ChinchillaTuxedo from '$lib/img/chinchilla_tuxedo.png?format=webp';
 </script>
 
 <svelte:head>
@@ -11,14 +16,14 @@
 </svelte:head>
 
 <div class=" w-full">
-	<img class="w-full object-center object-cover h-72 lg:h-full" src="/img/hero.png" alt="" />
+	<img class="w-full object-center object-cover h-72 lg:h-full" src={Hero} alt="" />
 </div>
 
 <div class="flex justify-center py-24">
 	<div class="grid lg:grid-cols-3 grid-rows gap-8">
 		<TiltCard>
 			<a href="/shop">
-				<img class="rounded-t-lg" src="/img/shop_cause.png" alt="" />
+				<img class="rounded-t-lg" src={ShopCause} alt="" />
 			</a>
 			<div class="p-5 bg-gray-50 rounded-xl">
 				<a href="/shop">
@@ -40,7 +45,7 @@
 		</TiltCard>
 		<TiltCard>
 			<a href="/blog">
-				<img class="rounded-t-lg" src="/img/chinchilla_blog.png" alt="" />
+				<img class="rounded-t-lg" src={ChinchillaBlog} alt="" />
 			</a>
 			<div class="p-5 bg-gray-50 rounded-xl">
 				<a href="/blog">
@@ -63,7 +68,7 @@
 		</TiltCard>
 		<TiltCard>
 			<a href="/about">
-				<img class="rounded-t-lg" src="/img/contact_chinchilla.png" alt="" />
+				<img class="rounded-t-lg" src={ContactChinchilla} alt="" />
 			</a>
 			<div class="p-5 bg-gray-50 rounded-xl">
 				<a href="/about">
@@ -95,7 +100,7 @@
 				<div class="relative aspect-[2/1] h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
 					<img
 						class="absolute inset-0 h-full w-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
-						src="/img/chinchilla_tuxedo.png"
+						src={ChinchillaTuxedo}
 						alt=""
 					/>
 				</div>
@@ -116,7 +121,7 @@
 					</svg>
 					<blockquote class="text-xl font-serif leading-8 text-gray-700 sm:text-2xl sm:leading-9">
 						<p>
-							For over 13 years, we have been rescuing chinchillas and finding them forever homes.
+							For over 15 years, we have been rescuing chinchillas and finding them forever homes.
 							We are a non-profit organization, and we rely on donations to keep our chinchillas
 							happy and healthy.
 						</p>

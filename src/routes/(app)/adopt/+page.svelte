@@ -1,3 +1,6 @@
+<script lang="ts">
+</script>
+
 <svelte:head>
 	<!-- Seo -->
 	<title>Adopt | Canadian Chinchilla Rescue</title>
@@ -19,7 +22,13 @@
 						We have a lot of chinchillas that need a home. If you are interested in adopting a
 						chinchilla, please contact us. We will help you find the perfect chinchilla for you.
 					</p>
+
+					<button
+						class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-black bg-gray-100 border-gray-500 border-2 rounded-lg hover:bg-gray-200 focus:ring-0"
+						>Get started</button
+					>
 				</div>
+
 				<div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg bg-gray-100">
 					<img src="/img/adopt_dont_shop.png" alt="" class="object-cover object-center" />
 				</div>
@@ -74,7 +83,7 @@
 	<div class="mx-auto max-w-7xl px-6 lg:px-8">
 		<div class="flex w-full flex-col">
 			<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Our family</h2>
-			<div class="grid sm:grid-cols-2 gap-">
+			<div class="grid sm:grid-cols-2 gap-4">
 				<p class="mt-6 text-gray-600">
 					Our chinchillas are our family. We love them and care for them as if they were our own
 					children. We want to make sure that they have the best life possible. For these reasons,

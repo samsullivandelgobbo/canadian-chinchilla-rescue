@@ -51,8 +51,8 @@
 			Welcome to our shop
 		</h1>
 		<div class="absolute hidden lg:flex flex-col top-0 left-0 lg:px-12 p-2 py-4 lg:py-16 space-y-4">
-			<h1 class="text-5xl font-bold text-red-400/80">Welcome to our shop</h1>
-			<p class="text-lg hidden lg:flex text-gray-300">
+			<h1 class="text-5xl font-bold text-gray-50">Welcome to our shop</h1>
+			<p class="text-lg hidden lg:flex text-gray-200">
 				Shop for chew toys, wood sticks, treats and more.
 			</p>
 		</div>

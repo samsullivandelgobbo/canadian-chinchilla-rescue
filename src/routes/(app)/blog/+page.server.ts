@@ -6,6 +6,9 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	const posts = await db.post.findMany({
 		where: {
 			published: true
+		},
+		include: {
+			author: true
 		}
 	});
 	return {

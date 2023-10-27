@@ -4,13 +4,11 @@ import { db } from '$lib/data/db';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	// load all posts from the db
-	const posts = await db.post.findMany();
+	const posts = await db.post.findMany({
+		include: {
+			author: true
+		}
+	});
 
-	const publishedPosts = posts.filter((post) => post.published);
-	const unpublishedPosts = posts.filter((post) => !post.published);
-
-	return {
-		publishedPosts,
-		unpublishedPosts
-	};
+	return { posts };
 };

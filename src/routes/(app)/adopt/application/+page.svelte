@@ -1,4 +1,5 @@
 <script lang="ts">
+	let age: number;
 </script>
 
 <svelte:head>
@@ -51,7 +52,7 @@
 				</div>
 			</div>
 
-			<div class="sm:col-span-2">
+			<div>
 				<label for="email" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
 				<div class="mt-2.5">
 					<input
@@ -63,23 +64,315 @@
 					/>
 				</div>
 			</div>
-			<div class="sm:col-span-2">
-				<label for="phone-number" class="block text-sm font-semibold leading-6 text-gray-900"
-					>Phone number</label
-				>
+			<div>
+				<label for="age" class="block text-sm font-semibold leading-6 text-gray-900">Age</label>
 				<div class="relative mt-2.5">
 					<input
-						type="tel"
-						name="phone-number"
-						id="phone-number"
-						autocomplete="tel"
+						type="number"
+						name="age"
+						min="12"
+						bind:value={age}
+						id="age"
 						class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
 					/>
 				</div>
 			</div>
+			<div class="flex items-center justify-between col-span-2">
+				<span class="flex flex-grow flex-col">
+					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
+						Have you read our <a href="/care" class="hover:underline text-red-500">care page</a>?
+					</span>
+					<span class="text-sm text-gray-500" id="availability-description">
+						This outlines the requirements for adopting and caring for a chinchilla.
+					</span>
+				</span>
+				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<button
+					type="button"
+					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					role="switch"
+					aria-checked="false"
+					aria-labelledby="availability-label"
+					aria-describedby="availability-description"
+				>
+					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+					<span
+						aria-hidden="true"
+						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+					/>
+				</button>
+			</div>
+			<div class="flex items-center justify-between col-span-2">
+				<span class="flex flex-grow flex-col">
+					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
+						Do you have a cage?
+					</span>
+					<span class="text-sm text-gray-500" id="availability-description">
+						Please see our requirements for cages on our <a
+							href="/care"
+							class="hover:underline text-red-500">care page</a
+						>
+					</span>
+				</span>
+				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<button
+					type="button"
+					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					role="switch"
+					aria-checked="false"
+					aria-labelledby="availability-label"
+					aria-describedby="availability-description"
+				>
+					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+					<span
+						aria-hidden="true"
+						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+					/>
+				</button>
+			</div>
+
+			<div class="flex items-center justify-between col-span-2">
+				<span class="flex flex-grow flex-col">
+					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
+						Do you have children in your home?
+					</span>
+					<span class="text-sm text-gray-500" id="availability-description">
+						Chinchillas are not recommended for homes with children under the age of 12.
+					</span>
+				</span>
+				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<button
+					type="button"
+					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					role="switch"
+					aria-checked="false"
+					aria-labelledby="availability-label"
+					aria-describedby="availability-description"
+				>
+					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+					<span
+						aria-hidden="true"
+						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+					/>
+				</button>
+			</div>
+			<div class="flex items-center justify-between col-span-2">
+				<span class="flex flex-grow flex-col">
+					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
+						Are there any other pets in your home?
+					</span>
+					<span class="text-sm text-gray-500" id="availability-description">
+						This includes pets owned by roommates or family members.
+					</span>
+				</span>
+				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<button
+					type="button"
+					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					role="switch"
+					aria-checked="false"
+					aria-labelledby="availability-label"
+					aria-describedby="availability-description"
+				>
+					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+					<span
+						aria-hidden="true"
+						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+					/>
+				</button>
+			</div>
+			<div class="flex items-center justify-between col-span-2">
+				<span class="flex flex-grow flex-col">
+					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
+						Have you ever owned a chinchilla before?
+					</span>
+				</span>
+				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<button
+					type="button"
+					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					role="switch"
+					aria-checked="false"
+					aria-labelledby="availability-label"
+					aria-describedby="availability-description"
+				>
+					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+					<span
+						aria-hidden="true"
+						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+					/>
+				</button>
+			</div>
+
+			{#if age < 18}
+				For parents
+			{/if}
+
+			<!--
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+-->
+			<fieldset class="border-b border-t border-gray-200 sm:col-span-2">
+				<legend class="sr-only">Notifications</legend>
+				<div class="divide-y divide-gray-200">
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="comments" class="font-medium text-gray-900"> Commitment </label>
+							<p id="comments-description" class="text-gray-500">
+								I understand that chinchillas can live beyond 20 years and I am willing and able to
+								make that commitment.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="comments"
+								aria-describedby="comments-description"
+								name="comments"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="candidates" class="font-medium text-gray-900"> Playtime </label>
+							<p id="candidates-description" class="text-gray-500">
+								I understand that chinchillas require daily playtime outside of their cage.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="candidates"
+								aria-describedby="candidates-description"
+								name="candidates"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="offers" class="font-medium text-gray-900"> Cleaning </label>
+							<p id="offers-description" class="text-gray-500">
+								I understand that chinchillas require daily cage cleaning and weekly dust baths.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="offers"
+								aria-describedby="offers-description"
+								name="offers"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="offers" class="font-medium text-gray-900"> Supplies </label>
+							<p id="offers-description" class="text-gray-500">
+								I understand that chinchillas require uncommon items, many of which are not
+								available at local pet stores.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="offers"
+								aria-describedby="offers-description"
+								name="offers"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="offers" class="font-medium text-gray-900"> Healthcare </label>
+							<p id="offers-description" class="text-gray-500">
+								I currently know a veterinarian who is experienced with chinchillas or am willing to
+								find one.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="offers"
+								aria-describedby="offers-description"
+								name="offers"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="offers" class="font-medium text-gray-900"> Financial </label>
+							<p id="offers-description" class="text-gray-500">
+								I am able to afford the costs of owning a chinchilla, including food, supplies, and
+								veterinary care.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="offers"
+								aria-describedby="offers-description"
+								name="offers"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="offers" class="font-medium text-gray-900"> Air conditioning </label>
+							<p id="offers-description" class="text-gray-500">
+								I have adequately air conditioned space in my home for the chinchilla. I am aware
+								that chinchillas cannot tolerate temperatures above 75 degrees Fahrenheit.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="offers"
+								aria-describedby="offers-description"
+								name="offers"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+					<div class="relative flex items-start pb-4 pt-3.5">
+						<div class="min-w-0 flex-1 text-sm leading-6">
+							<label for="offers" class="font-medium text-gray-900"> I agree and understand </label>
+							<p id="offers-description" class="text-gray-500">
+								All of the above statements are true and I agree to abide by them. I understand that
+								providing false information will result in my application being denied.
+							</p>
+						</div>
+						<div class="ml-3 flex h-6 items-center">
+							<input
+								id="offers"
+								aria-describedby="offers-description"
+								name="offers"
+								type="checkbox"
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+							/>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
 			<div class="sm:col-span-2">
 				<label for="message" class="block text-sm font-semibold leading-6 text-gray-900"
-					>Message</label
+					>Comments</label
 				>
 				<div class="mt-2.5">
 					<textarea
@@ -94,7 +387,7 @@
 		<div class="mt-10">
 			<button
 				type="submit"
-				class="block w-full rounded-md bg-pink-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+				class="block w-full rounded-md bg-red-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
 			>
 				Submit
 			</button>
