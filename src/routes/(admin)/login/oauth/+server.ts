@@ -38,8 +38,6 @@ export async function GET({ cookies, url, locals }) {
 
 		const tokenData = await tokenResponse.json();
 
-		console.log(tokenData);
-
 		// // fetch user data from google
 
 		if (!tokenData.error) {

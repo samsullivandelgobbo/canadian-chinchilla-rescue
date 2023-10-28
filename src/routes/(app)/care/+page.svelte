@@ -91,9 +91,12 @@
 						/>
 					</svg>
 					<span
-						><strong class="font-semibold text-gray-900">Treats.</strong> Ac tincidunt sapien vehicula
-						erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.</span
-					>
+						><strong class="font-semibold text-gray-900">Treats.</strong>
+						Treats provide a great way to bond with your chinchilla. They should be given sparingly,
+						as they can cause digestive issues if given too often. We recommend giving your chinchilla
+						treats no more than once a week. Some good treats include rose hips, dried herbs, and dried
+						flowers.
+					</span>
 				</li>
 			</ul>
 
