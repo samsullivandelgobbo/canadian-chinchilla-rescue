@@ -14,10 +14,10 @@
 			Caring for a Chinchilla
 		</h1>
 		<p class="mt-6 text-xl leading-8">
-			Chinchillas are delightful, nocturnal creatures native to the Andes Mountains. They have
-			incredibly soft fur and unique personalities, making them popular pets for those who
-			understand their specific needs. This guide provides comprehensive insights into the care and
-			keeping of these delightful creatures, outlining all considerations for prospective owners.
+			Chinchillas are delightful, fluffy little creatures. They have incredibly soft fur and unique
+			personalities, making them popular pets for those who understand their specific needs. This
+			guide provides comprehensive insights into the care and keeping of these delightful creatures,
+			outlining all considerations for prospective owners.
 		</p>
 		<div class="mt-10 max-w-2xl">
 			<p>
@@ -27,7 +27,7 @@
 				are very sensitive animals and require many considerations, which we will outline in this
 				guide.
 			</p>
-			<h2 class="mt-16 text-2xl font-bold tracking-tight text-gray-900">
+			<h2 class="mt-16 text-3xl font-bold tracking-tight text-gray-900">
 				What do chinchillas eat?
 			</h2>
 			<p class="mt-6">
@@ -54,10 +54,16 @@
 						/>
 					</svg>
 					<span
-						><strong class="font-semibold text-gray-900">Pellets.</strong> Lorem ipsum, dolor sit amet
-						consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
-						blanditiis ratione.</span
-					>
+						><strong class="font-semibold text-gray-900">Pellets.</strong>
+						Pellets are the staple of a chinchilla's diet. They should be given unlimited access to pellets
+						at all times. We recommend
+						<a
+							href="https://oxbowanimalhealth.com/product/essentials-chinchilla-food/"
+							class="text-red-400">Oxbow Essentials Chinchilla Food.</a
+						> It is a high quality pellet that is made specifically for chinchillas. It contains high
+						quality ingredients and does not contain any sugary treats or other added ingredients that
+						could be harmful to your chinchilla.
+					</span>
 				</li>
 				<li class="flex gap-x-3">
 					<svg
@@ -73,9 +79,12 @@
 						/>
 					</svg>
 					<span
-						><strong class="font-semibold text-gray-900"> Hay. </strong> Anim aute id magna aliqua ad
-						ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.</span
-					>
+						><strong class="font-semibold text-gray-900"> Hay. </strong>
+						Hay is the most important part of a chinchilla's diet. It is high in fiber and low in fat,
+						which is essential for a chinchilla's digestive system. There are many different types of
+						hay, but the main hay that should be fed to chinchillas is Timothy Hay. Chinchillas should
+						be given unlimited access to hay at all times.
+					</span>
 				</li>
 				<li class="flex gap-x-3">
 					<svg
@@ -100,41 +109,34 @@
 				</li>
 			</ul>
 
-			<h3 class="mt-16 text-xl font-bold tracking-tight text-gray-900">
-				What will you be feeding your chinchilla?
-			</h3>
+			<h2 class="mt-16 text-3xl font-bold tracking-tight text-gray-900">Housing your chinchilla</h2>
+
 			<p class="mt-6">
-				We recommend
-				<a
-					href="https://oxbowanimalhealth.com/product/essentials-chinchilla-food/"
-					class="text-red-400">Oxbow Essentials Chinchilla Food.</a
-				>
-				It is a high quality pellet that is made specifically for chinchillas. It contains high quality
-				ingredients and does not contain any sugary treats or other added ingredients that could be harmful
-				to your chinchilla.
+				Housing is one of the most important considerations when it comes to chinchillas. They need
+				to have a large cage with plenty of space to run around and play. They also need to have
+				plenty of toys and things to chew on. Chinchillas are very active animals, so they need a
+				way to burn off energy, this is usually done by running on a wheel or chewing on toys.
 			</p>
-			<p class="mt-6" />
-			<p class="mt-8">
-				Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit
-				molestie auctor fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius
-				vulputate et ultrices hac adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem
-				vel integer orci.
-			</p>
-			<h2 class="mt-16 text-2xl font-bold tracking-tight text-gray-900" />
 			<p class="mt-6">
-				Id orci tellus laoreet id ac. Dolor, aenean leo, ac etiam consequat in. Convallis arcu ipsum
-				urna nibh. Pharetra, euismod vitae interdum mauris enim, consequat vulputate nibh. Maecenas
-				pellentesque id sed tellus mauris, ultrices mauris. Tincidunt enim cursus ridiculus mi.
-				Pellentesque nam sed nullam sed diam turpis ipsum eu a sed convallis diam.
+				We require all prospective owners to have a cage that meets all the requirements outlined in
+				this guide. We also require that the cage be set up before the chinchilla is adopted. This
+				is to ensure that the chinchilla has a safe and comfortable home to live in when they are
+				adopted.
 			</p>
 
+			<p class="mt-8" />
+			<h2 class="mt-16 text-2xl font-bold tracking-tight text-gray-900">
+				Furnishing your chinchilla's cage
+			</h2>
+			<p class="mt-6" />
+
 			<p class="mt-10">
-				Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris
+				<!-- Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris
 				semper sed amet vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus
-				viverra tellus varius sit neque erat velit.
+				viverra tellus varius sit neque erat velit. -->
 			</p>
 		</div>
-		<figure class="mt-16">
+		<!-- <figure class="mt-16">
 			<img class="aspect-video rounded-xl bg-gray-50 object-cover" src="" alt="" />
 			<figcaption class="mt-4 flex gap-x-2 text-sm leading-6 text-gray-500">
 				<svg
@@ -167,6 +169,6 @@
 				semper sed amet vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus
 				viverra tellus varius sit neque erat velit.
 			</p>
-		</div>
+		</div> -->
 	</div>
 </div>

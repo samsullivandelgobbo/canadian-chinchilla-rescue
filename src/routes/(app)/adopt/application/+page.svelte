@@ -1,5 +1,11 @@
 <script lang="ts">
 	let age: number;
+	let hasChildren: boolean;
+	let hasCage: boolean;
+	let readCareGuide: boolean;
+	let otherPets: boolean;
+	let ownedChinchilla: boolean;
+	let surrenderedBefore: boolean;
 </script>
 
 <svelte:head>
@@ -88,19 +94,20 @@
 						This outlines the requirements for adopting and caring for a chinchilla.
 					</span>
 				</span>
-				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<!-- Enabled: "bg-red-400", Not Enabled: "bg-gray-200" -->
 				<button
+					on:click={() => (readCareGuide = !readCareGuide)}
 					type="button"
-					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					class="
+          {readCareGuide ? 'bg-red-400' : 'bg-gray-200'}
+          bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
 					role="switch"
-					aria-checked="false"
-					aria-labelledby="availability-label"
-					aria-describedby="availability-description"
 				>
 					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
 					<span
-						aria-hidden="true"
-						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+						class="
+            {readCareGuide ? 'translate-x-5' : 'translate-x-0'}
+            translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
 					/>
 				</button>
 			</div>
@@ -110,25 +117,22 @@
 						Do you have a cage?
 					</span>
 					<span class="text-sm text-gray-500" id="availability-description">
-						Please see our requirements for cages on our <a
-							href="/care"
-							class="hover:underline text-red-500">care page</a
-						>
+						We require that you have a cage before adopting a chinchilla.
 					</span>
 				</span>
-				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<!-- Enabled: "bg-red-400", Not Enabled: "bg-gray-200" -->
 				<button
+					on:click={() => (hasCage = !hasCage)}
 					type="button"
-					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
-					role="switch"
-					aria-checked="false"
-					aria-labelledby="availability-label"
-					aria-describedby="availability-description"
+					class="
+          {hasCage ? 'bg-red-400' : 'bg-gray-200'}
+          bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
 				>
 					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
 					<span
-						aria-hidden="true"
-						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+						class="
+            {hasCage ? 'translate-x-5' : 'translate-x-0'}
+            translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
 					/>
 				</button>
 			</div>
@@ -142,19 +146,21 @@
 						Chinchillas are not recommended for homes with children under the age of 12.
 					</span>
 				</span>
-				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+
 				<button
+					on:click={() => (hasChildren = !hasChildren)}
 					type="button"
-					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					class="
+          {hasChildren ? 'bg-red-400' : 'bg-gray-200'}
+          bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
 					role="switch"
 					aria-checked="false"
-					aria-labelledby="availability-label"
-					aria-describedby="availability-description"
 				>
-					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
 					<span
 						aria-hidden="true"
-						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+						class="
+            {hasChildren ? 'translate-x-5' : 'translate-x-0'}
+            translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
 					/>
 				</button>
 			</div>
@@ -167,19 +173,20 @@
 						This includes pets owned by roommates or family members.
 					</span>
 				</span>
-				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+
 				<button
+					on:click={() => (otherPets = !otherPets)}
 					type="button"
-					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					class="
+          {otherPets ? 'bg-red-400' : 'bg-gray-200'}
+          bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
 					role="switch"
-					aria-checked="false"
-					aria-labelledby="availability-label"
-					aria-describedby="availability-description"
 				>
-					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
 					<span
 						aria-hidden="true"
-						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+						class="
+            {otherPets ? 'translate-x-5' : 'translate-x-0'}
+            translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
 					/>
 				</button>
 			</div>
@@ -189,10 +196,38 @@
 						Have you ever owned a chinchilla before?
 					</span>
 				</span>
-				<!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+				<!-- Enabled: "bg-red-400", Not Enabled: "bg-gray-200" -->
 				<button
+					on:click={() => (ownedChinchilla = !ownedChinchilla)}
 					type="button"
-					class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+					class="
+          {ownedChinchilla ? 'bg-red-400' : 'bg-gray-200'}
+          bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
+					role="switch"
+					aria-checked="false"
+				>
+					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+					<span
+						aria-hidden="true"
+						class="
+            {ownedChinchilla ? 'translate-x-5' : 'translate-x-0'}
+            translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+					/>
+				</button>
+			</div>
+			<div class="flex items-center justify-between col-span-2">
+				<span class="flex flex-grow flex-col">
+					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
+						Have you ever surrendered a pet before?
+					</span>
+				</span>
+				<!-- Enabled: "bg-red-400", Not Enabled: "bg-gray-200" -->
+				<button
+					on:click={() => (surrenderedBefore = !surrenderedBefore)}
+					type="button"
+					class="
+          {surrenderedBefore ? 'bg-red-400' : 'bg-gray-200'}
+          bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
 					role="switch"
 					aria-checked="false"
 					aria-labelledby="availability-label"
@@ -201,64 +236,67 @@
 					<!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
 					<span
 						aria-hidden="true"
-						class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+						class="
+            {surrenderedBefore ? 'translate-x-5' : 'translate-x-0'}
+            translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
 					/>
 				</button>
 			</div>
+
+			{#if surrenderedBefore}
+				<div class="sm:col-span-2">
+					<label for="message" class="block text-sm font-semibold leading-6 text-gray-900">
+						Could you please explain why you surrendered your pet?
+					</label>
+					<div class="mt-2.5">
+						<textarea
+							name="message"
+							id="message"
+							rows="4"
+							class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
+						/>
+					</div>
+				</div>
+			{/if}
 
 			{#if age < 18}
 				For parents
 			{/if}
 
-			<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
 			<fieldset class="border-b border-t border-gray-200 sm:col-span-2">
 				<legend class="sr-only">Notifications</legend>
 				<div class="divide-y divide-gray-200">
 					<div class="relative flex items-start pb-4 pt-3.5">
 						<div class="min-w-0 flex-1 text-sm leading-6">
-							<label for="comments" class="font-medium text-gray-900"> Commitment </label>
-							<p id="comments-description" class="text-gray-500">
+							<label for="commitment" class="font-medium text-gray-900"> Commitment </label>
+							<p class="text-gray-500">
 								I understand that chinchillas can live beyond 20 years and I am willing and able to
 								make that commitment.
 							</p>
 						</div>
 						<div class="ml-3 flex h-6 items-center">
 							<input
-								id="comments"
-								aria-describedby="comments-description"
-								name="comments"
+								required
+								id="commitment"
+								name="commitment"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
 					<div class="relative flex items-start pb-4 pt-3.5">
 						<div class="min-w-0 flex-1 text-sm leading-6">
-							<label for="candidates" class="font-medium text-gray-900"> Playtime </label>
-							<p id="candidates-description" class="text-gray-500">
+							<label for="playtime" class="font-medium text-gray-900"> Playtime </label>
+							<p class="text-gray-500">
 								I understand that chinchillas require daily playtime outside of their cage.
 							</p>
 						</div>
 						<div class="ml-3 flex h-6 items-center">
 							<input
-								id="candidates"
-								aria-describedby="candidates-description"
-								name="candidates"
+								id="playtime"
+								name="playtime"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -275,7 +313,7 @@
 								aria-describedby="offers-description"
 								name="offers"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -293,7 +331,7 @@
 								aria-describedby="offers-description"
 								name="offers"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -311,7 +349,7 @@
 								aria-describedby="offers-description"
 								name="offers"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -329,7 +367,7 @@
 								aria-describedby="offers-description"
 								name="offers"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -347,7 +385,7 @@
 								aria-describedby="offers-description"
 								name="offers"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -365,7 +403,7 @@
 								aria-describedby="offers-description"
 								name="offers"
 								type="checkbox"
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+								class="h-6 w-6 rounded border-gray-300 text-red-400 focus:ring-red-400"
 							/>
 						</div>
 					</div>
@@ -373,13 +411,13 @@
 			</fieldset>
 
 			<div class="sm:col-span-2">
-				<label for="message" class="block text-sm font-semibold leading-6 text-gray-900"
-					>Comments</label
-				>
+				<label for="whyAdoptChinchilla" class="block text-sm font-semibold leading-6 text-gray-900">
+					Why do you think a chinchilla is the right pet for you?
+				</label>
 				<div class="mt-2.5">
 					<textarea
-						name="message"
-						id="message"
+						name="whyAdoptChinchilla"
+						id="whyAdoptChinchilla"
 						rows="4"
 						class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
 					/>

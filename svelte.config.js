@@ -7,7 +7,7 @@ const config = {
     csp: {
       directives: {
         'script-src': ['self'],
-        'connect-src': ['vitals.vercel-insights.com']
+        'connect-src': ['self', 'vitals.vercel-insights.com']
       },
     },
   },
