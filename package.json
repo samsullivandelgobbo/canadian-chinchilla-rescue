@@ -47,6 +47,7 @@
 		"jsonwebtoken": "^9.0.2",
 		"markdown-it": "^13.0.2",
 		"marked": "^9.1.2",
+		"sitemap": "^7.1.1",
 		"stripe": "^13.9.0"
 	}
 }

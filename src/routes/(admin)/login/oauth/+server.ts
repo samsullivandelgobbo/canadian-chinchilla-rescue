@@ -40,13 +40,33 @@ export async function GET({ cookies, url, locals }) {
 
 		// // fetch user data from google
 
+		if (tokenData.error) {
+			throw fail(400, { message: tokenData.error_description });
+		}
+
+		if (!tokenData.access_token) {
+			throw fail(400, { message: 'No access_token provided' });
+		}
+
+		if (!tokenData.refresh_token) {
+			throw fail(400, { message: 'No refresh_token provided' });
+		}
+
 		const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
 			headers: {
 				Authorization: `Bearer ${tokenData.access_token}`
 			}
 		});
 
+		if (userDataResponse.status !== 200) {
+			throw fail(400, { message: 'Could not fetch user data' });
+		}
+
 		const userData = await userDataResponse.json();
+
+		if (!userData.email) {
+			throw fail(400, { message: 'No email provided' });
+		}
 
 		console.log(userData, tokenData);
 

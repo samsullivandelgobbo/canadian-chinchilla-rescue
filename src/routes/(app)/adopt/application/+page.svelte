@@ -17,8 +17,10 @@
 			Adoption application
 		</h2>
 		<p class="mt-2 text-lg leading-8 text-gray-600">
-			We are excited that you are interested in adopting a chinchilla. Please fill out the form
-			below to start the adoption process.
+			We are excited that you are interested in adopting a chinchilla. Please read our <a
+				href="/care"
+				class="hover:underline text-red-500">care page</a
+			> before filling out the form below to start the adoption process.
 		</p>
 	</div>
 	<form action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
@@ -80,7 +82,7 @@
 			<div class="flex items-center justify-between col-span-2">
 				<span class="flex flex-grow flex-col">
 					<span class="text-sm font-medium leading-6 text-gray-900" id="availability-label">
-						Have you read our <a href="/care" class="hover:underline text-red-500">care page</a>?
+						Have you read our <a href="/care" class="hover:underline text-red-500">care guide</a>?
 					</span>
 					<span class="text-sm text-gray-500" id="availability-description">
 						This outlines the requirements for adopting and caring for a chinchilla.

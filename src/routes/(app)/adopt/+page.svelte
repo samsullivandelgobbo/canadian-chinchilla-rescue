@@ -23,9 +23,10 @@
 						chinchilla, please contact us. We will help you find the perfect chinchilla for you.
 					</p>
 
-					<button
+					<a
+						href="/adopt/application"
 						class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-black bg-gray-100 border-gray-500 border-2 rounded-lg hover:bg-gray-200 focus:ring-0"
-						>Get started</button
+						>Get started</a
 					>
 				</div>
 
@@ -70,7 +71,9 @@
 							However, please review the content on our website before contacting us. Especially our <a
 								href="/blog"
 								class="underline text-red-400">blog</a
-							>, which has a lot of information about chinchillas.
+							>
+							& <a href="/care" class="underline text-red-400">care guide</a>
+							, which has a lot of information about chinchillas.
 						</p>
 					</div>
 				</div>
