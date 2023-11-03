@@ -8,41 +8,42 @@
 
 <svelte:head>
 	<!-- Seo -->
-	<title>{post.title} | Canadian Chinchilla Rescue</title>
-	<meta name="description" content={post.description} />
-	<meta property="og:title" content={post.title} />
-	<meta property="og:description" content={post.description} />
-	<meta property="og:image" content={post.image} />
-	<meta property="og:url" content={`https://chinchillarescue.ca/blog/${post.slug}`} />
-	<meta property="og:type" content="article" />
-	<meta property="og:site_name" content="Canadian Chinchilla Rescue" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:site" content="@chinchillarescue" />
-	<meta name="twitter:title" content={post.title} />
-	<meta name="twitter:description" content={post.description} />
-	<meta name="twitter:image" content={post.image} />
-	<meta name="twitter:url" content={`https://chinchillarescue.ca/blog/${post.slug}`} />
-	<meta name="twitter:label1" content="Written by" />
-	<meta name="twitter:data1" content={post.author.name} />
-	<meta name="twitter:label2" content="Filed under" />
-	<meta name="twitter:data2" content={post.tags.join(', ')} />
-	<meta name="twitter:label3" content="Published on" />
-	<meta name="twitter:data3" content={new Date(post.createdAt).toLocaleDateString()} />
-	<meta name="twitter:label4" content="Read time" />
-	<meta
-		name="twitter:data4"
-		content={`${Math.ceil(post.content.split(' ').length / 200)} min read`}
-	/>
-	<meta name="twitter:label5" content="Share" />
-	<meta name="twitter:data5" content="Share" />
-	<meta name="twitter:label6" content="Donate" />
-	<meta name="twitter:data6" content="Donate" />
-	<meta name="twitter:label7" content="Shop" />
-	<meta name="twitter:data7" content="Shop" />
-	<meta name="twitter:label8" content="Adopt" />
-	<meta name="twitter:data8" content="Adopt" />
-	<meta name="twitter:label9" content="Foster" />
-	<meta name="twitter:data9" content="Foster" />
+	{#if post}
+		<title>{post.title} | Canadian Chinchilla Rescue</title>
+		<meta name="description" content={post.description} />
+		<meta property="og:title" content={post.title} />
+		<meta property="og:description" content={post.description} />
+		<meta property="og:image" content={post.image} />
+		<meta property="og:url" content={`https://chinchillarescue.ca/blog/${post.slug}`} />
+		<meta property="og:type" content="article" />
+		<meta property="og:site_name" content="Canadian Chinchilla Rescue" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@chinchillarescue" />
+		<meta name="twitter:title" content={post.title} />
+		<meta name="twitter:description" content={post.description} />
+		<meta name="twitter:image" content={post.image} />
+		<meta name="twitter:url" content={`https://chinchillarescue.ca/blog/${post.slug}`} />
+		<meta name="twitter:label1" content="Written by" />
+		<meta name="twitter:data1" content={post.author.name} />
+		<meta name="twitter:label2" content="Filed under" />
+		<meta name="twitter:label3" content="Published on" />
+		<meta name="twitter:data3" content={new Date(post.createdAt).toLocaleDateString()} />
+		<meta name="twitter:label4" content="Read time" />
+		<meta
+			name="twitter:data4"
+			content={`${Math.ceil(post.content.split(' ').length / 200)} min read`}
+		/>
+		<meta name="twitter:label5" content="Share" />
+		<meta name="twitter:data5" content="Share" />
+		<meta name="twitter:label6" content="Donate" />
+		<meta name="twitter:data6" content="Donate" />
+		<meta name="twitter:label7" content="Shop" />
+		<meta name="twitter:data7" content="Shop" />
+		<meta name="twitter:label8" content="Adopt" />
+		<meta name="twitter:data8" content="Adopt" />
+		<meta name="twitter:label9" content="Foster" />
+		<meta name="twitter:data9" content="Foster" />
+	{/if}
 </svelte:head>
 
 {#if post}
@@ -85,7 +86,7 @@
 							</p>
 						</div>
 
-						<p class="font-semibold text-gray-900">
+						<p class="font-semibold text-gray-900 block lg:hidden">
 							by {post.author.name}
 						</p>
 						<!-- Author -->
