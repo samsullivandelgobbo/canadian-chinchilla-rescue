@@ -12,6 +12,6 @@ export const load: PageServerLoad = async ({ request, params, cookies, locals })
 
 	throw redirect(
 		302,
-		`https://accounts.google.com/o/oauth2/v2/auth?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}&response_type=${response_type}&access_type=${access_type}&include_granted_scopes=true&prompt=consent`
+		`https://accounts.google.com/o/oauth2/v2/auth?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}&response_type=${response_type}&access_type=${access_type}&include_granted_scopes=true&prompt=select_account%20consent`
 	);
 };
