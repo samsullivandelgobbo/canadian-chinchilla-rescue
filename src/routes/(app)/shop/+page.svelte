@@ -1,5 +1,10 @@
 <script lang="ts">
 	import ChinchillaShop from '$lib/img/shop_hero.png?format=webp';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+
+	const products = data.products;
 </script>
 
 <svelte:head>
@@ -72,27 +77,31 @@
 			<div
 				class="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8"
 			>
-				<div class="group relative">
-					<div
-						class="h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80"
-					>
-						<img
-							src="/img/apple_sticks.png"
-							alt="Apple Sticks"
-							class="h-full w-full object-cover object-center"
-						/>
+				{#each products as product}
+					<div class="group relative">
+						<div
+							class="h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80"
+						>
+							<img
+								src={product.image}
+								alt={product.title}
+								class="h-full w-full object-cover object-center"
+							/>
+						</div>
+						<h3 class="mt-4 text-sm text-gray-700">
+							<a href={`/shop/${product.handle}`}>
+								<span class="absolute inset-0" />
+								{product.title}
+							</a>
+						</h3>
+						<p class="mt-1 text-sm text-gray-500" />
+						<p class="mt-1 text-sm font-medium text-gray-900">
+							${product.price}
+						</p>
 					</div>
-					<h3 class="mt-4 text-sm text-gray-700">
-						<a href="#">
-							<span class="absolute inset-0" />
-							Apple Sticks
-						</a>
-					</h3>
-					<p class="mt-1 text-sm text-gray-500">1lb</p>
-					<p class="mt-1 text-sm font-medium text-gray-900">$25</p>
-				</div>
 
-				<!-- More products... -->
+					<!-- More products... -->
+				{/each}
 			</div>
 
 			<div class="mt-8 text-sm md:hidden">

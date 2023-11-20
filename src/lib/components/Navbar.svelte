@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { cubicOut } from 'svelte/easing';
+	import ShoppingCartPopover from './ShoppingCartPopover.svelte';
 	import { fade, fly, slide } from 'svelte/transition';
+
 	let menuOpen = false;
 	// check if user switched pages and close menu
 	const unsubscribe = page.subscribe(() => {
@@ -43,16 +45,20 @@
 				</svg>
 			</button>
 		</div>
-		<div class="hidden lg:flex lg:gap-x-16">
+		<div class="hidden lg:flex lg:gap-x-12 items-center">
 			<a href="/blog" class="text-sm font-semibold leading-6 text-gray-900">Blog</a>
 			<a href="/shop" class="text-sm font-semibold leading-6 text-gray-900">Shop</a>
 			<a href="/adopt" class="text-sm font-semibold leading-6 text-gray-900">Adopt</a>
 			<a href="/about" class="text-sm font-semibold leading-6 text-gray-900">About</a>
-
-			<div class="hidden lg:flex lg:flex-1 lg:justify-end">
-				<a href="/donate" class="text-sm font-semibold leading-6 text-red-400 hover:text-red-400/70"
-					>Donate <span aria-hidden="true">&rarr;</span></a
-				>
+			<a href="/donate" class="text-sm font-semibold leading-6 text-red-400 hover:text-red-400/70"
+				>Donate
+			</a>
+			<div
+				class="hidden lg:flex lg:flex-1 lg:justify-end gap-4 items-center
+      
+      "
+			>
+				<ShoppingCartPopover />
 			</div>
 		</div>
 	</nav>
