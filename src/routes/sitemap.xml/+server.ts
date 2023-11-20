@@ -8,11 +8,9 @@ export async function GET() {
 		{ url: '/adopt', changefreq: 'daily', priority: 1 },
 		{ url: '/shop', changefreq: 'daily', priority: 1 },
 		{ url: '/donate', changefreq: 'daily', priority: 1 },
-		{ url: '/blog', changefreq: 'daily', priority: 1 }
-    { url: '/adopt/application', changefreq: 'daily', priority: 1 },
-    { url: '/care', changefreq: 'daily', priority: 1 }
-
-
+		{ url: '/blog', changefreq: 'daily', priority: 1 },
+		{ url: '/adopt/application', changefreq: 'daily', priority: 1 },
+		{ url: '/care', changefreq: 'daily', priority: 1 }
 	];
 
 	const stream = new SitemapStream({ hostname: 'https://canadianchinchilla.ca' });
