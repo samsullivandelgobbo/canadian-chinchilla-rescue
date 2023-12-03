@@ -7,8 +7,6 @@ export const load: PageServerLoad = async ({ request, params }) => {
 
 	const slug = params.slug;
 
-	console.log('slug:', slug);
-
 	try {
 		const response = await fetch(`https://${shopUrl}/api/2023-10/graphql.json`, {
 			method: 'POST',
@@ -20,26 +18,39 @@ export const load: PageServerLoad = async ({ request, params }) => {
 				// grab the product by handle
 
 				query: `
-          query {
-            productByHandle(handle: "${slug}") {
+        query {
+          productByHandle(handle: "${slug}") {
               id
               title
               handle
+              totalInventory
               description
               priceRange {
-                minVariantPrice {
-                  amount
-                }
+                  minVariantPrice {
+                      amount
+                  }
               }
               images(first: 1) {
-                edges {
-                  node {
-                    originalSrc
+                  edges {
+                      node {
+                          originalSrc
+                      }
                   }
-                }
               }
-            }
+              variants(first: 10) {
+                  edges {
+                      node {
+                          id
+                          title
+                          priceV2 {
+                              amount
+                          }
+                          availableForSale
+                      }
+                  }
+              }
           }
+      }
 
         `
 			})
@@ -64,8 +75,8 @@ export const load: PageServerLoad = async ({ request, params }) => {
 		delete product.images;
 		product.price = product.priceRange.minVariantPrice.amount;
 		delete product.priceRange;
-
-		console.log('product:', product);
+		product.variants = product.variants.edges.map((edge) => edge.node);
+		delete product.variants.edges;
 
 		return {
 			product
@@ -82,10 +93,139 @@ const addToCart: Action = async ({ request, locals, params }) => {
 		const shopUrl = import.meta.env.VITE_SHOPIFY_SHOP_URL;
 		const storefrontAccessToken = import.meta.env.VITE_SHOPIFY_PUBLIC_TOKEN;
 
-		const slug = params.slug;
-	} catch (error) {}
+		const form = await request.formData();
+		const quantity = form.get('quantity');
+		const productId = form.get('productId') as string;
+
+		const cartId = form.get('cartId') as string;
+
+		if (cartId) {
+			// cart exists, add to cart
+
+			console.log('cart exists, add to cart');
+
+			console.log('cartId:', cartId);
+
+			const response = await fetch(`https://${shopUrl}/api/2023-10/graphql.json`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Shopify-Storefront-Access-Token': storefrontAccessToken
+				},
+				body: JSON.stringify({
+					query: `
+          mutation {
+            cartLinesAdd(
+              cartId: "${cartId}"
+              lines: [
+                {
+                  quantity: ${quantity}
+                  merchandiseId: "${productId}"
+                }
+              ]
+            ) {
+              cart {
+                id
+                createdAt
+                updatedAt
+                lines(first: 10) {
+                  edges {
+                    node {
+                      id
+                      quantity
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `
+				})
+			});
+
+			const { data, errors } = await response.json();
+
+			if (errors) {
+				console.error('GraphQL errors:', errors);
+				throw new Error('GraphQL query errors occurred.');
+			}
+
+			const cart = data.cartLinesAdd.cart;
+
+			console.log('cart quantity:', cart.lines.edges[0].node.quantity);
+
+			return {
+				success: true,
+				cartId: cart.id,
+				cart
+			};
+		}
+
+		console.log('quantity:', quantity);
+		console.log('productId:', productId);
+
+		const response = await fetch(`https://${shopUrl}/api/2023-10/graphql.json`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Shopify-Storefront-Access-Token': storefrontAccessToken
+			},
+			body: JSON.stringify({
+				query: `
+        mutation {
+          cartCreate(
+            input: {
+              lines: [
+                {
+                  quantity: ${quantity}
+                  merchandiseId: "${productId}"
+                }
+              ],
+            }
+          ) {
+            cart {
+              id
+              createdAt
+              updatedAt
+              lines(first: 10) {
+                edges {
+                  node {
+                    id
+                    quantity
+
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `
+			})
+		});
+
+		const { data, errors } = await response.json();
+
+		if (errors) {
+			console.error('GraphQL errors:', errors);
+			console.log(errors);
+			throw new Error('GraphQL query errors occurred.');
+		}
+
+		const cart = data.cartCreate.cart;
+
+		console.log('cart quantity:', cart.lines.edges[0].node.quantity);
+		console.log('cart:', cart);
+
+		return {
+			success: true,
+			cartId: cart.id,
+			cart
+		};
+	} catch (error) {
+		console.error('Error fetching data:', error);
+	}
 };
 
 export const actions: Actions = {
-	addToCart
+	default: addToCart
 };

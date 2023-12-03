@@ -98,11 +98,11 @@
 			</div>
 		</div>
 
-		<div class="relative bg-gray-900 mt-24 rounded-3xl">
+		<div class="relative bg-neutral-800 mt-24 rounded-3xl">
 			<div
-				class="relative h-80 overflow-hidden bg-red-300/90 opacity-90 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2 rounded-3xl"
+				class="relative h-80 overflow-hidden bg-gradient-to-tr from-red-300 to-pink-300 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2 rounded-t-3xl"
 			>
-				<img class="h-full w-full object-cover rounded-3xl p-12" src="/img/sponsor_me.png" alt="" />
+				<img class="h-full w-full object-cover rounded-3xl p-4" src="/img/sponsor_me.png" alt="" />
 				<svg
 					viewBox="0 0 926 676"
 					aria-hidden="true"

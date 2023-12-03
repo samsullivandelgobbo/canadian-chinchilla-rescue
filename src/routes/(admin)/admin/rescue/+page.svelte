@@ -8,10 +8,10 @@
 		addHiddenColumns
 	} from 'svelte-headless-table/plugins';
 	import { readable } from 'svelte/store';
-	import { Activity, CreditCard, DollarSign, Download, Users } from 'lucide-svelte';
+	import { Activity, CreditCard, DollarSign, Download, Plus, Users } from 'lucide-svelte';
 	import * as Table from '$lib/components/ui/table';
 	// import Actions from './data-table/data-table-actions.svelte';
-	import { Button } from '$lib/components/ui/button';
+
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { cn } from '$lib/utils';
 	import { Input } from '$lib/components/ui/input';
@@ -19,219 +19,275 @@
 	import { ArrowUpDown, ChevronDown } from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import type { PageData } from './$types';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
+	import * as Dialog from '$lib/components/ui/dialog';
 
-	type Payment = {
-		id: string;
-		amount: number;
-		status: 'Pending' | 'Processing' | 'Success' | 'Failed';
-		email: string;
-	};
+	import { Label } from '$lib/components/ui/label';
+	import AddChinchillaForm from './add-chinchilla-form.svelte';
+	import RescueChinCard from '$lib/components/RescueChinCard.svelte';
 
-	const data: Payment[] = [
-		{
-			id: 'm5gr84i9',
-			amount: 316,
-			status: 'Success',
-			email: 'ken99@yahoo.com'
-		},
-		{
-			id: '3u1reuv4',
-			amount: 242,
-			status: 'Success',
-			email: 'Abe45@gmail.com'
-		},
-		{
-			id: 'derv1ws0',
-			amount: 837,
-			status: 'Processing',
-			email: 'Monserrat44@gmail.com'
-		},
-		{
-			id: '5kma53ae',
-			amount: 874,
-			status: 'Success',
-			email: 'Silas22@gmail.com'
-		},
-		{
-			id: 'bhqecj4p',
-			amount: 721,
-			status: 'Failed',
-			email: 'carmella@hotmail.com'
+	export let data: PageData;
+	const chinchillas = data.chinchillas;
+
+	const maleChinchillas = chinchillas.map((chinchilla) => {
+		if (chinchilla.gender === 'MALE') {
+			return chinchilla;
 		}
-	];
-
-	const table = createTable(readable(data), {
-		sort: addSortBy({ disableMultiSort: true }),
-		page: addPagination(),
-		filter: addTableFilter({
-			fn: ({ filterValue, value }) => value.includes(filterValue)
-		}),
-		select: addSelectedRows(),
-		hide: addHiddenColumns()
 	});
 
-	const columns = table.createColumns([
-		// table.column({
-		// 	header: (_, { pluginStates }) => {
-		// 		const { allPageRowsSelected } = pluginStates.select;
-		// 		return createRender(DataTableCheckbox, {
-		// 			checked: allPageRowsSelected
-		// 		});
-		// 	},
-		// 	accessor: 'id',
-		// 	cell: ({ row }, { pluginStates }) => {
-		// 		const { getRowState } = pluginStates.select;
-		// 		const { isSelected } = getRowState(row);
+	const femaleChinchillas = chinchillas.map((chinchilla) => {
+		if (chinchilla.gender === 'FEMALE') {
+			return chinchilla;
+		}
+	});
 
-		// 		return createRender(DataTableCheckbox, {
-		// 			checked: isSelected
-		// 		});
-		// 	},
-		// 	plugins: {
-		// 		sort: {
-		// 			disable: true
-		// 		},
-		// 		filter: {
-		// 			exclude: true
-		// 		}
-		// 	}
-		// }),
-		table.column({
-			header: 'Status',
-			accessor: 'status',
-			plugins: { sort: { disable: true }, filter: { exclude: true } }
-		}),
-		table.column({
-			header: 'Email',
-			accessor: 'email',
-			cell: ({ value }) => value.toLowerCase(),
-			plugins: {
-				filter: {
-					getFilterValue(value) {
-						return value.toLowerCase();
-					}
-				}
-			}
-		}),
-		table.column({
-			header: 'Amount',
-			accessor: 'amount',
-			cell: ({ value }) => {
-				const formatted = new Intl.NumberFormat('en-US', {
-					style: 'currency',
-					currency: 'USD'
-				}).format(value);
-				return formatted;
-			},
-			plugins: {
-				sort: {
-					disable: true
-				},
-				filter: {
-					exclude: true
-				}
-			}
-		})
-		// table.column({
-		// 	header: '',
-		// 	accessor: ({ id }) => id,
-		// 	cell: (item) => {
-		// 		return createRender(Actions, { id: item.value });
-		// 	},
-		// 	plugins: {
-		// 		sort: {
-		// 			disable: true
-		// 		}
-		// 	}
-		// })
-	]);
+	// type Payment = {
+	// 	id: string;
+	// 	amount: number;
+	// 	status: 'Pending' | 'Processing' | 'Success' | 'Failed';
+	// 	email: string;
+	// };
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, flatColumns, pluginStates, rows } =
-		table.createViewModel(columns);
+	// const data: Payment[] = [
+	// 	{
+	// 		id: 'm5gr84i9',
+	// 		amount: 316,
+	// 		status: 'Success',
+	// 		email: 'ken99@yahoo.com'
+	// 	},
+	// 	{
+	// 		id: '3u1reuv4',
+	// 		amount: 242,
+	// 		status: 'Success',
+	// 		email: 'Abe45@gmail.com'
+	// 	},
+	// 	{
+	// 		id: 'derv1ws0',
+	// 		amount: 837,
+	// 		status: 'Processing',
+	// 		email: 'Monserrat44@gmail.com'
+	// 	},
+	// 	{
+	// 		id: '5kma53ae',
+	// 		amount: 874,
+	// 		status: 'Success',
+	// 		email: 'Silas22@gmail.com'
+	// 	},
+	// 	{
+	// 		id: 'bhqecj4p',
+	// 		amount: 721,
+	// 		status: 'Failed',
+	// 		email: 'carmella@hotmail.com'
+	// 	}
+	// ];
 
-	const { sortKeys } = pluginStates.sort;
+	// const table = createTable(readable(data), {
+	// 	sort: addSortBy({ disableMultiSort: true }),
+	// 	page: addPagination(),
+	// 	filter: addTableFilter({
+	// 		fn: ({ filterValue, value }) => value.includes(filterValue)
+	// 	}),
+	// 	select: addSelectedRows(),
+	// 	hide: addHiddenColumns()
+	// });
 
-	const { hiddenColumnIds } = pluginStates.hide;
-	const ids = flatColumns.map((c) => c.id);
-	let hideForId = Object.fromEntries(ids.map((id) => [id, true]));
+	// const columns = table.createColumns([
+	// 	// table.column({
+	// 	// 	header: (_, { pluginStates }) => {
+	// 	// 		const { allPageRowsSelected } = pluginStates.select;
+	// 	// 		return createRender(DataTableCheckbox, {
+	// 	// 			checked: allPageRowsSelected
+	// 	// 		});
+	// 	// 	},
+	// 	// 	accessor: 'id',
+	// 	// 	cell: ({ row }, { pluginStates }) => {
+	// 	// 		const { getRowState } = pluginStates.select;
+	// 	// 		const { isSelected } = getRowState(row);
 
-	$: $hiddenColumnIds = Object.entries(hideForId)
-		.filter(([, hide]) => !hide)
-		.map(([id]) => id);
+	// 	// 		return createRender(DataTableCheckbox, {
+	// 	// 			checked: isSelected
+	// 	// 		});
+	// 	// 	},
+	// 	// 	plugins: {
+	// 	// 		sort: {
+	// 	// 			disable: true
+	// 	// 		},
+	// 	// 		filter: {
+	// 	// 			exclude: true
+	// 	// 		}
+	// 	// 	}
+	// 	// }),
+	// 	table.column({
+	// 		header: 'Status',
+	// 		accessor: 'status',
+	// 		plugins: { sort: { disable: true }, filter: { exclude: true } }
+	// 	}),
+	// 	table.column({
+	// 		header: 'Email',
+	// 		accessor: 'email',
+	// 		cell: ({ value }) => value.toLowerCase(),
+	// 		plugins: {
+	// 			filter: {
+	// 				getFilterValue(value) {
+	// 					return value.toLowerCase();
+	// 				}
+	// 			}
+	// 		}
+	// 	}),
+	// 	table.column({
+	// 		header: 'Amount',
+	// 		accessor: 'amount',
+	// 		cell: ({ value }) => {
+	// 			const formatted = new Intl.NumberFormat('en-US', {
+	// 				style: 'currency',
+	// 				currency: 'USD'
+	// 			}).format(value);
+	// 			return formatted;
+	// 		},
+	// 		plugins: {
+	// 			sort: {
+	// 				disable: true
+	// 			},
+	// 			filter: {
+	// 				exclude: true
+	// 			}
+	// 		}
+	// 	})
+	// 	// table.column({
+	// 	// 	header: '',
+	// 	// 	accessor: ({ id }) => id,
+	// 	// 	cell: (item) => {
+	// 	// 		return createRender(Actions, { id: item.value });
+	// 	// 	},
+	// 	// 	plugins: {
+	// 	// 		sort: {
+	// 	// 			disable: true
+	// 	// 		}
+	// 	// 	}
+	// 	// })
+	// ]);
 
-	const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
-	const { filterValue } = pluginStates.filter;
+	// const { headerRows, pageRows, tableAttrs, tableBodyAttrs, flatColumns, pluginStates, rows } =
+	// 	table.createViewModel(columns);
 
-	const { selectedDataIds } = pluginStates.select;
+	// const { sortKeys } = pluginStates.sort;
+
+	// const { hiddenColumnIds } = pluginStates.hide;
+	// const ids = flatColumns.map((c) => c.id);
+	// let hideForId = Object.fromEntries(ids.map((id) => [id, true]));
+
+	// $: $hiddenColumnIds = Object.entries(hideForId)
+	// 	.filter(([, hide]) => !hide)
+	// 	.map(([id]) => id);
+
+	// const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
+	// const { filterValue } = pluginStates.filter;
+
+	// const { selectedDataIds } = pluginStates.select;
 
 	const hideableCols = ['status', 'email', 'amount'];
 </script>
 
-<div class="bg-white mx-auto max-w-7xl px-24 py-12">
-	<div class="  py-12 px-16">
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">Current Chinchillas</Card.Title>
-					<!-- <img src="/logo.png" alt="Logo" class="h-8 w-auto" /> -->
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">23</div>
-					<p class="text-xs text-muted-foreground">+2 from last month</p>
-				</Card.Content>
-			</Card.Root>
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">New Subscriptions</Card.Title>
-					<Users class="h-4 w-4 text-muted-foreground" />
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">23</div>
-					<p class="text-xs text-green-500">+180.1% from last month</p>
-				</Card.Content>
-			</Card.Root>
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">Adoption Applications</Card.Title>
-					<CreditCard class="h-4 w-4 text-muted-foreground" />
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">12</div>
-					<p class="text-xs text-muted-foreground">+19% from last month</p>
-				</Card.Content>
-			</Card.Root>
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">Active Now</Card.Title>
-					<Activity class="h-4 w-4 text-muted-foreground" />
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">+573</div>
-					<p class="text-xs text-muted-foreground">+201 since last hour</p>
-				</Card.Content>
-			</Card.Root>
-		</div>
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7 pt-4">
-			<Card.Root class="col-span-4">
-				<Card.Header>
+<div class="bg-white mx-auto max-w-7xl lg:px-24 py-20">
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Current Chinchillas</Card.Title>
+				<img src="/logo.png" alt="Logo" class="h-8 w-auto" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-2xl font-bold">
+					{chinchillas.length}
+				</div>
+				<div class="flex flex-row justify-between">
+					<p class="text-xs text-muted-foreground">
+						{maleChinchillas.length} male
+					</p>
+
+					<p class="text-xs text-muted-foreground">
+						{femaleChinchillas.length} female
+					</p>
+				</div>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">New Subscriptions</Card.Title>
+				<Users class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-2xl font-bold">23</div>
+				<p class="text-xs text-green-500">+180.1% from last month</p>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Adoption Applications</Card.Title>
+				<CreditCard class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-2xl font-bold">12</div>
+				<p class="text-xs text-muted-foreground">+19% from last month</p>
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Active Now</Card.Title>
+				<Activity class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-2xl font-bold">+573</div>
+				<p class="text-xs text-muted-foreground">+201 since last hour</p>
+			</Card.Content>
+		</Card.Root>
+	</div>
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7 pt-4">
+		<Card.Root class="col-span-7">
+			<Card.Header>
+				<div class="flex w-full justify-between">
 					<Card.Title>Overview</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<!-- <Overview /> -->
-				</Card.Content>
-			</Card.Root>
-			<Card.Root class="col-span-3">
+
+					<Dialog.Root>
+						<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
+							Add Chin <Plus class="ml-2 h-4 w-4" />
+						</Dialog.Trigger>
+						<Dialog.Content class=" max-w-4xl">
+							<Dialog.Header>
+								<Dialog.Title>Add Chinchilla</Dialog.Title>
+								<Dialog.Description>
+									Please fill out the form below to add a new chinchilla.
+								</Dialog.Description>
+							</Dialog.Header>
+
+							<AddChinchillaForm form={data.form} {chinchillas} />
+						</Dialog.Content>
+					</Dialog.Root>
+				</div>
+			</Card.Header>
+			<Card.Content>
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+					{#each chinchillas as chinchilla}
+						<RescueChinCard {chinchilla} />
+					{/each}
+				</div>
+
+				<!-- <Overview /> -->
+			</Card.Content>
+		</Card.Root>
+		<!-- <Card.Root class="col-span-3">
 				<Card.Header>
 					<Card.Title>Recent Sales</Card.Title>
 					<Card.Description>You made 265 sales this month.</Card.Description>
 				</Card.Header>
 				<Card.Content>
-					<!-- <RecentSales /> -->
+					<RecentSales />
 				</Card.Content>
-			</Card.Root>
-		</div>
+			</Card.Root> -->
+	</div>
 
-		<Card.Root class="flex col-span-3 p-4 flex-col mt-4">
+	<!-- <Card.Root class="flex col-span-3 p-4 flex-col mt-4">
 			<div class="w-full">
 				<div class="flex items-center py-4">
 					<Input
@@ -337,6 +393,5 @@
 					>
 				</div>
 			</div>
-		</Card.Root>
-	</div>
+		</Card.Root> -->
 </div>

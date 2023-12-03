@@ -22,6 +22,28 @@ model User {
   posts        Post[]
 }
 
+model RescueApplication {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  firstName        String
+  lastName         String
+  email            String
+  age              Int
+  parentFirstName  String?
+  parentLastName   String?
+  parentEmail      String?
+  hasChildren      Boolean
+  hasPets          Boolean
+  petTypes         String[]
+  hasChinchilla    Boolean
+  chinchillaGender Gender?
+  chinchillaAge    Int?
+
+  previousChinchilla    Boolean
+  previousChinchillaAge Int?
+}
+
 model Post {
   id          Int      @id @default(autoincrement())
   title       String
@@ -38,24 +60,34 @@ model Post {
 }
 
 model Chinchilla {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  age       Int
-  color     String
-  gender    String
-  photos    String[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  age         Int
+  description String
+  color       String
+  gender      Gender
+  friendly    Boolean
+  photos      String[]
+  bondedWith  Chinchilla[] @relation("Bonding")
+  bondedTo    Chinchilla?  @relation("Bonding", fields: [bondedToId], references: [id])
+  bondedToId  Int?
 }
 
-model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  stripeId  String
-  quantity  Int
-  price     Int
-  category  String
-  photos    String[]
+enum Gender {
+  MALE
+  FEMALE
 }
+
+// model Product {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   stripeId  String
+//   quantity  Int
+//   price     Int
+//   category  String
+//   photos    String[]
+// }

@@ -4,12 +4,12 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 const config = {
   kit: {
     adapter: adapter(),
-    csp: {
-      directives: {
-        'script-src': ['self'],
-        'connect-src': ['self', 'vitals.vercel-insights.com']
-      },
-    },
+    // csp: {
+    //   directives: {
+    //     'script-src': ['self'],
+    //     'connect-src': ['self', 'vitals.vercel-insights.com']
+    //   },
+    // },
   },
   preprocess: vitePreprocess()
 };

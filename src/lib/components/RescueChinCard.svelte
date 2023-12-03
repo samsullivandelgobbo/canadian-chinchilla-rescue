@@ -1,34 +1,53 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+	import type { Chinchilla } from '@prisma/client';
+	import { Badge } from '$lib/components/ui/badge';
+
+	export let chinchilla: Chinchilla;
+
+	let flipped = false;
+
+	function toggleFlip() {
+		console.log('flipped');
+		flipped = !flipped;
+	}
 </script>
 
-<a href="#" class="group">
-	<img class="aspect-[3/2] w-full rounded-2xl object-cover" src="/img/dexter.png" alt="" />
-	<div class="flex flex-col">
-		<div class="flex flex-row justify-between">
-			<h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">Dexter</h3>
-			<h5 class="mt-8 text-md font-bold text-gray-800">5 years old</h5>
-		</div>
-		<div class="flex flex-row justify-between">
-			<p class="text-base leading-7 text-gray-600">Gray Male</p>
-			<p
-				class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800"
-			>
-				Available
-			</p>
-		</div>
-	</div>
-</a>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 
-<Card.Root>
-	<Card.Header>
-		<Card.Title>Card Title</Card.Title>
-		<Card.Description>Card Description</Card.Description>
-	</Card.Header>
-	<Card.Content>
-		<p>Card Content</p>
-	</Card.Content>
-	<Card.Footer>
-		<p>Card Footer</p>
-	</Card.Footer>
+<Card.Root class="w-full rounded-2xl  ">
+	<a href={`/adopt/${chinchilla.name.toLowerCase().replace(' ', '-')}`} class="h-full w-full">
+		<img
+			class="aspect-[3/2] w-full rounded-t-2xl object-cover"
+			src={chinchilla.photos[0]}
+			alt={chinchilla.name}
+		/>
+		<Card.Content />
+		<Card.Footer>
+			<div class="flex flex-col gap-2 w-full">
+				<div class="flex w-full flex-row justify-between">
+					<Card.Title>
+						{chinchilla.name}
+					</Card.Title>
+					<Card.Description>
+						{chinchilla.color}
+					</Card.Description>
+				</div>
+				<div class="flex w-full flex-row justify-between">
+					<Card.Description>
+						{chinchilla.age}
+						{chinchilla.age > 1 ? 'years' : 'year'} old
+					</Card.Description>
+					<Badge
+						class={chinchilla.friendly
+							? 'bg-green-100 text-green-800 hover:bg-green-200'
+							: 'bg-red-100 text-red-800'}
+					>
+						{chinchilla.friendly ? 'Friendly' : 'Not Friendly'}
+					</Badge>
+				</div>
+			</div>
+		</Card.Footer>
+	</a>
 </Card.Root>

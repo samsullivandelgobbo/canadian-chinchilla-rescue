@@ -16,13 +16,15 @@
 		class="flex items-center justify-between lg:justify-center px-4 py-3 lg:px-8"
 		aria-label="Global"
 	>
-		<div class="flex lg:flex">
+		<div class="flex">
 			<a href="/" class="p-1.5 mr-12">
 				<span class="sr-only">Canadian Chinchilla Rescue</span>
 				<img class="h-8 w-auto" src="/logo.png" alt="Logo" />
 			</a>
 		</div>
 		<div class="flex lg:hidden">
+			<ShoppingCartPopover />
+
 			<button
 				on:click={() => (menuOpen = !menuOpen)}
 				type="button"
@@ -75,6 +77,7 @@
 						<span class="sr-only">Canadian Chinchilla Rescue</span>
 						<img class="h-12 w-auto" src="/logo.png" alt="" />
 					</a>
+
 					<button
 						type="button"
 						class="-m-2.5 rounded-md p-3 mb-1 text-gray-700"

@@ -1,11 +1,17 @@
 <script lang="ts">
 	import type { Post } from '@prisma/client';
 	import type { PageData } from './$types';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import { Button } from '$lib/components/ui/button';
 
 	import { onMount } from 'svelte';
 	import { enhance, applyAction } from '$app/forms';
 	import type { SubmitFunction } from '$app/forms';
 	import { page } from '$app/stores';
+	import { Label } from '$lib/components/ui/label';
+	import { Trash } from 'lucide-svelte';
+	import Switch from '$lib/components/ui/switch/switch.svelte';
+	import * as Select from '$lib/components/ui/select';
 
 	let ToastEditor: any;
 	let blogTitle: string = 'Untitled';
@@ -108,7 +114,21 @@
 			window.location.href = '/admin/blog';
 		}
 	};
+
+	let categories = [
+		{ value: 'shop', label: 'Shop' },
+		{ value: 'tips', label: 'Tips' },
+		{ value: 'fun', label: 'Fun' },
+		{ value: 'care', label: 'Care' },
+		{ value: 'rescue', label: 'Rescue' }
+	];
 </script>
+
+<!-- <Form.Root>
+
+
+
+  </Form.Root> -->
 
 <form
 	action="/admin/blog/{blogTitle}"
@@ -117,7 +137,7 @@
 	enctype="multipart/form-data"
 >
 	<div class="bg-gray-100 py-24 min-h-screen">
-		<div class="max-w-7xl mx-auto px-6 lg:px-8">
+		<div class="max-w-4xl mx-auto">
 			{#if saveError}
 				<div class="rounded-md bg-red-50 p-4">
 					<div class="flex">
@@ -186,89 +206,9 @@
 					</div>
 				</div>
 			{/if}
-			<div class="flex flex-row px-8 gap-4 w-full">
-				<div class="flex basis-1/4 flex-col">
-					<label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900"
-						>Cover photo</label
-					>
 
-					<div
-						class="mt-2 justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-4
-              {image ? 'hidden' : 'flex'}
-              "
-					>
-						<div class="text-center">
-							<svg
-								class="mx-auto h-12 w-12 text-gray-300"
-								viewBox="0 0 24 24"
-								fill="currentColor"
-								aria-hidden="true"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-									clip-rule="evenodd"
-								/>
-							</svg>
-							<div class="mt-4 flex text-sm leading-6 text-gray-600">
-								<label
-									for="file-upload"
-									class="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500"
-								>
-									<span>Upload a file</span>
-									<input
-										id="file-upload"
-										name="file-upload"
-										type="file"
-										class="sr-only"
-										accept="image/*"
-										on:change={handleImageChange}
-									/>
-								</label>
-								<p class="pl-1">or drag and drop</p>
-							</div>
-							<p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-						</div>
-					</div>
-					<div
-						class="{image ? 'flex w-full' : 'hidden'}
-          relative
-          "
-					>
-						<div
-							class="absolute w-full h-full hover:bg-gray-100/30 group
-            "
-						>
-							<button
-								type="button"
-								class=" flex-col gap-4 items-center justify-center h-full w-full flex
-                "
-								on:click={() => (image = null)}
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="h-12 w-12 text-gray-900 group-hover:opacity-100 opacity-0"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-									/>
-								</svg>
-								<p class="text-sm leading-5 text-gray-900 group-hover:opacity-100 opacity-0">
-									Change
-								</p>
-							</button>
-						</div>
-						<img src={image} alt="" class="h-64 w-full rounded-lg object-cover" />
-					</div>
-				</div>
-
-				<div class="flex basis-3/4 flex-col">
+			<div class="flex flex-row px-4 gap-4 w-full">
+				<div class="flex basis-full flex-col">
 					<div class="flex flex-col p-1">
 						<input
 							type="text"
@@ -297,13 +237,14 @@
 				</div>
 			</div>
 
-			<div class=" px-4 pt-8">
+			<div class=" px-4 pt-4">
 				<div class="flex flex-row justify-between w-full px-4">
 					<div class=" px-4 justify-start">
-						<label for="category" class=" text-sm font-medium leading-6 text-gray-900">
-							Category
-						</label>
-						<select
+						<!-- <label for="category" class=" text-sm font-medium leading-6 text-gray-900"> -->
+						<!-- Category -->
+						<!-- </label> -->
+
+						<!-- <select
 							id="category"
 							name="category"
 							bind:value={category}
@@ -314,12 +255,12 @@
 							<option selected> Fun </option>
 							<option> Care </option>
 							<option> Rescue </option>
-						</select>
+						</select> -->
 					</div>
 					<div class="justify-end flex">
 						<p class="text-gray-500 text-sm text-center items-center inline-flex px-4">
 							{#if !awaitSave}
-								Last updated: {lastUpdated ? lastUpdated.toLocaleString() : 'Never'}
+								{lastUpdated ? 'Last updated ' + lastUpdated.toLocaleDateString() : 'Not saved'}
 							{:else}
 								Saving...
 							{/if}
@@ -340,6 +281,71 @@
 				</div>
 			</div>
 			<div class="flex flex-col gap-8 px-12 py-18 mt-12">
+				<!-- <div class="bg-white shadow sm:rounded-lg p-4"> -->
+				<Label>Cover photo</Label>
+
+				<div
+					class="mt-2 justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-4
+              {image ? 'hidden' : 'flex'}
+              "
+				>
+					<div class="text-center">
+						<svg
+							class="mx-auto h-12 w-12 text-gray-300"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+						<div class="mt-4 flex text-sm leading-6 text-gray-600">
+							<label
+								for="file-upload"
+								class="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500"
+							>
+								<span>Upload a file</span>
+								<input
+									id="file-upload"
+									name="file-upload"
+									type="file"
+									class="sr-only"
+									accept="image/*"
+									on:change={handleImageChange}
+								/>
+							</label>
+							<p class="pl-1">or drag and drop</p>
+						</div>
+						<p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+					</div>
+				</div>
+				<div
+					class="{image ? 'flex w-full' : 'hidden'}
+          relative
+          "
+				>
+					<div
+						class="absolute w-full h-full hover:bg-gray-100/30 group
+            "
+					>
+						<button
+							type="button"
+							class=" flex-col gap-4 items-center justify-center h-full w-full flex
+                "
+							on:click={() => (image = null)}
+						>
+							<Trash class="h-12 w-12 text-gray-900/50 opacity-0 group-hover:opacity-100" />
+							<p class="text-sm leading-5 text-gray-900 group-hover:opacity-100 opacity-0">
+								Change
+							</p>
+						</button>
+					</div>
+					<img src={image} alt="" class=" w-full rounded-lg object-cover" />
+				</div>
+
 				<div class="bg-white shadow sm:rounded-lg">
 					<div class="px-4 py-5 sm:p-6">
 						<h3
@@ -355,7 +361,9 @@
 								</p>
 							</div>
 							<div class="mt-5 sm:ml-6 sm:mt-0 sm:flex sm:flex-shrink-0 sm:items-center">
-								<button
+								<Switch bind:checked={published} />
+
+								<!-- <button
 									on:click={() => (published = !published)}
 									type="button"
 									class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
@@ -372,10 +380,39 @@
                     {published ? 'translate-x-5' : 'translate-x-0'}
                     "
 									/>
-								</button>
+								</button> -->
 							</div>
 						</div>
 					</div>
+
+					<div class="bg-white shadow sm:rounded-lg">
+						<div class="px-4 py-5 sm:p-6">
+							<h3 class="text-base font-semibold leading-6 text-gray-900">Post Category</h3>
+							<div class="mt-2 sm:flex sm:items-start sm:justify-between">
+								<div class="max-w-xl text-sm text-gray-500">
+									<p>Select a category for this post. This will help users find your post.</p>
+								</div>
+
+								<Select.Root portal={null}>
+									<Select.Trigger class="w-[180px]">
+										<Select.Value placeholder="Select a category" />
+									</Select.Trigger>
+									<Select.Content>
+										<Select.Group>
+											<Select.Label>Categories</Select.Label>
+											{#each categories as category}
+												<Select.Item value={category.value} label={category.label}
+													>{category.label}</Select.Item
+												>
+											{/each}
+										</Select.Group>
+									</Select.Content>
+									<Select.Input name="favoritecategory" />
+								</Select.Root>
+							</div>
+						</div>
+					</div>
+
 					<div class="bg-white shadow sm:rounded-lg">
 						<div class="px-4 py-5 sm:p-6">
 							<h3 class="text-base font-semibold leading-6 text-gray-900">Delete Post</h3>
@@ -384,13 +421,31 @@
 									<p>Delete this post. This action cannot be undone.</p>
 								</div>
 								<div class="mt-5 sm:ml-6 sm:mt-0 sm:flex sm:flex-shrink-0 sm:items-center">
-									<button
+									<AlertDialog.Root>
+										<AlertDialog.Trigger asChild let:builder>
+											<Button builders={[builder]} variant="destructive">Show Dialog</Button>
+										</AlertDialog.Trigger>
+										<AlertDialog.Content>
+											<AlertDialog.Header>
+												<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+												<AlertDialog.Description>
+													This action cannot be undone. This will permanently delete your account
+													and remove your data from our servers.
+												</AlertDialog.Description>
+											</AlertDialog.Header>
+											<AlertDialog.Footer>
+												<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+												<AlertDialog.Action>Continue</AlertDialog.Action>
+											</AlertDialog.Footer>
+										</AlertDialog.Content>
+									</AlertDialog.Root>
+									<!-- <button
 										type="button"
 										on:click={() => (deletePostCheck = true)}
 										class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
 									>
 										Delete
-									</button>
+									</button> -->
 								</div>
 							</div>
 						</div>

@@ -10,7 +10,9 @@ declare global {
 				avatar?: string | null;
 				name: string;
 			} | null;
+			cartId: string | null;
 		}
+
 		// interface PageData {}
 		// interface Platform {}
 	}

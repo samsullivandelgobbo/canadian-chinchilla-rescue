@@ -15,7 +15,7 @@
 	/>
 </svelte:head>
 <div class="mx-auto max-w-7xl">
-	<div class=" w-full px-4 -ml-2-2">
+	<div class=" w-full lg:px-4">
 		<img
 			class="w-full object-center object-cover h-72 lg:h-full lg:rounded-lg"
 			src={Hero}
