@@ -1,193 +1,168 @@
+<script lang="ts" context="module">
+	export const ssr = false;
+
+	import type { Load } from '@sveltejs/kit';
+
+	const url = '/api/chinchilla';
+
+	export const load: Load = async ({ fetch }) => {
+		const response = await fetch('http://locahost:5175/api/chinchilla', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		console.log('res', response);
+		const initialChinchillas = await response.json();
+
+		return {
+			props: {
+				initialChinchillas
+			}
+		};
+	};
+</script>
+
 <script lang="ts">
-	import { createTable, Subscribe, Render, createRender } from 'svelte-headless-table';
 	import {
-		addSortBy,
-		addPagination,
-		addTableFilter,
-		addSelectedRows,
-		addHiddenColumns
-	} from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
-	import { Activity, CreditCard, DollarSign, Download, Plus, Users } from 'lucide-svelte';
-	import * as Table from '$lib/components/ui/table';
-	// import Actions from './data-table/data-table-actions.svelte';
+		Activity,
+		Archive,
+		CreditCard,
+		Edit,
+		Eye,
+		MoreHorizontal,
+		Plus,
+		Users
+	} from 'lucide-svelte';
+
+	import { useSWR } from 'sswr';
 
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { cn } from '$lib/utils';
-	import { Input } from '$lib/components/ui/input';
-	// import DataTableCheckbox from './data-table/data-table-checkbox.svelte';
-	import { ArrowUpDown, ChevronDown } from 'lucide-svelte';
+
 	import * as Card from '$lib/components/ui/card';
-	import * as Tabs from '$lib/components/ui/tabs';
+
 	import type { PageData } from './$types';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
-	import { Label } from '$lib/components/ui/label';
-	import AddChinchillaForm from './add-chinchilla-form.svelte';
+	import ChinchillaForm from './chinchilla-form.svelte';
 	import RescueChinCard from '$lib/components/RescueChinCard.svelte';
+	import type { Chinchilla } from '@prisma/client';
+	import { onMount } from 'svelte';
 
-	export let data: PageData;
-	const chinchillas = data.chinchillas;
-
-	const maleChinchillas = chinchillas.map((chinchilla) => {
-		if (chinchilla.gender === 'MALE') {
-			return chinchilla;
-		}
+	let open = false;
+	let edit = false;
+	let dropdownOpen = false;
+	let deleteAlertOpen = false;
+	let notification = null;
+	onMount(() => {
+		console.log('mounted');
 	});
 
-	const femaleChinchillas = chinchillas.map((chinchilla) => {
-		if (chinchilla.gender === 'FEMALE') {
-			return chinchilla;
-		}
+	$: if (notification) {
+		setTimeout(() => {
+			notification = null;
+		}, 5000);
+	}
+
+	export let initialChinchillas: Chinchilla[];
+
+	const { data: chinchillas, revalidate } = useSWR<Chinchilla[]>('/api/chinchilla', {
+		initialChinchillas,
+		revalidateOnStart: true
 	});
 
-	// type Payment = {
-	// 	id: string;
-	// 	amount: number;
-	// 	status: 'Pending' | 'Processing' | 'Success' | 'Failed';
-	// 	email: string;
-	// };
+	let editChinchilla: Chinchilla;
 
-	// const data: Payment[] = [
-	// 	{
-	// 		id: 'm5gr84i9',
-	// 		amount: 316,
-	// 		status: 'Success',
-	// 		email: 'ken99@yahoo.com'
-	// 	},
-	// 	{
-	// 		id: '3u1reuv4',
-	// 		amount: 242,
-	// 		status: 'Success',
-	// 		email: 'Abe45@gmail.com'
-	// 	},
-	// 	{
-	// 		id: 'derv1ws0',
-	// 		amount: 837,
-	// 		status: 'Processing',
-	// 		email: 'Monserrat44@gmail.com'
-	// 	},
-	// 	{
-	// 		id: '5kma53ae',
-	// 		amount: 874,
-	// 		status: 'Success',
-	// 		email: 'Silas22@gmail.com'
-	// 	},
-	// 	{
-	// 		id: 'bhqecj4p',
-	// 		amount: 721,
-	// 		status: 'Failed',
-	// 		email: 'carmella@hotmail.com'
-	// 	}
-	// ];
+	let selectedChinchilla: Chinchilla | null = null;
 
-	// const table = createTable(readable(data), {
-	// 	sort: addSortBy({ disableMultiSort: true }),
-	// 	page: addPagination(),
-	// 	filter: addTableFilter({
-	// 		fn: ({ filterValue, value }) => value.includes(filterValue)
-	// 	}),
-	// 	select: addSelectedRows(),
-	// 	hide: addHiddenColumns()
-	// });
+	const maleChinchillas = $chinchillas?.filter((chinchilla) => chinchilla.gender === 'MALE');
 
-	// const columns = table.createColumns([
-	// 	// table.column({
-	// 	// 	header: (_, { pluginStates }) => {
-	// 	// 		const { allPageRowsSelected } = pluginStates.select;
-	// 	// 		return createRender(DataTableCheckbox, {
-	// 	// 			checked: allPageRowsSelected
-	// 	// 		});
-	// 	// 	},
-	// 	// 	accessor: 'id',
-	// 	// 	cell: ({ row }, { pluginStates }) => {
-	// 	// 		const { getRowState } = pluginStates.select;
-	// 	// 		const { isSelected } = getRowState(row);
+	const femaleChinchillas = $chinchillas?.filter((chinchilla) => chinchilla.gender === 'FEMALE');
 
-	// 	// 		return createRender(DataTableCheckbox, {
-	// 	// 			checked: isSelected
-	// 	// 		});
-	// 	// 	},
-	// 	// 	plugins: {
-	// 	// 		sort: {
-	// 	// 			disable: true
-	// 	// 		},
-	// 	// 		filter: {
-	// 	// 			exclude: true
-	// 	// 		}
-	// 	// 	}
-	// 	// }),
-	// 	table.column({
-	// 		header: 'Status',
-	// 		accessor: 'status',
-	// 		plugins: { sort: { disable: true }, filter: { exclude: true } }
-	// 	}),
-	// 	table.column({
-	// 		header: 'Email',
-	// 		accessor: 'email',
-	// 		cell: ({ value }) => value.toLowerCase(),
-	// 		plugins: {
-	// 			filter: {
-	// 				getFilterValue(value) {
-	// 					return value.toLowerCase();
-	// 				}
-	// 			}
-	// 		}
-	// 	}),
-	// 	table.column({
-	// 		header: 'Amount',
-	// 		accessor: 'amount',
-	// 		cell: ({ value }) => {
-	// 			const formatted = new Intl.NumberFormat('en-US', {
-	// 				style: 'currency',
-	// 				currency: 'USD'
-	// 			}).format(value);
-	// 			return formatted;
-	// 		},
-	// 		plugins: {
-	// 			sort: {
-	// 				disable: true
-	// 			},
-	// 			filter: {
-	// 				exclude: true
-	// 			}
-	// 		}
-	// 	})
-	// 	// table.column({
-	// 	// 	header: '',
-	// 	// 	accessor: ({ id }) => id,
-	// 	// 	cell: (item) => {
-	// 	// 		return createRender(Actions, { id: item.value });
-	// 	// 	},
-	// 	// 	plugins: {
-	// 	// 		sort: {
-	// 	// 			disable: true
-	// 	// 		}
-	// 	// 	}
-	// 	// })
-	// ]);
+	console.log(maleChinchillas);
 
-	// const { headerRows, pageRows, tableAttrs, tableBodyAttrs, flatColumns, pluginStates, rows } =
-	// 	table.createViewModel(columns);
+	let selectedChinchillas: Chinchilla[] = [];
 
-	// const { sortKeys } = pluginStates.sort;
+	async function handleChinchillaDelete(chinchillaId: number) {
+		const res = await fetch(`/api/chinchilla/${chinchillaId}`, {
+			method: 'DELETE'
+		});
 
-	// const { hiddenColumnIds } = pluginStates.hide;
-	// const ids = flatColumns.map((c) => c.id);
-	// let hideForId = Object.fromEntries(ids.map((id) => [id, true]));
-
-	// $: $hiddenColumnIds = Object.entries(hideForId)
-	// 	.filter(([, hide]) => !hide)
-	// 	.map(([id]) => id);
-
-	// const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
-	// const { filterValue } = pluginStates.filter;
-
-	// const { selectedDataIds } = pluginStates.select;
-
-	const hideableCols = ['status', 'email', 'amount'];
+		if (res.ok) {
+			console.log('deleted');
+			revalidate();
+			notification = {
+				type: 'success',
+				message: 'Successfully deleted chinchilla.'
+			};
+		}
+	}
 </script>
+
+{#if notification}
+	<!-- Global notification live region, render this permanently at the end of the document -->
+	<div
+		aria-live="assertive"
+		class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
+	>
+		<div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+			<!--
+      Notification panel, dynamically insert this into the live region when it needs to be displayed
+
+      Entering: "transform ease-out duration-300 transition"
+        From: "translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+        To: "translate-y-0 opacity-100 sm:translate-x-0"
+      Leaving: "transition ease-in duration-100"
+        From: "opacity-100"
+        To: "opacity-0"
+    -->
+			<div
+				class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
+			>
+				<div class="p-4">
+					<div class="flex items-start">
+						<div class="flex-shrink-0">
+							<svg
+								class="h-6 w-6 text-green-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+						</div>
+						<div class="ml-3 w-0 flex-1 pt-0.5">
+							<p class="text-sm font-medium text-gray-900">
+								{notification.message}
+							</p>
+						</div>
+						<div class="ml-4 flex flex-shrink-0">
+							<button
+								type="button"
+								class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+							>
+								<span class="sr-only">Close</span>
+								<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+									<path
+										d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+									/>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/if}
 
 <div class="bg-white mx-auto max-w-7xl lg:px-24 py-20">
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -198,15 +173,19 @@
 			</Card.Header>
 			<Card.Content>
 				<div class="text-2xl font-bold">
-					{chinchillas.length}
+					{$chinchillas && $chinchillas.length ? $chinchillas.length : 0}
 				</div>
 				<div class="flex flex-row justify-between">
 					<p class="text-xs text-muted-foreground">
-						{maleChinchillas.length} male
+						{#if maleChinchillas && maleChinchillas.length > 0}
+							{maleChinchillas.length} male
+						{/if}
 					</p>
 
 					<p class="text-xs text-muted-foreground">
-						{femaleChinchillas.length} female
+						{#if femaleChinchillas && femaleChinchillas.length > 0}
+							{femaleChinchillas.length} female
+						{/if}
 					</p>
 				</div>
 			</Card.Content>
@@ -249,8 +228,19 @@
 				<div class="flex w-full justify-between">
 					<Card.Title>Overview</Card.Title>
 
-					<Dialog.Root>
-						<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
+					<Dialog.Root bind:open>
+						<Dialog.Trigger
+							class={buttonVariants({ variant: 'outline' })}
+							on:click={() => {
+								edit = false;
+
+								setTimeout(() => {
+									edit = true;
+								}, 100);
+
+								editChinchilla = null;
+							}}
+						>
 							Add Chin <Plus class="ml-2 h-4 w-4" />
 						</Dialog.Trigger>
 						<Dialog.Content class=" max-w-4xl">
@@ -260,138 +250,127 @@
 									Please fill out the form below to add a new chinchilla.
 								</Dialog.Description>
 							</Dialog.Header>
-
-							<AddChinchillaForm form={data.form} {chinchillas} />
+							<div class="flex flex-col px-4">
+								{#if editChinchilla}
+									<ChinchillaForm
+										chinchillas={$chinchillas}
+										{editChinchilla}
+										on:success={() => {
+											open = false;
+											revalidate();
+											notification = {
+												type: 'success',
+												message: 'Successfully edited chinchilla.'
+											};
+										}}
+									/>
+								{:else}
+									<ChinchillaForm
+										chinchillas={$chinchillas}
+										editChinchilla={null}
+										on:success={() => {
+											open = false;
+											revalidate();
+											notification = {
+												type: 'success',
+												message: 'Successfully added chinchilla.'
+											};
+										}}
+									/>
+								{/if}
+							</div>
 						</Dialog.Content>
 					</Dialog.Root>
 				</div>
 			</Card.Header>
-			<Card.Content>
-				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-					{#each chinchillas as chinchilla}
-						<RescueChinCard {chinchilla} />
-					{/each}
-				</div>
-
-				<!-- <Overview /> -->
-			</Card.Content>
-		</Card.Root>
-		<!-- <Card.Root class="col-span-3">
-				<Card.Header>
-					<Card.Title>Recent Sales</Card.Title>
-					<Card.Description>You made 265 sales this month.</Card.Description>
-				</Card.Header>
+			{#if $chinchillas}
 				<Card.Content>
-					<RecentSales />
-				</Card.Content>
-			</Card.Root> -->
-	</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+						{#each $chinchillas as chinchilla}
+							<div class="border hover:border-red-300 rounded-2xl overflow-hidden relative">
+								<!-- {#if selectedChinchillas.includes(chinchilla)}
+								<div class="absolute top-0 right-0 m-2 rounded-full p-1 bg-red-400">
+									<Check class="h-4 w-4 text-white" />
+								</div>
+							{/if} -->
+								<div
+									class="absolute top-0 right-0 m-2 rounded-full z-50"
+									id={`dropdown-${chinchilla.id}`}
+								>
+									<DropdownMenu.Root preventScroll={false}>
+										<DropdownMenu.Trigger asChild let:builder>
+											<Button builders={[builder]} variant="outline" size="icon">
+												<MoreHorizontal class="h-4 w-4 text-gray-700" />
+											</Button>
+										</DropdownMenu.Trigger>
+										<DropdownMenu.Content class="w-56">
+											<DropdownMenu.Label>
+												{chinchilla.name}
+											</DropdownMenu.Label>
+											<DropdownMenu.Separator />
+											<DropdownMenu.Group>
+												<DropdownMenu.Item>
+													<Eye class="mr-2 h-4 w-4" />
+													<span> View </span>
+												</DropdownMenu.Item>
+												<DropdownMenu.Item
+													on:click={() => {
+														editChinchilla = chinchilla;
 
-	<!-- <Card.Root class="flex col-span-3 p-4 flex-col mt-4">
-			<div class="w-full">
-				<div class="flex items-center py-4">
-					<Input
-						class="max-w-sm"
-						placeholder="Filter emails..."
-						type="text"
-						bind:value={$filterValue}
-					/>
-					<DropdownMenu.Root>
-						<DropdownMenu.Trigger asChild let:builder>
-							<Button variant="outline" class="ml-auto" builders={[builder]}>
-								Columns <ChevronDown class="ml-2 h-4 w-4" />
-							</Button>
-						</DropdownMenu.Trigger>
-						<DropdownMenu.Content>
-							{#each flatColumns as col}
-								{#if hideableCols.includes(col.id)}
-									<DropdownMenu.CheckboxItem bind:checked={hideForId[col.id]}>
-										{col.header}
-									</DropdownMenu.CheckboxItem>
-								{/if}
-							{/each}
-						</DropdownMenu.Content>
-					</DropdownMenu.Root>
-				</div>
-				<div class="rounded-md border">
-					<Table.Root {...$tableAttrs}>
-						<Table.Header>
-							{#each $headerRows as headerRow}
-								<Subscribe rowAttrs={headerRow.attrs()}>
-									<Table.Row>
-										{#each headerRow.cells as cell (cell.id)}
-											<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
-												<Table.Head {...attrs} class={cn('[&:has([role=checkbox])]:pl-3')}>
-													{#if cell.id === 'amount'}
-														<div class="text-right font-medium">
-															<Render of={cell.render()} />
-														</div>
-													{:else if cell.id === 'email'}
-														<Button variant="ghost" on:click={props.sort.toggle}>
-															<Render of={cell.render()} />
-															<ArrowUpDown
-																class={cn(
-																	$sortKeys[0]?.id === cell.id && 'text-foreground',
-																	'ml-2 h-4 w-4'
-																)}
-															/>
-														</Button>
-													{:else}
-														<Render of={cell.render()} />
-													{/if}
-												</Table.Head>
-											</Subscribe>
-										{/each}
-									</Table.Row>
-								</Subscribe>
-							{/each}
-						</Table.Header>
-						<Table.Body {...$tableBodyAttrs}>
-							{#each $pageRows as row (row.id)}
-								<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-									<Table.Row {...rowAttrs} data-state={$selectedDataIds[row.id] && 'selected'}>
-										{#each row.cells as cell (cell.id)}
-											<Subscribe attrs={cell.attrs()} let:attrs>
-												<Table.Cell class="[&:has([role=checkbox])]:pl-3" {...attrs}>
-													{#if cell.id === 'amount'}
-														<div class="text-right font-medium">
-															<Render of={cell.render()} />
-														</div>
-													{:else if cell.id === 'status'}
-														<div class="capitalize">
-															<Render of={cell.render()} />
-														</div>
-													{:else}
-														<Render of={cell.render()} />
-													{/if}
-												</Table.Cell>
-											</Subscribe>
-										{/each}
-									</Table.Row>
-								</Subscribe>
-							{/each}
-						</Table.Body>
-					</Table.Root>
-				</div>
+														open = true;
+													}}
+												>
+													<Edit class="mr-2 h-4 w-4" />
+													<span> Edit </span>
+												</DropdownMenu.Item>
 
-				<div class="flex items-center justify-end space-x-2 py-4">
-					<div class="flex-1 text-sm text-muted-foreground">
-						{Object.keys($selectedDataIds).length} of{' '}
-						{$rows.length} row(s) selected.
+												<DropdownMenu.Item
+													on:click={() => {
+														console.log(chinchilla);
+														selectedChinchilla = chinchilla;
+														deleteAlertOpen = true;
+													}}
+													class="text-red-500 hover:bg-red-100"
+												>
+													<Archive class="mr-2 h-4 w-4" />
+
+													<span> Delete </span>
+												</DropdownMenu.Item>
+											</DropdownMenu.Group>
+										</DropdownMenu.Content>
+									</DropdownMenu.Root>
+								</div>
+
+								<RescueChinCard {chinchilla} />
+							</div>
+						{/each}
 					</div>
-					<Button
-						variant="outline"
-						size="sm"
-						on:click={() => ($pageIndex = $pageIndex - 1)}
-						disabled={!$hasPreviousPage}>Previous</Button
-					>
-					<Button
-						variant="outline"
-						size="sm"
-						disabled={!$hasNextPage}
-						on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
-					>
-				</div>
-			</div>
-		</Card.Root> -->
+
+					<!-- <Overview /> -->
+				</Card.Content>
+			{/if}
+		</Card.Root>
+	</div>
 </div>
+
+<AlertDialog.Root bind:open={deleteAlertOpen}>
+	<AlertDialog.Trigger asChild />
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+			<AlertDialog.Description>
+				This action cannot be undone. This will permanently delete
+				{selectedChinchilla?.name} from the database.
+			</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<AlertDialog.Action
+				on:click={() => {
+					handleChinchillaDelete(selectedChinchilla?.id);
+				}}
+				>Delete
+			</AlertDialog.Action>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>

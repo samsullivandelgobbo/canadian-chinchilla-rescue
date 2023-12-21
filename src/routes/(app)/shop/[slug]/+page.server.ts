@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import type { Action, Actions } from '@sveltejs/kit';
-
+import { db } from '$lib/data/db';
 export const load: PageServerLoad = async ({ request, params }) => {
 	const shopUrl = import.meta.env.VITE_SHOPIFY_SHOP_URL;
 	const storefrontAccessToken = import.meta.env.VITE_SHOPIFY_PUBLIC_TOKEN;
@@ -78,8 +78,11 @@ export const load: PageServerLoad = async ({ request, params }) => {
 		product.variants = product.variants.edges.map((edge) => edge.node);
 		delete product.variants.edges;
 
+		const chinchillas = await db.chinchilla.findMany();
+
 		return {
-			product
+			product,
+			chinchillas
 		};
 	} catch (error) {
 		console.error('Error fetching data:', error);
@@ -89,16 +92,15 @@ export const load: PageServerLoad = async ({ request, params }) => {
 };
 
 const addToCart: Action = async ({ request, locals, params }) => {
+	const shopUrl = import.meta.env.VITE_SHOPIFY_SHOP_URL;
+	const storefrontAccessToken = import.meta.env.VITE_SHOPIFY_PUBLIC_TOKEN;
+
+	const form = await request.formData();
+	const quantity = form.get('quantity');
+	const productId = form.get('productId') as string;
+
+	const cartId = form.get('cartId') as string;
 	try {
-		const shopUrl = import.meta.env.VITE_SHOPIFY_SHOP_URL;
-		const storefrontAccessToken = import.meta.env.VITE_SHOPIFY_PUBLIC_TOKEN;
-
-		const form = await request.formData();
-		const quantity = form.get('quantity');
-		const productId = form.get('productId') as string;
-
-		const cartId = form.get('cartId') as string;
-
 		if (cartId) {
 			// cart exists, add to cart
 
@@ -159,19 +161,18 @@ const addToCart: Action = async ({ request, locals, params }) => {
 				cartId: cart.id,
 				cart
 			};
-		}
+		} else {
+			console.log('quantity:', quantity);
+			console.log('productId:', productId);
 
-		console.log('quantity:', quantity);
-		console.log('productId:', productId);
-
-		const response = await fetch(`https://${shopUrl}/api/2023-10/graphql.json`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-Shopify-Storefront-Access-Token': storefrontAccessToken
-			},
-			body: JSON.stringify({
-				query: `
+			const response = await fetch(`https://${shopUrl}/api/2023-10/graphql.json`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Shopify-Storefront-Access-Token': storefrontAccessToken
+				},
+				body: JSON.stringify({
+					query: `
         mutation {
           cartCreate(
             input: {
@@ -200,27 +201,27 @@ const addToCart: Action = async ({ request, locals, params }) => {
             }
           }
         `
-			})
-		});
+				})
+			});
 
-		const { data, errors } = await response.json();
+			const { data, errors } = await response.json();
 
-		if (errors) {
-			console.error('GraphQL errors:', errors);
-			console.log(errors);
-			throw new Error('GraphQL query errors occurred.');
+			if (errors) {
+				console.error('GraphQL errors:', errors);
+				console.log(errors);
+				throw new Error('GraphQL query errors occurred.');
+			}
+
+			const cart = data.cartCreate.cart;
+
+			console.log('cart quantity:', cart.lines.edges[0].node.quantity);
+
+			return {
+				success: true,
+				cartId: cart.id,
+				cart
+			};
 		}
-
-		const cart = data.cartCreate.cart;
-
-		console.log('cart quantity:', cart.lines.edges[0].node.quantity);
-		console.log('cart:', cart);
-
-		return {
-			success: true,
-			cartId: cart.id,
-			cart
-		};
 	} catch (error) {
 		console.error('Error fetching data:', error);
 	}

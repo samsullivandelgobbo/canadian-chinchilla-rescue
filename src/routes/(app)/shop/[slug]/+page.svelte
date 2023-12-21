@@ -5,11 +5,18 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { page } from '$app/stores';
 	import cartId from '$lib/stores/shoppingCart';
-	import { Minus, Plus } from 'lucide-svelte';
+	import { Check, Minus, Plus } from 'lucide-svelte';
+	import * as Popover from '$lib/components/ui/popover';
+	import * as Select from '$lib/components/ui/select';
+	import * as Command from '$lib/components/ui/command';
+	import { Button } from '$lib/components/ui/button';
+	import { cn } from '$lib/utils';
+	import RescueChinCard from '$lib/components/RescueChinCard.svelte';
 
 	export let data: PageData;
 
 	const product = data.product;
+	const chinchillas = data.chinchillas;
 	let loading = false;
 	let quantity = 1;
 
@@ -50,10 +57,10 @@
 					<input type="hidden" name="quantity" value={quantity} />
 					<input type="hidden" name="cartId" value={$cartId} />
 
-					<div class="flex flex-row gap-4">
-						<button
+					<div class="flex flex-col gap-4">
+						<Button
 							type="submit"
-							class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded w-1/2 flex flex-row gap-4 justify-center"
+							class="w-full sm:w-1/2"
 							on:click={() => {
 								console.log('clicked');
 							}}
@@ -95,10 +102,10 @@
 									>
 								</div>
 							{/if}
-						</button>
+						</Button>
 
 						<!-- quantity buttons -->
-						<div class="grid grid-cols-3 gap-2 items-center">
+						<div class="flex flex-row gap-4 sm:w-1/2 justify-center">
 							<button
 								type="button"
 								aria-label="Decrease quantity"
@@ -137,6 +144,32 @@
 			<div class="flex flex-col gap-4 pt-8 justify-start">
 				<h2 class="text-lg font-bold">Description</h2>
 				<p class="text-sm font-light">{product.description}</p>
+			</div>
+
+			<div class="flex flex-col gap-4 mt-4">
+				<h3 class="text-lg font-bold">Donate to a chinchilla</h3>
+				<p class="" />
+
+				<Select.Root portal={null}>
+					<Select.Trigger class="w-[180px]">
+						<Select.Value placeholder="Select a chinchilla" />
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Group>
+							<Select.Label>chinchillas</Select.Label>
+							{#each chinchillas as chinchilla}
+								<Select.Item value={chinchilla.name} label={chinchilla.name}
+									>{chinchilla.name}</Select.Item
+								>
+							{/each}
+						</Select.Group>
+					</Select.Content>
+					<Select.Input name="favoritechinchilla" />
+				</Select.Root>
+
+				<!-- <RescueChinCard chinchilla={chinchillas[0]} /> -->
+
+				<Button variant="outline" size="">Donate</Button>
 			</div>
 		</div>
 	</div>

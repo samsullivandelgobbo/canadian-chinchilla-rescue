@@ -50,10 +50,10 @@
 	<div class="bg-white py-8 lg:py-16 sm:py-24">
 		<div class="mx-auto max-w-3xl px-4 sm:px-6">
 			<div class="flex flex-col items-center">
-				<div class="flex flex-col lg:flex-row gap-12 w-full">
+				<div class="flex flex-col-reverse gap-12 w-full">
 					<!-- Image -->
 					<img
-						class=" rounded-xl object-fit lg:h-72 h-auto w-auto lg:mb-8"
+						class=" rounded-xl object-fit border border-gray-200 shadow-xl h-auto w-auto lg:mb-8"
 						src={post.image}
 						alt={post.title}
 					/>
@@ -61,26 +61,30 @@
 					<div class="flex flex-col">
 						<!-- Date -->
 						<div class="flex flex-row gap-6">
-							<p class="text-sm font-semibold leading-7 text-red-400 mb-2">
-								<time datetime={new Date(post.createdAt).toISOString()}
-									>{new Date(post.createdAt).toLocaleDateString()}</time
-								>
+							<p class="text- font-semibold leading-7 text-red-400 mb-2">
+								<time datetime={new Date(post.createdAt).toISOString()}>
+									{new Date(post.createdAt).toLocaleDateString('en', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric'
+									})}
+								</time>
 							</p>
 							<div class="flex items-center justify-center mb-2">
 								<p
-									class="relative z-10 rounded-full text-sm bg-gray-50 px-2 py-1 font-medium text-gray-600 hover:bg-gray-100"
+									class="relative z-10 capitalize rounded-full text-sm bg-gradient-to-r from-pink-300/50 to-red-300/50 via-orange-300/50 via-[80%] px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
 								>
-									Shop
+									{post.category}
 								</p>
 							</div>
 						</div>
 						<!-- Title -->
-						<h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">
+						<h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">
 							{post.title}
 						</h1>
 
 						<!-- Description -->
-						<div class="text-sm leading-7 text-gray-500 mb-6">
+						<div class="text-xl leading-7 text-gray-500 mb-6">
 							<p>
 								{post.description}
 							</p>

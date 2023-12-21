@@ -295,7 +295,7 @@
 									<Popover.Content class="max-w-[200px] min-w-[200px] p-0">
 										<Command.Root>
 											<Command.Input autofocus placeholder="Search petType..." />
-											<Command.Empty>No petType found.</Command.Empty>
+											<Command.Empty>No pet type found.</Command.Empty>
 											<Command.Group>
 												{#each petTypes as petType}
 													<Command.Item
@@ -304,6 +304,7 @@
 															console.log('on select firing');
 															console.log(value);
 															handlePetTypeSelect(petType);
+															setValue([...value, petType.value]);
 															// closeAndFocusTrigger(ids.trigger);
 														}}
 													>
@@ -370,7 +371,7 @@
 							</Form.Item>
 						</div>
 					</Form.Field>
-					<Form.Field name="surrenderedPetReason" {config} class="w-full col-span-2">
+					<Form.Field name="surrenderedPetReason" {config}>
 						<div class="flex w-full col-span-2 justify-between">
 							<Form.Item class="w-full flex justify-between">
 								<div class="flex flex-col gap-2 w-full">
@@ -424,7 +425,7 @@
 				</div>
 
 				{#if hasChinchilla}
-					<Form.Field name="chinchillaNames" {config}>
+					<Form.Field name="chinchillaName" {config}>
 						<Form.Item>
 							<Form.Label>Chinchilla's name</Form.Label>
 							<Form.Input />
@@ -433,7 +434,7 @@
 						</Form.Item>
 					</Form.Field>
 
-					<Form.Field name="ownedChinchillaAge" {config} let:value>
+					<Form.Field name="chinchillaAge" {config} let:value>
 						<Form.Item>
 							<Form.Label>Age</Form.Label>
 							<Form.Input type="number" />
@@ -442,7 +443,7 @@
 						</Form.Item>
 					</Form.Field>
 
-					<Form.Field {config} name="gender" let:setValue>
+					<Form.Field {config} name="chinchillaGender" let:setValue>
 						<Form.Item>
 							<div class="flex flex-col gap-4">
 								<Form.Label>Gender</Form.Label>
@@ -542,13 +543,12 @@
 								that chinchillas cannot tolerate temperatures above 75 degrees Fahrenheit (24
 								degrees Celsius).
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -562,13 +562,12 @@
 								I am able and willing to afford the costs of owning a chinchilla, including food,
 								supplies, and veterinary care.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -581,13 +580,12 @@
 								I understand that chinchillas can live beyond 20 years and I am willing and able to
 								make that commitment.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -601,13 +599,12 @@
 								will be free of other pets, direct sunlight, and will be safe for the chinchilla to
 								play in.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -620,13 +617,12 @@
 								I understand that chinchillas can be <strong>very</strong> messy, I will be able to clean
 								up after my chinchilla daily and give them dust baths at least once a week.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -640,13 +636,12 @@
 								be able to provide at least 30 minutes of fun interaction with my chinchilla every
 								day. (This can be broken up into multiple sessions throughout the day.)
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -660,13 +655,12 @@
 								I understand that no rescue chinchilla is to ever be bred. I agree to never breed
 								any chinchilla I adopt from the Canadian Chinchilla Rescue.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -681,13 +675,12 @@
 								chinchilla to be held or petted. I will respect my chinchilla's boundaries and only
 								handle them when they are comfortable.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>
@@ -702,13 +695,12 @@
 								understand that providing false information will result in my application being
 								denied.
 							</Form.Description>
+							<Form.Validation />
 						</div>
 
 						<Form.Checkbox
 							class="h-7 w-7 items-center justify-center flex rounded border-gray-300 text-red-400 focus:ring-red-400"
 						/>
-
-						<Form.Validation />
 					</Form.Item>
 				</Form.Field>
 			</div>

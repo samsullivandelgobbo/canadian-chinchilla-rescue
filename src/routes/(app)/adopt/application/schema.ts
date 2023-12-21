@@ -35,12 +35,12 @@ export const applicationSchema = z.object({
 	petTypes: z.array(z.string()).optional(),
 	hasChinchillaVet: z.boolean(),
 
-	hasChinchilla: z.boolean(),
 	// if hasChinchilla, require chinchilla info
-	chinchillaCount: z.number().min(1).max(100).optional(),
-	chinchillaNames: z.array(z.string()).optional(),
-	chinchillaAges: z.array(z.number()).optional(),
-	chinchillaGenders: z.array(z.string()).optional(),
+	hasChinchilla: z.boolean(),
+	chinchillaName: z.string().optional(),
+	chinchillaAge: z.number().min(0).max(100).optional(),
+	chinchillaGender: z.string().optional(),
+	chinchillaFriendly: z.boolean().optional(),
 	willQuarantine: z.boolean(),
 
 	ownedChinchillas: z.boolean(),
@@ -56,15 +56,33 @@ export const applicationSchema = z.object({
 	surrenderedPetReason: z.string().optional(),
 
 	// ackknowledgements (all required)
-	hasAirConditioning: z.boolean(),
-	financialResponsibility: z.boolean(),
-	timeResponsibility: z.boolean(),
-	hasSpace: z.boolean(),
-	handlingAcknowledgement: z.boolean(),
-	breedingAcknowledgement: z.boolean(),
-	cleaningResponsibility: z.boolean(),
-	playtimeResponsibility: z.boolean(),
-	factuallyAccurate: z.boolean(),
+	hasAirConditioning: z.boolean().refine((value) => value, {
+		message: 'You must have air conditioning to adopt a chinchilla.'
+	}),
+	financialResponsibility: z.boolean().refine((value) => value, {
+		message: 'You must be financially able to care for a chinchilla.'
+	}),
+	timeResponsibility: z.boolean().refine((value) => value, {
+		message: 'You must have time to care for a chinchilla.'
+	}),
+	hasSpace: z.boolean().refine((value) => value, {
+		message: 'You must have space for a chinchilla.'
+	}),
+	handlingAcknowledgement: z.boolean().refine((value) => value, {
+		message: 'You must understand the handling requirements of a chinchilla.'
+	}),
+	breedingAcknowledgement: z.boolean().refine((value) => value, {
+		message: 'You must agree to never breed your chinchilla.'
+	}),
+	cleaningResponsibility: z.boolean().refine((value) => value, {
+		message: "You must be able to clean your chinchilla's cage regularly."
+	}),
+	playtimeResponsibility: z.boolean().refine((value) => value, {
+		message: 'You must be able to provide regular playtime for your chinchilla.'
+	}),
+	factuallyAccurate: z.boolean().refine((value) => value, {
+		message: 'You must agree that all information provided is factually accurate.'
+	}),
 
 	message: z.string().min(0).max(10000)
 });

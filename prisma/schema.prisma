@@ -23,25 +23,39 @@ model User {
 }
 
 model RescueApplication {
-  id               Int      @id @default(autoincrement())
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  firstName        String
-  lastName         String
-  email            String
-  age              Int
-  parentFirstName  String?
-  parentLastName   String?
-  parentEmail      String?
-  hasChildren      Boolean
-  hasPets          Boolean
-  petTypes         String[]
-  hasChinchilla    Boolean
-  chinchillaGender Gender?
-  chinchillaAge    Int?
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  firstName       String
+  lastName        String
+  email           String
+  age             Int
+  parentFirstName String?
+  parentLastName  String?
+  parentEmail     String?
 
-  previousChinchilla    Boolean
-  previousChinchillaAge Int?
+  hasCage            Boolean
+  cageType           String?
+  cageImage          String?
+  hasChildren        Boolean
+  hasAllergies       Boolean
+  hasPets            Boolean
+  petTypes           String[]
+  hasChinchillaVet   Boolean
+  hasChinchilla      Boolean
+  chinchillaName     String?
+  chinchillaAge      Int?
+  chinchillaGender   Gender?
+  chinchillaFriendly Boolean?
+  willQuarantine     Boolean?
+
+  ownedChinchillas      Boolean
+  ownedChinchillasCount Int?
+
+  surrenderedPet       Boolean
+  surrenderedPetReason String?
+
+  whyChinchilla String?
 }
 
 model Post {
