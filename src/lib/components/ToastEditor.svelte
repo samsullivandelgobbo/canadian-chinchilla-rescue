@@ -14,7 +14,7 @@
 	onMount(() => {
 		editor = new Editor({
 			el: editorContainer,
-			height: '600px',
+			height: '70vh',
 
 			initialValue: content,
 			initialEditType: 'wysiwyg',

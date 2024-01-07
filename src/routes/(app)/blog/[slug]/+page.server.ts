@@ -3,11 +3,11 @@ import Post from '@prisma/client';
 import { db } from '$lib/data/db';
 
 export const load: PageServerLoad = async ({ request, params }) => {
-	const slug = params.slug;
+	const id = params.slug;
 
 	const post = await db.post.findUnique({
 		where: {
-			slug: slug
+			id: id
 		},
 		include: {
 			author: true

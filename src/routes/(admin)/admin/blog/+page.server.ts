@@ -10,5 +10,11 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 		}
 	});
 
-	return { posts };
+	const drafts = await db.draft.findMany({
+		include: {
+			author: true
+		}
+	});
+
+	return { posts: posts, drafts: drafts };
 };

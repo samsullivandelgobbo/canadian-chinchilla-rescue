@@ -1,6 +1,6 @@
 <script>
 	import TiltCard from '$lib/components/TiltCard.svelte';
-	import Hero from '$lib/img/hero.png?format=webp&cache=false';
+	import Hero from '$lib/img/hero.png?format=webp&w=1920';
 	import ShopCause from '$lib/img/shop_cause.png?format=webp&w=500&h=300';
 	import ChinchillaBlog from '$lib/img/chinchilla_blog.png?format=webp&w=500&h=300';
 	import ContactChinchilla from '$lib/img/contact_chinchilla.png?format=webp&w=500&h=300';

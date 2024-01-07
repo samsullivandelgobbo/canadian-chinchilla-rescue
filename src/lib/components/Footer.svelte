@@ -73,7 +73,9 @@
 			</a>
 		</div>
 		<p class="mt-10 text-center text-xs leading-5 text-gray-500">
-			&copy; 2023 Canadian Chinchilla Rescue, All rights reserved.
+			&copy;
+			{new Date().getFullYear()}
+			Canadian Chinchilla Rescue, All rights reserved.
 		</p>
 	</div>
 </footer>

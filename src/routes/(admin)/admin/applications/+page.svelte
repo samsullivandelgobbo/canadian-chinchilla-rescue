@@ -8,7 +8,7 @@
 		addHiddenColumns
 	} from 'svelte-headless-table/plugins';
 	import { readable } from 'svelte/store';
-	import { Activity, CreditCard, DollarSign, Download, Users } from 'lucide-svelte';
+	import { Activity, Calendar, CreditCard, DollarSign, Download, Users } from 'lucide-svelte';
 	import * as Table from '$lib/components/ui/table';
 	// import Actions from './data-table/data-table-actions.svelte';
 	import { Button } from '$lib/components/ui/button';
@@ -19,188 +19,83 @@
 	import { ArrowUpDown, ChevronDown } from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import type { PageData } from './$types';
+	import ApplicationsTable from '$lib/components/ApplicationsTable.svelte';
+	import type { RescueApplication } from '@prisma/client';
 
-	type Payment = {
-		id: string;
-		amount: number;
-		status: 'Pending' | 'Processing' | 'Success' | 'Failed';
-		email: string;
-	};
+	export let data: PageData;
+	const applications = data.applications as RescueApplication[];
+	console.log(applications);
 
-	const data: Payment[] = [
-		{
-			id: 'm5gr84i9',
-			amount: 316,
-			status: 'Success',
-			email: 'ken99@yahoo.com'
-		},
-		{
-			id: '3u1reuv4',
-			amount: 242,
-			status: 'Success',
-			email: 'Abe45@gmail.com'
-		},
-		{
-			id: 'derv1ws0',
-			amount: 837,
-			status: 'Processing',
-			email: 'Monserrat44@gmail.com'
-		},
-		{
-			id: '5kma53ae',
-			amount: 874,
-			status: 'Success',
-			email: 'Silas22@gmail.com'
-		},
-		{
-			id: 'bhqecj4p',
-			amount: 721,
-			status: 'Failed',
-			email: 'carmella@hotmail.com'
-		}
-	];
-
-	const table = createTable(readable(data), {
-		sort: addSortBy({ disableMultiSort: true }),
-		page: addPagination(),
-		filter: addTableFilter({
-			fn: ({ filterValue, value }) => value.includes(filterValue)
-		}),
-		select: addSelectedRows(),
-		hide: addHiddenColumns()
+	const applicationsThisWeek = applications.filter((application) => {
+		const date = new Date(application.createdAt);
+		const today = new Date();
+		const weekAgo = new Date(today.setDate(today.getDate() - 7));
+		return date > weekAgo;
 	});
 
-	const columns = table.createColumns([
-		// table.column({
-		// 	header: (_, { pluginStates }) => {
-		// 		const { allPageRowsSelected } = pluginStates.select;
-		// 		return createRender(DataTableCheckbox, {
-		// 			checked: allPageRowsSelected
-		// 		});
-		// 	},
-		// 	accessor: 'id',
-		// 	cell: ({ row }, { pluginStates }) => {
-		// 		const { getRowState } = pluginStates.select;
-		// 		const { isSelected } = getRowState(row);
-
-		// 		return createRender(DataTableCheckbox, {
-		// 			checked: isSelected
-		// 		});
-		// 	},
-		// 	plugins: {
-		// 		sort: {
-		// 			disable: true
-		// 		},
-		// 		filter: {
-		// 			exclude: true
-		// 		}
-		// 	}
-		// }),
-		table.column({
-			header: 'Status',
-			accessor: 'status',
-			plugins: { sort: { disable: true }, filter: { exclude: true } }
-		}),
-		table.column({
-			header: 'Email',
-			accessor: 'email',
-			cell: ({ value }) => value.toLowerCase(),
-			plugins: {
-				filter: {
-					getFilterValue(value) {
-						return value.toLowerCase();
-					}
-				}
-			}
-		}),
-		table.column({
-			header: 'Amount',
-			accessor: 'amount',
-			cell: ({ value }) => {
-				const formatted = new Intl.NumberFormat('en-US', {
-					style: 'currency',
-					currency: 'USD'
-				}).format(value);
-				return formatted;
-			},
-			plugins: {
-				sort: {
-					disable: true
-				},
-				filter: {
-					exclude: true
-				}
-			}
-		})
-		// table.column({
-		// 	header: '',
-		// 	accessor: ({ id }) => id,
-		// 	cell: (item) => {
-		// 		return createRender(Actions, { id: item.value });
-		// 	},
-		// 	plugins: {
-		// 		sort: {
-		// 			disable: true
-		// 		}
-		// 	}
-		// })
-	]);
-
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, flatColumns, pluginStates, rows } =
-		table.createViewModel(columns);
-
-	const { sortKeys } = pluginStates.sort;
-
-	const { hiddenColumnIds } = pluginStates.hide;
-	const ids = flatColumns.map((c) => c.id);
-	let hideForId = Object.fromEntries(ids.map((id) => [id, true]));
-
-	$: $hiddenColumnIds = Object.entries(hideForId)
-		.filter(([, hide]) => !hide)
-		.map(([id]) => id);
-
-	const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
-	const { filterValue } = pluginStates.filter;
-
-	const { selectedDataIds } = pluginStates.select;
-
-	const hideableCols = ['status', 'email', 'amount'];
+	const applicationsLastWeek = applications.filter((application) => {
+		// grab all applications from 2 weeks ago
+		const date = new Date(application.createdAt);
+		const today = new Date();
+		const weekAgo = new Date(today.setDate(today.getDate() - 7));
+		const twoWeeksAgo = new Date(today.setDate(today.getDate() - 14));
+		return date > twoWeeksAgo && date < weekAgo;
+	});
 </script>
 
-<div class="bg-white mx-auto max-w-7xl px-24 py-12">
-	<div class="  py-12 px-16">
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">Current Chinchillas</Card.Title>
-					<!-- <img src="/logo.png" alt="Logo" class="h-8 w-auto" /> -->
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">23</div>
-					<p class="text-xs text-muted-foreground">+2 from last month</p>
-				</Card.Content>
-			</Card.Root>
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">New Subscriptions</Card.Title>
-					<Users class="h-4 w-4 text-muted-foreground" />
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">23</div>
-					<p class="text-xs text-green-500">+180.1% from last month</p>
-				</Card.Content>
-			</Card.Root>
-			<Card.Root>
-				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-					<Card.Title class="text-sm font-medium">Adoption Applications</Card.Title>
-					<CreditCard class="h-4 w-4 text-muted-foreground" />
-				</Card.Header>
-				<Card.Content>
-					<div class="text-2xl font-bold">12</div>
-					<p class="text-xs text-muted-foreground">+19% from last month</p>
-				</Card.Content>
-			</Card.Root>
-			<Card.Root>
+<div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
+	<Card.Root>
+		<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+			<Card.Title class="text-sm font-medium">Applications this week</Card.Title>
+			<Calendar class="h-4 w-4 text-muted-foreground" />
+		</Card.Header>
+		<Card.Content>
+			<div class="text-2xl font-bold">
+				{applicationsThisWeek.length}
+			</div>
+			<p
+				class="text-xs text-muted-foreground
+      {applicationsThisWeek.length - applicationsLastWeek.length > 0
+					? 'text-green-500'
+					: 'text-red-500'}
+      "
+			>
+				{applicationsThisWeek.length - applicationsLastWeek.length} from last week
+			</p>
+		</Card.Content>
+	</Card.Root>
+	<Card.Root>
+		<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+			<Card.Title class="text-sm font-medium">Total Applications</Card.Title>
+			<Users class="h-4 w-4 text-muted-foreground" />
+		</Card.Header>
+		<Card.Content>
+			<div class="text-2xl font-bold">
+				{applications.length}
+			</div>
+			<p
+				class="text-xs
+      {applicationsThisWeek.length - applicationsLastWeek.length > 0
+					? 'text-red-500'
+					: 'text-green-500'}
+      
+      "
+			>
+				+{applications.length - applicationsLastWeek.length} from last week
+			</p>
+		</Card.Content>
+	</Card.Root>
+	<!-- <Card.Root>
+		<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+			<Card.Title class="text-sm font-medium">Unread Applications</Card.Title>
+			<CreditCard class="h-4 w-4 text-muted-foreground" />
+		</Card.Header>
+		<Card.Content>
+			<div class="text-2xl font-bold">12</div>
+		</Card.Content>
+	</Card.Root> -->
+	<!-- <Card.Root>
 				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 					<Card.Title class="text-sm font-medium">Active Now</Card.Title>
 					<Activity class="h-4 w-4 text-muted-foreground" />
@@ -209,29 +104,12 @@
 					<div class="text-2xl font-bold">+573</div>
 					<p class="text-xs text-muted-foreground">+201 since last hour</p>
 				</Card.Content>
-			</Card.Root>
-		</div>
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7 pt-4">
-			<Card.Root class="col-span-4">
-				<Card.Header>
-					<Card.Title>Overview</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<!-- <Overview /> -->
-				</Card.Content>
-			</Card.Root>
-			<Card.Root class="col-span-3">
-				<Card.Header>
-					<Card.Title>Recent Sales</Card.Title>
-					<Card.Description>You made 265 sales this month.</Card.Description>
-				</Card.Header>
-				<Card.Content>
-					<!-- <RecentSales /> -->
-				</Card.Content>
-			</Card.Root>
-		</div>
+			</Card.Root> -->
+</div>
 
-		<Card.Root class="flex col-span-3 p-4 flex-col mt-4">
+<ApplicationsTable {applications} />
+
+<!-- <Card.Root class="flex col-span-3 p-4 flex-col mt-4">
 			<div class="w-full">
 				<div class="flex items-center py-4">
 					<Input
@@ -337,6 +215,4 @@
 					>
 				</div>
 			</div>
-		</Card.Root>
-	</div>
-</div>
+		</Card.Root> -->

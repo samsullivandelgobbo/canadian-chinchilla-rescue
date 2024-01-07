@@ -3,7 +3,6 @@ import { put, del } from '@vercel/blob';
 
 export async function GET({ params }) {
 	const chinchillas = await db.chinchilla.findMany();
-	console.log(chinchillas);
 
 	return new Response(JSON.stringify(chinchillas), {
 		headers: {
@@ -26,9 +25,6 @@ export async function POST({ params, request }) {
 		const friendly = body.friendly;
 		const bondedWith = body.bondedWith;
 		const photos = body.photos;
-		const files = body.files;
-
-		console.log(files);
 
 		// get filetype from base64 string
 

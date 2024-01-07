@@ -12,14 +12,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  name         String
-  avatar       String?
-  refreshToken String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  posts        Post[]
+  id               String              @id @default(uuid())
+  email            String              @unique
+  name             String
+  avatar           String?
+  refreshToken     String              @unique
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  posts            Post[]
+  readApplications RescueApplication[]
+  drafts           Draft[]
 }
 
 model RescueApplication {
@@ -56,21 +58,35 @@ model RescueApplication {
   surrenderedPetReason String?
 
   whyChinchilla String?
+
+  readBy User[]
 }
 
 model Post {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(cuid())
   title       String
   content     String
   image       String?
-  category    String
+  tags        String[]
   description String
-  slug        String   @unique
-  published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
+  drafts      Draft[]
+}
+
+model Draft {
+  id          String   @id @default(cuid())
+  title       String?
+  content     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+  post        Post?    @relation(fields: [postId], references: [id])
+  postId      String?
 }
 
 model Chinchilla {

@@ -12,13 +12,16 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 	import RescueChinCard from '$lib/components/RescueChinCard.svelte';
+	import type { Chinchilla } from '@prisma/client';
+	import { slide } from 'svelte/transition';
 
 	export let data: PageData;
 
 	const product = data.product;
-	const chinchillas = data.chinchillas;
+	const chinchillas = data.chinchillas as Chinchilla[];
 	let loading = false;
 	let quantity = 1;
+	let successNotification = false;
 
 	const addToCart: SubmitFunction = async ({ formElement, formData, action, cancel }) => {
 		loading = true;
@@ -34,10 +37,70 @@
 				cartId.set(null);
 				// set cartId store
 				cartId.set($page.form.cartId);
+				successNotification = true;
+
+				setTimeout(() => {
+					successNotification = false;
+				}, 3000);
+				// reset quantity
+				quantity = 1;
 			}
 		};
 	};
 </script>
+
+{#if successNotification}
+	<!-- Global notification live region, render this permanently at the end of the document -->
+	<div
+		aria-live="assertive"
+		class="pointer-events-none fixed flex items-end px-4 py-6 sm:items-start sm:p-6 top-12 inset-x-0"
+		transition:slide={{ duration: 300, delay: 300, axis: 'y' }}
+	>
+		<div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+			<div
+				class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
+			>
+				<div class="p-4">
+					<div class="flex items-start">
+						<div class="flex-shrink-0">
+							<svg
+								class="h-6 w-6 text-green-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+						</div>
+						<div class="ml-3 w-0 flex-1 pt-0.5">
+							<p class="text-sm font-medium text-gray-900">Added to cart</p>
+							<p class="mt-1 text-sm text-gray-500">Successfully added to your cart</p>
+						</div>
+						<div class="ml-4 flex flex-shrink-0">
+							<button
+								type="button"
+								class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+							>
+								<span class="sr-only">Close</span>
+								<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+									<path
+										d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+									/>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/if}
 
 <div class="mx-auto max-w-7xl md:px-24 px-4 py-8">
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -57,10 +120,45 @@
 					<input type="hidden" name="quantity" value={quantity} />
 					<input type="hidden" name="cartId" value={$cartId} />
 
-					<div class="flex flex-col gap-4">
+					<div class="flex flex-col gap-4 max-w-[400px]">
+						<!-- quantity buttons -->
+						<div class="flex flex-row gap-4 sm:w-full justify-start">
+							<Button
+								variant="outline"
+								type="button"
+								size="lg"
+								aria-label="Decrease quantity"
+								on:click={() => {
+									if (quantity > 1) {
+										quantity -= 1;
+									}
+								}}
+							>
+								<Minus class="w-5 h-5" />
+							</Button>
+
+							<div
+								class="flex justify-center items-center py-2 px-4 bg-gray-100 border border-gray-100 shadow-sm rounded-xl w-full max-w-[200px]"
+							>
+								<span class="text-gray-800 font-bold">{quantity}</span>
+							</div>
+
+							<Button
+								type="button"
+								variant="outline"
+								size="lg"
+								aria-label="Increase quantity"
+								on:click={() => {
+									quantity += 1;
+								}}
+							>
+								<Plus class="w-6 h-5" />
+							</Button>
+						</div>
 						<Button
 							type="submit"
-							class="w-full sm:w-1/2"
+							size="lg"
+							class="w-full max-w-[400px] gap-2 text-lg shadow-sm "
 							on:click={() => {
 								console.log('clicked');
 							}}
@@ -103,74 +201,43 @@
 								</div>
 							{/if}
 						</Button>
-
-						<!-- quantity buttons -->
-						<div class="flex flex-row gap-4 sm:w-1/2 justify-center">
-							<button
-								type="button"
-								aria-label="Decrease quantity"
-								on:click={() => {
-									if (quantity > 1) {
-										quantity -= 1;
-									}
-								}}
-								class={`bg-gray-50 border border-gray-400 hover:bg-gray-300 text-gray-800 font-bold rounded-full w-10 h-10 active:scale-95 transform transition duration-200 items-center justify-center flex
-                ${quantity === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-							>
-								-
-							</button>
-
-							<div
-								class="flex justify-center items-center py-2 px-4 bg-gray-100 border border-gray-400 rounded-full w-10 h-10"
-							>
-								<span class="text-gray-800 font-bold">{quantity}</span>
-							</div>
-
-							<button
-								type="button"
-								aria-label="Increase quantity"
-								on:click={() => {
-									quantity += 1;
-								}}
-								class="bg-gray-50 border border-gray-400 hover:bg-gray-300 text-gray-800 font-bold rounded-full w-10 h-10 active:scale-95 transform transition duration-200 items-center justify-center flex"
-							>
-								<Plus class="w-4 h-4" />
-							</button>
-						</div>
 					</div>
 				</form>
 			</div>
 
 			<div class="flex flex-col gap-4 pt-8 justify-start">
 				<h2 class="text-lg font-bold">Description</h2>
-				<p class="text-sm font-light">{product.description}</p>
+				<p class=" font-light">{product.description}</p>
 			</div>
+		</div>
 
-			<div class="flex flex-col gap-4 mt-4">
-				<h3 class="text-lg font-bold">Donate to a chinchilla</h3>
-				<p class="" />
+		<div class="flex flex-col gap-4 mt-24">
+			<h3 class="text-lg font-bold">Donate to a chinchilla</h3>
+			<p class="text-foreground">
+				Donate this item to a chinchilla in our rescue, and we'll send you a photo of them with your
+				donation!
+			</p>
 
-				<Select.Root portal={null}>
-					<Select.Trigger class="w-[180px]">
-						<Select.Value placeholder="Select a chinchilla" />
-					</Select.Trigger>
-					<Select.Content>
-						<Select.Group>
-							<Select.Label>chinchillas</Select.Label>
-							{#each chinchillas as chinchilla}
-								<Select.Item value={chinchilla.name} label={chinchilla.name}
-									>{chinchilla.name}</Select.Item
-								>
-							{/each}
-						</Select.Group>
-					</Select.Content>
-					<Select.Input name="favoritechinchilla" />
-				</Select.Root>
+			<Select.Root portal={null}>
+				<Select.Trigger class="w-full">
+					<Select.Value placeholder="Select a chinchilla" />
+				</Select.Trigger>
+				<Select.Content>
+					<Select.Group>
+						<Select.Label>Chinchillas</Select.Label>
+						{#each chinchillas as chinchilla}
+							<Select.Item value={chinchilla.name} label={chinchilla.name}
+								>{chinchilla.name}</Select.Item
+							>
+						{/each}
+					</Select.Group>
+				</Select.Content>
+				<Select.Input name="favoritechinchilla" />
+			</Select.Root>
 
-				<!-- <RescueChinCard chinchilla={chinchillas[0]} /> -->
+			<!-- <RescueChinCard chinchilla={chinchillas[0]} /> -->
 
-				<Button variant="outline" size="">Donate</Button>
-			</div>
+			<Button variant="outline" size="lg">Donate</Button>
 		</div>
 	</div>
 </div>

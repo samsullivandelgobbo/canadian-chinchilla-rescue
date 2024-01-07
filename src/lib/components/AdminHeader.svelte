@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Bell } from 'lucide-svelte';
 	import NotificationPopover from './NotificationPopover.svelte';
+	import { fade } from 'svelte/transition';
 
 	let mobileMenuOpen = false;
 </script>
@@ -47,7 +48,7 @@
 	</div>
 	<!-- Mobile menu, show/hide based on menu open state. -->
 	{#if mobileMenuOpen}
-		<div class="lg:hidden" role="dialog" aria-modal="true">
+		<div class="lg:hidden" role="dialog" aria-modal="true" transition:fade={{ duration: 300 }}>
 			<!-- Background backdrop, show/hide based on slide-over state. -->
 			<div class="fixed inset-0 z-50" />
 			<div

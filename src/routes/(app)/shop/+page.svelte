@@ -47,50 +47,38 @@
 
 		<div class="mx-auto max-w-2xl px-4 sm:px-6 sm:py-4 lg:max-w-7xl lg:px-12">
 			<div class="grid grid-cols-3 w-full gap-8 mb-10">
-				<Card.Root
-					class="bg-gradient-to-br p-2 from-orange-400/50 to-pink-500 hover:from-red-200/80 hover:to-orange-500/80  "
-				>
+				<Card.Root>
 					<div class="bg-white/80 rounded-md h-full w-full">
-						<Card.Header>
-							<!-- <img src="/img/chew_toys_icon.png" alt="" class="w-16 h-16" /> -->
-							<Card.Title>Chew Toys</Card.Title>
-							<Card.Description>
-								Shop for chew toys, we have chew toys, wood sticks, treats and more.
-							</Card.Description>
+						<Card.Header class="flex flex-row gap-4">
+							<img src="/img/shop_icon_toys.png" alt="" class="w-16 h-16" />
+
+							<div class="flex flex-col gap-4">
+								<Card.Title>Toss Toys</Card.Title>
+								<Button variant="outline">Shop Now</Button>
+							</div>
 						</Card.Header>
-						<Card.Footer>
-							<Button variant="outline">Shop Now</Button>
-						</Card.Footer>
 					</div>
 				</Card.Root>
-				<Card.Root
-					class="bg-gradient-to-br p-2 from-orange-400/50 to-pink-500 hover:from-red-200/80 hover:to-orange-500/80 "
-				>
+				<Card.Root>
 					<div class="bg-white/80 rounded-md h-full w-full">
-						<Card.Header>
-							<!-- <img src="/img/chew_toys_icon.png" alt="" class="w-16 h-16" /> -->
-							<Card.Title>Stick Chews</Card.Title>
-							<Card.Description>Shop for apple, pear and more wood chew sticks.</Card.Description>
+						<Card.Header class="flex flex-row gap-4">
+							<img src="/img/shop_icon_sticks.png" alt="" class="w-16 h-16" />
+							<div class="flex flex-col gap-4">
+								<Card.Title>Chew Sticks</Card.Title>
+								<Button variant="outline">Shop Now</Button>
+							</div>
 						</Card.Header>
-						<Card.Footer>
-							<Button variant="outline">Shop Now</Button>
-						</Card.Footer>
 					</div>
 				</Card.Root>
-				<Card.Root
-					class="bg-gradient-to-br p-2 from-orange-400/50 to-pink-500 hover:from-red-200/80 hover:to-orange-500/80 "
-				>
+				<Card.Root>
 					<div class="bg-white/80 rounded-md h-full w-full">
-						<Card.Header>
-							<!-- <img src="/img/chew_toys_icon.png" alt="" class="w-16 h-16" /> -->
-							<Card.Title>Chew Toys</Card.Title>
-							<Card.Description>
-								Shop for chew toys, we have chew toys, wood sticks, treats and more.
-							</Card.Description>
+						<Card.Header class="flex flex-row gap-4">
+							<img src="/img/shop_icon_treat.png" alt="" class="w-16 h-16" />
+							<div class="flex flex-col gap-4">
+								<Card.Title>Treats</Card.Title>
+								<Button variant="outline">Shop Now</Button>
+							</div>
 						</Card.Header>
-						<Card.Footer>
-							<Button variant="outline">Shop Now</Button>
-						</Card.Footer>
 					</div>
 				</Card.Root>
 			</div>

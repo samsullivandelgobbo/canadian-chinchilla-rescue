@@ -8,7 +8,16 @@
 	import { createEventDispatcher } from 'svelte';
 	import { cn } from '$lib/utils';
 	import { onDestroy, tick } from 'svelte';
-	import { ArrowLeft, ArrowRight, Check, ChevronsUpDown, Trash } from 'lucide-svelte';
+	import {
+		ArrowLeft,
+		ArrowRight,
+		Check,
+		ChevronsUpDown,
+		Landmark,
+		Mountain,
+		MountainSnow,
+		Trash
+	} from 'lucide-svelte';
 	import type { Chinchilla } from '@prisma/client';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
@@ -19,7 +28,7 @@
 	let uploadedImages: any[] = [];
 	let displayedImages: any[] = [];
 	let bondedWith: Chinchilla[] = [];
-	let photos;
+	let photos: any[] = [];
 
 	let isLoading = false;
 
@@ -35,6 +44,19 @@
 
 	const dispatch = createEventDispatcher();
 
+	// function to convert a url of an image to a base64 string
+	async function toBase64(url) {
+		const res = await fetch(url);
+		const blob = await res.blob();
+		return new Promise((resolve) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(blob);
+			reader.onloadend = () => {
+				resolve(reader.result);
+			};
+		});
+	}
+
 	$: {
 		if (editChinchilla) {
 			name = editChinchilla.name;
@@ -44,6 +66,9 @@
 			description = editChinchilla.description;
 			friendly = editChinchilla.friendly;
 			displayedImages = editChinchilla.photos;
+			photos = editChinchilla.photos;
+			// convert image to base
+			uploadedImages = editChinchilla.photos;
 		}
 	}
 
@@ -143,8 +168,7 @@
 				color: color,
 				photos: uploadedImages,
 				description: description,
-				friendly: friendly,
-				files: photos
+				friendly: friendly
 			})
 		});
 
@@ -171,6 +195,7 @@
 				gender: gender,
 				color: color,
 				photos: uploadedImages,
+				existingPhotos: photos,
 				description: description,
 				friendly: friendly
 			})
@@ -198,7 +223,13 @@
 	</div>
 	<div class="flex flex-col gap-2">
 		<Label>Age</Label>
-		<Input type="number" />
+		<Input
+			type="number"
+			value={age}
+			on:change={(e) => {
+				age = e.target.value;
+			}}
+		/>
 
 		<p class="text-sm text-muted-foreground">Age of the chinchilla you want to add</p>
 	</div>
@@ -207,7 +238,20 @@
 
 		<Select.Root>
 			<Select.Trigger>
-				<Select.Value placeholder="Color" />
+				{#if color}
+					<span class="flex w-full justify-between">
+						{color}
+
+						<span
+							class="w-4 h-4 mr-4 rounded-full bg-gradient-to-br {chinchillaColors.find(
+								(c) => c.value === color
+							).gradient}"
+						/>
+					</span>
+				{:else}
+					<span class="flex w-full justify-between"> Color </span>
+				{/if}
+				<!-- <Select.Value placeholder="Color" /> -->
 			</Select.Trigger>
 
 			<Select.Content>
@@ -270,7 +314,12 @@
 			</p>
 		</div>
 
-		<Switch bind:checked={friendly} />
+		<Switch
+			checked={friendly}
+			onCheckedChange={() => {
+				friendly = !friendly;
+			}}
+		/>
 	</div>
 
 	<div class="flex w-full flex-col justify-between">
@@ -297,26 +346,28 @@
 					<Command.Empty>No chinchillas found.</Command.Empty>
 					<Command.Group>
 						{#each chinchillas as chinchilla}
-							<Command.Item
-								value={chinchilla.id.toString()}
-								onSelect={() => {
-									console.log('on select firing');
+							{#if chinchilla.id !== editChinchilla?.id}
+								<Command.Item
+									value={chinchilla.id.toString()}
+									onSelect={() => {
+										console.log('on select firing');
 
-									if (bondedWith.includes(chinchilla)) {
-										bondedWith = bondedWith.filter((chin) => chin.id !== chinchilla.id);
-									} else {
-										bondedWith = [...bondedWith, chinchilla];
-									}
-									// setValue to {id: number}[]
-								}}
-							>
-								<Check
-									class="
+										if (bondedWith.includes(chinchilla)) {
+											bondedWith = bondedWith.filter((chin) => chin.id !== chinchilla.id);
+										} else {
+											bondedWith = [...bondedWith, chinchilla];
+										}
+										// setValue to {id: number}[]
+									}}
+								>
+									<Check
+										class="
 											mr-2 h-4 w-4
                     {bondedWith.includes(chinchilla) ? 'text-blue-500' : 'text-transparent'}"
-								/>
-								{chinchilla.name}
-							</Command.Item>
+									/>
+									{chinchilla.name}
+								</Command.Item>
+							{/if}
 						{/each}
 					</Command.Group>
 				</Command.Root>
@@ -335,7 +386,12 @@
 
 		<Label>Description</Label>
 
-		<Textarea bind:value={description} />
+		<Textarea
+			value={description}
+			on:change={(e) => {
+				description = e.target.value;
+			}}
+		/>
 
 		<p class="text-sm text-muted-foreground">Description of the chinchilla you want to add</p>
 	</div>
@@ -343,7 +399,39 @@
 		<label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Images</label
 		>
 		<div class="col-span-full justify-start flex w-full">
-			<div class="grid grid-cols-4 gap-4 items-center justify-center">
+			<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 items-center justify-center">
+				<button
+					class="flex justify-start h-full"
+					on:click={() => {
+						document.getElementById('file-upload')?.click();
+					}}
+				>
+					<div
+						class=" flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6"
+					>
+						<div class="text-center justify-center flex flex-col items-center">
+							<MountainSnow class="h-10 w-10 text-gray-900/50" />
+							<div class="mt-4 flex text-sm leading-6 text-gray-600">
+								<label
+									for="file-upload"
+									class="relative text-center justify-center w-full cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500"
+								>
+									Upload a file
+									<input
+										multiple
+										accept="image/*"
+										id="file-upload"
+										name="file-upload"
+										type="file"
+										class="sr-only"
+										on:change={handleFileInput}
+									/>
+								</label>
+							</div>
+							<p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+						</div>
+					</div>
+				</button>
 				{#if displayedImages.length > 0}
 					{#each displayedImages as image, index}
 						<div class="flex flex-col gap-4">
@@ -366,38 +454,6 @@
 						</div>
 					{/each}
 				{/if}
-				<button
-					class="flex justify-start h-full"
-					on:click={() => {
-						document.getElementById('file-upload')?.click();
-					}}
-				>
-					<div
-						class=" flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6"
-					>
-						<div class="text-center">
-							<img src="/logo.png" alt="logo" class="mx-auto h-12 w-12 text-gray-400" />
-							<div class="mt-4 flex text-sm leading-6 text-gray-600">
-								<label
-									for="file-upload"
-									class="relative text-center justify-center w-full cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500"
-								>
-									Upload a file
-									<input
-										multiple
-										accept="image/*"
-										id="file-upload"
-										name="file-upload"
-										type="file"
-										class="sr-only"
-										on:change={handleFileInput}
-									/>
-								</label>
-							</div>
-							<p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-						</div>
-					</div>
-				</button>
 			</div>
 		</div>
 	</div>

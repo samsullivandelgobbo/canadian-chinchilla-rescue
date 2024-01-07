@@ -61,7 +61,16 @@ export async function GET({ cookies, url, locals }) {
 
 	const userData = await userDataResponse.json();
 
-	if (!userData.email) {
+	if (
+		userData.email !== 'canadianchinchillarescue@gmail.com' ||
+		userData.email !== 'sam.sullivan150@gmail.com'
+	) {
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: '/'
+			}
+		});
 	}
 
 	console.log(userData, tokenData);

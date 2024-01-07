@@ -11,12 +11,17 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { cn } from '$lib/utils';
 	import { tick } from 'svelte';
-	import { Check, ChevronsUpDown } from 'lucide-svelte';
+	import { ArrowRight, Check, ChevronsUpDown } from 'lucide-svelte';
+
+	import { page } from '$app/stores';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import type { Chinchilla } from '@prisma/client';
+	import Sucess from './sucess.svelte';
+	import Loading from './loading.svelte';
 
 	export let chinchillas: Chinchilla[];
 
 	export let form: SuperValidated<FormSchema>;
-	import { page } from '$app/stores';
 	let hasChinchilla = false;
 
 	function closeAndFocusTrigger(triggerId: string) {
@@ -37,6 +42,7 @@
 	];
 
 	let selectedPetTypes: { value: string; label: string }[] = [];
+	let selectedPetTypesArray: string[] = [];
 
 	function handlePetTypeSelect(petType: { value: string; label: string }) {
 		console.log('handlePetTypeSelect');
@@ -47,6 +53,7 @@
 		} else {
 			selectedPetTypes = [...selectedPetTypes, petType];
 		}
+		selectedPetTypesArray = selectedPetTypes.map((petType) => petType.value);
 	}
 </script>
 
@@ -82,7 +89,10 @@
 		schema={applicationSchema}
 		let:config
 		class="max-w-xl mx-auto mt-8"
+		resetForm
 	>
+		<Sucess />
+
 		<div class="grid grid-cols-2 gap-x-8 gap-y-6">
 			<Form.Field name="firstName" {config}>
 				<Form.Item>
@@ -114,7 +124,7 @@
 			<Form.Field name="age" {config} let:value>
 				<Form.Item>
 					<Form.Label>Age</Form.Label>
-					<Form.Input type="number" min="12" value="12" />
+					<Form.Input type="number" />
 
 					<Form.Validation />
 				</Form.Item>
@@ -125,34 +135,36 @@
 							You must be at least 12 years old to adopt a chinchilla. If you are under 18, you will
 							need a parent or guardian to fill out the form with you.
 						</p>
-						<Form.Field name="parentFirstName" {config}>
-							<Form.Item class="w-full flex-col flex justify-between">
-								<Form.Label>Parent's name</Form.Label>
-								<Form.Input />
-								<!-- <Form.Description>This is your public display name.</Form.Description> -->
-								<Form.Validation />
-							</Form.Item>
-						</Form.Field>
-					</div>
-					<div class="flex w-full col-span-2 justify-between">
-						<Form.Field name="parentLastName" {config}>
-							<Form.Item class="w-full flex-col flex justify-between">
-								<Form.Label>Parent's name</Form.Label>
-								<Form.Input />
-								<!-- <Form.Description>This is your public display name.</Form.Description> -->
-								<Form.Validation />
-							</Form.Item>
-						</Form.Field>
-					</div>
-					<div class="flex w-full col-span-2 justify-between">
-						<Form.Field name="parentEmail" {config}>
-							<Form.Item class="w-full flex-col flex justify-between">
-								<Form.Label>Parent's email</Form.Label>
-								<Form.Input />
-								<!-- <Form.Description>This is your public display name.</Form.Description> -->
-								<Form.Validation />
-							</Form.Item>
-						</Form.Field>
+						<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6">
+							<Form.Field name="parentFirstName" {config}>
+								<Form.Item class="w-full flex-col flex justify-between">
+									<Form.Label>Parent's first name</Form.Label>
+									<Form.Input />
+									<!-- <Form.Description>This is your public display name.</Form.Description> -->
+									<Form.Validation />
+								</Form.Item>
+							</Form.Field>
+							<div class="flex w-full justify-between">
+								<Form.Field name="parentLastName" {config}>
+									<Form.Item class="w-full flex-col flex justify-between">
+										<Form.Label>Parent's last name</Form.Label>
+										<Form.Input />
+										<!-- <Form.Description>This is your public display name.</Form.Description> -->
+										<Form.Validation />
+									</Form.Item>
+								</Form.Field>
+							</div>
+							<div class="flex w-full col-span-2 justify-between">
+								<Form.Field name="parentEmail" {config}>
+									<Form.Item class="w-full flex-col flex justify-between">
+										<Form.Label>Parent's email</Form.Label>
+										<Form.Input />
+										<!-- <Form.Description>This is your public display name.</Form.Description> -->
+										<Form.Validation />
+									</Form.Item>
+								</Form.Field>
+							</div>
+						</div>
 					</div>
 				{/if}
 			</Form.Field>
@@ -210,11 +222,12 @@
 										<Form.SelectItem value="Other">Other</Form.SelectItem>
 									</Form.SelectContent>
 								</Form.Select>
+								<Form.Validation />
 							</Form.Item>
 						</div>
 					</Form.Field>
 
-					<Form.Field name="cageImages" {config}>
+					<Form.Field name="cageImage" {config} let:setValue>
 						<div class="flex md:flex-row flex-col w-full col-span-2 justify-between">
 							<Form.Item class="w-full md:flex-row flex-col flex justify-between">
 								<div class="flex flex-col gap-2 w-full">
@@ -224,7 +237,7 @@
 									</Form.Description>
 									<Form.Validation />
 								</div>
-								<Form.Input type="file" multiple accept="image/png, image/jpeg, image/jpg" />
+								<Input type="file" accept="image/*" name="file" />
 							</Form.Item>
 						</div>
 					</Form.Field>
@@ -269,69 +282,83 @@
 								<div class="flex flex-col gap-4 w-full">
 									<Form.Label>What type of pets do you have?</Form.Label>
 									<Form.Description>Please select all the pets in your home.</Form.Description>
+									<Form.Input class="hidden" bind:value={selectedPetTypesArray} />
 								</div>
-
-								<Popover.Root bind:open let:ids>
-									<Popover.Trigger asChild let:builder>
-										<Form.Control id={ids.trigger} let:attrs>
-											<Button
-												builders={[builder]}
-												{...attrs}
-												variant="outline"
-												role="combobox"
-												type="button"
-												class={cn(
-													'min-w-[200px] md:max-w-[200px] justify-between overflow-hidden',
-													!value && 'text-muted-foreground'
-												)}
-											>
-												{selectedPetTypes.length > 0
-													? selectedPetTypes.map((petType) => petType.label).join(', ')
-													: 'Select pet types...'}
-												<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-											</Button>
-										</Form.Control>
-									</Popover.Trigger>
-									<Popover.Content class="max-w-[200px] min-w-[200px] p-0">
-										<Command.Root>
-											<Command.Input autofocus placeholder="Search petType..." />
-											<Command.Empty>No pet type found.</Command.Empty>
-											<Command.Group>
-												{#each petTypes as petType}
-													<Command.Item
-														value={petType.value}
-														onSelect={() => {
-															console.log('on select firing');
-															console.log(value);
-															handlePetTypeSelect(petType);
-															setValue([...value, petType.value]);
-															// closeAndFocusTrigger(ids.trigger);
-														}}
-													>
-														<Check
-															class={cn(
-																'mr-2 h-4 w-4',
-																selectedPetTypes.includes(petType)
-																	? 'text-red-500'
-																	: 'text-transparent'
-															)}
-														/>
-														{petType.label}
-													</Command.Item>
-												{/each}
-											</Command.Group>
-										</Command.Root>
-									</Popover.Content>
-								</Popover.Root>
-								<Form.Description>
-									<!-- This is the petType that will be used in the dashboard. -->
-								</Form.Description>
-								<Form.Validation />
 							</Form.Item>
 						</Form.Field>
+						<Popover.Root bind:open let:ids>
+							<Popover.Trigger asChild let:builder>
+								<!-- <Form.Control id={ids.trigger} let:attrs> -->
+								<Button
+									builders={[builder]}
+									variant="outline"
+									role="combobox"
+									type="button"
+									class={cn(
+										'min-w-[200px] md:max-w-[200px] justify-between overflow-hidden',
+										!value && 'text-muted-foreground'
+									)}
+								>
+									{selectedPetTypes.length > 0
+										? selectedPetTypes.map((petType) => petType.label).join(', ')
+										: 'Select pet types...'}
+									<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+								</Button>
+								<!-- </Form.Control> -->
+							</Popover.Trigger>
+							<Popover.Content class="max-w-[200px] min-w-[200px] p-0">
+								<Command.Root>
+									<Command.Input autofocus placeholder="Search petType..." />
+									<Command.Empty>No pet type found.</Command.Empty>
+									<Command.Group>
+										{#each petTypes as petType}
+											<Command.Item
+												value={petType.value}
+												onSelect={() => {
+													handlePetTypeSelect(petType);
+													console.log(form);
+
+													if (selectedPetTypes.length > 0) {
+													} else {
+													}
+												}}
+											>
+												<Check
+													class={cn(
+														'mr-2 h-4 w-4',
+														selectedPetTypes.includes(petType) ? 'text-red-500' : 'text-transparent'
+													)}
+												/>
+												{petType.label}
+											</Command.Item>
+										{/each}
+									</Command.Group>
+								</Command.Root>
+							</Popover.Content>
+						</Popover.Root>
+						<Form.Description>
+							<!-- This is the petType that will be used in the dashboard. -->
+						</Form.Description>
+						<!-- <Form.Validation /> -->
 					</div>
 				{/if}
 			</Form.Field>
+
+			<div class="flex w-full col-span-2 justify-between">
+				<Form.Field name="hasAllergies" {config}>
+					<Form.Item class="w-full flex justify-between">
+						<div class="flex flex-col gap-2 w-full">
+							<Form.Label>Do you have any issues with allergies?</Form.Label>
+							<Form.Description>
+								This includes allergies to hay, dust, or other allergens.
+							</Form.Description>
+							<Form.Validation />
+						</div>
+
+						<Form.Switch />
+					</Form.Item>
+				</Form.Field>
+			</div>
 
 			<Form.Field name="surrenderedPets" {config} let:value>
 				<div class="flex w-full col-span-2 justify-between">
@@ -350,7 +377,7 @@
 				</div>
 
 				{#if value}
-					<Form.Field name="cageType" {config}>
+					<Form.Field name="surrenderedPetType" {config}>
 						<div class="flex w-full col-span-2 justify-between">
 							<Form.Item class="w-full flex justify-between">
 								<div class="flex flex-col gap-2 w-full">
@@ -522,6 +549,22 @@
 					</Form.Item>
 				</Form.Field>
 			</div>
+
+			<Form.Field name="whyChinchilla" {config}>
+				<div class="flex w-full col-span-2 justify-between">
+					<Form.Item class="w-full flex justify-between">
+						<div class="flex flex-col gap-2 w-full">
+							<Form.Label>Why chinchilla?</Form.Label>
+							<Form.Description>
+								Briefly explain why you think a chinchilla is the right pet for you.
+							</Form.Description>
+
+							<Form.Textarea />
+							<Form.Validation />
+						</div></Form.Item
+					>
+				</div></Form.Field
+			>
 
 			<!-- ack sections -->
 			<!-- title -->
@@ -708,7 +751,11 @@
 			<!-- <div class="flex w-full col-span-2 justify-between">
         <Form.Field name="hasCommitment" {config}> -->
 
-			<Form.Button class="col-span-2 w-full mt-8">Submit Application</Form.Button>
+			<Form.Button class="col-span-2 w-full mt-8 gap-2 inline-flex"
+				>Submit Application
+
+				<Loading />
+			</Form.Button>
 		</div>
 	</Form.Root>
 </div>

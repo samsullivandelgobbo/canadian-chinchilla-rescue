@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { PageData } from './$types';
 	import { marked } from 'marked';
 
@@ -47,7 +48,7 @@
 </svelte:head>
 
 {#if post}
-	<div class="bg-white py-8 lg:py-16 sm:py-24">
+	<div class="bg-white py-8 lg:py-16 sm:py-24 w-full">
 		<div class="mx-auto max-w-3xl px-4 sm:px-6">
 			<div class="flex flex-col items-center">
 				<div class="flex flex-col-reverse gap-12 w-full">
@@ -94,6 +95,7 @@
 							by {post.author.name}
 						</p>
 						<!-- Author -->
+
 						<div class="mt-6 border-t border-gray-900/5 pt-6 min-w-[16rem] lg:flex hidden">
 							<div class="relative flex items-center gap-x-4">
 								<img
@@ -116,7 +118,7 @@
 			</div>
 			<div class="flex py-8">
 				<p class="prose text-left">
-					{@html marked(post.content)}
+					{@html post.content}
 				</p>
 			</div>
 		</div>

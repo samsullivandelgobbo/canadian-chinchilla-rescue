@@ -2,6 +2,9 @@
 	import {
 		Cloud,
 		CreditCard,
+		Edit,
+		Edit2,
+		Edit3,
 		Github,
 		Keyboard,
 		LifeBuoy,
@@ -18,10 +21,12 @@
 		ShoppingCart,
 		ShoppingCartIcon,
 		SplitIcon,
+		Trash,
 		User,
 		UserPlus,
 		Users
 	} from 'lucide-svelte';
+	import { Separator } from '$lib/components/ui/separator';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -94,22 +99,15 @@
 			{/if}
 		</Button>
 	</DropdownMenu.Trigger>
-	<DropdownMenu.Content class="md:w-72 w-[95%]">
+	<DropdownMenu.Content class="md:w-full md:max-w-[400px] w-[95vw]">
 		<DropdownMenu.Label>
 			<div class="flex flex-row justify-between">
 				Shopping Cart
 
-				<!-- reset cart -->
-				<button
-					class="text-xs flex flex-row gap-1"
-					on:click={() => {
-						localStorage.removeItem('cartId');
-						cartItems = [];
-						cartId.set(null);
-					}}
-				>
-					<RotateCcw class="w-4 h-4" />
-					Reset
+				<!-- edit cart -->
+				<button class="text-sm flex flex-row gap-1 items-center hover:underline hover:text-red-500">
+					<Edit class="w-4 h-4 mr-2" />
+					Edit
 				</button>
 			</div>
 		</DropdownMenu.Label>
@@ -123,6 +121,7 @@
 
 			{#each cartItems as item}
 				<DropdownMenu.Item
+					class="py-6 "
 					on:click={() => {
 						window.location.href = `/shop/${item.product.slug}`;
 					}}
@@ -130,14 +129,29 @@
 					<!-- remove item  -->
 
 					<img class="w-8 h-8 rounded-full" src={item.image} alt={item.name} />
-					<span class="ml-2">{item.product}</span>
-					<span class="ml-2">x{item.quantity}</span>
+					<span class="ml-2 text-lg">{item.product}</span>
+					<span class="ml-2 text-gray-600">x{item.quantity}</span>
 
-					<span class="ml-auto">${item.total}</span>
+					<span class="ml-auto text-lg font-semibold">${item.total}</span>
+					<button class="items-center">
+						<Trash class="w-4 h-4 ml-4 text-red-500" />
+					</button>
 				</DropdownMenu.Item>
+				<Separator />
 			{/each}
 
-			<DropdownMenu.Label>
+			<DropdownMenu.Label class="flex flex-row justify-between items-center py-4 px-4">
+				<button
+					class="text-xs flex flex-row gap-1"
+					on:click={() => {
+						localStorage.removeItem('cartId');
+						cartItems = [];
+						cartId.set(null);
+					}}
+				>
+					<RotateCcw class="w-4 h-4" />
+					Reset
+				</button>
 				<span class="ml-auto">Total: ${cartItems.reduce((acc, item) => acc + item.total, 0)}</span>
 			</DropdownMenu.Label>
 

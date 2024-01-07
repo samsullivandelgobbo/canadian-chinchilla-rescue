@@ -2,6 +2,9 @@ import { SitemapStream, streamToPromise } from 'sitemap';
 import { Readable } from 'stream';
 
 export async function GET() {
+	// grab all the blog posts from the db
+	// const posts = await db.post.findMany()
+
 	const links = [
 		{ url: '/', changefreq: 'daily', priority: 1 },
 		{ url: '/about', changefreq: 'daily', priority: 1 },

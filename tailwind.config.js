@@ -6,7 +6,6 @@ const config = {
   content: ["./src/**/*.{html,js,svelte,ts}"],
   safelist: ["dark"],
   plugins: [require('@tailwindcss/typography'),
-    // require('@tailwindcss/forms'),
   ],
   theme: {
     container: {
