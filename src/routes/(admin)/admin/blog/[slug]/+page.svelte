@@ -185,11 +185,17 @@
 		return Math.floor(seconds) + ' seconds ago';
 	}
 
-	let post: Draft = data.draft as Draft;
+	let post: Draft =
+		data.draft ||
+		({
+			title: '',
+			description: '',
+			content: ''
+		} as Draft);
 
 	let blogId = post?.id || cuid();
 
-	$: if (post) {
+	$: if (post && post.updatedAt) {
 		lastSavedTime = new Date(post.updatedAt);
 		saveStatus = 'saved';
 	}
