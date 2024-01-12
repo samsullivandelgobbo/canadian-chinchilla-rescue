@@ -195,6 +195,7 @@
 					<div class="text-center">
 						<p class="text-gray-500">No posts yet</p>
 						<Folder class="h-12 w-12 mx-auto text-gray-400" />
+				
 					</div>
 				{/if}
 				{#each posts as post}

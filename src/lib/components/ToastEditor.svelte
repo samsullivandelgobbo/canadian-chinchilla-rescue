@@ -16,6 +16,7 @@
 			el: editorContainer,
 			height: '70vh',
 
+
 			initialValue: content,
 			initialEditType: 'wysiwyg',
 			placeholder: 'Write here...',
