@@ -129,10 +129,12 @@
 			plugins: { sort: { disable: true }, filter: { exclude: true } }
 		}),
 		table.column({
-			accessor: ({ id }) => id,
+			accessor: ({ id, email }) => {
+				return { id, email };
+			},
 			header: '',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { id: value.toString() });
+				return createRender(DataTableActions, { id: value.id.toString(), email: value.email });
 			}
 		})
 	]);

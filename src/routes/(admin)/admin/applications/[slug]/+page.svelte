@@ -55,6 +55,21 @@
 				{/if}
 
 				<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+					<dt class="text-sm font-medium leading-6 text-gray-900">Allergy issues</dt>
+					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+						{application?.hasAllergies ? 'Yes' : 'No'}
+					</dd>
+				</div>
+				<dl class="divide-y divide-gray-100">
+					<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt class="text-sm font-medium leading-6 text-gray-900">Has a chinchilla vet</dt>
+						<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+							{application?.hasChinchillaVet ? 'Yes' : 'No'}
+						</dd>
+					</div>
+				</dl>
+
+				<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
 					<dt class="text-sm font-medium leading-6 text-gray-900">Has cage</dt>
 					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 						{application?.hasCage ? 'Yes' : 'No'}
@@ -153,22 +168,23 @@
 						{application?.ownedChinchillas ? 'Yes' : 'No'}
 					</dd>
 				</div>
-
-				<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-					<dt class="text-sm font-medium leading-6 text-gray-900">Surrendered a pet before</dt>
-					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 capitalizev">
-						{application?.surrenderedPet ? 'Yes' : 'No'}
-					</dd>
-				</div>
-
-				{#if application?.surrenderedPet}
+				<dl class="divide-y divide-gray-100">
 					<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-						<dt class="text-sm font-medium leading-6 text-gray-900">Surrendered pet reason</dt>
+						<dt class="text-sm font-medium leading-6 text-gray-900">Surrendered a pet before</dt>
 						<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 capitalizev">
-							{application?.surrenderedPetReason}
+							{application?.surrenderedPet ? 'Yes' : 'No'}
 						</dd>
 					</div>
-				{/if}
+
+					{#if application?.surrenderedPet}
+						<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+							<dt class="text-sm font-medium leading-6 text-gray-900">Surrendered pet reason</dt>
+							<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 capitalizev">
+								{application?.surrenderedPetReason}
+							</dd>
+						</div>
+					{/if}
+				</dl>
 			</dl>
 		</div>
 	</div>

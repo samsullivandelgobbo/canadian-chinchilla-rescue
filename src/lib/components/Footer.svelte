@@ -16,6 +16,9 @@
 			<div class="pb-6">
 				<a href="/donate" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Donate</a>
 			</div>
+			<div class="pb-6">
+				<a href="/partners" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Partners</a>
+			</div>
 		</nav>
 		<div class="mt-10 flex justify-center space-x-10">
 			<a

@@ -2,6 +2,8 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { MoreHorizontal } from 'lucide-svelte';
+
+	export let email: string;
 	export let id: string;
 </script>
 
@@ -15,7 +17,7 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
-			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item on:click={() => navigator.clipboard.writeText(email)}>
 				Copy Email
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>

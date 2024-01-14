@@ -61,46 +61,22 @@ export async function GET({ cookies, url, locals }) {
 
 	const userData = await userDataResponse.json();
 
-	// console.log(userData.email);
-
-	// if (
-	// 	userData.email !== 'canadianchinchillarescue@gmail.com' ||
-	// 	userData.email !== 'sam.sullivan150@gmail.com'
-	// ) {
-	// 	console.log('Email not in list of approved emails');
-	// 	return new Response(null, {
-	// 		status: 302,
-	// 		headers: {
-	// 			Location: '/'
-	// 		}
-	// 	});
-	// }
-
-	console.log(userData, tokenData);
-
 	// throw redirect(302, '/admin');
 
-	let userRecord: User | null = null;
 	// create user in db if it doesn't exist
-	const user = await db.user.findUnique({
+	const userRecord = await db.user.findUnique({
 		where: {
 			email: userData.email
 		}
 	});
-	if (!user) {
-		const newUser = await db.user.create({
-			data: {
-				email: userData.email,
-				name: userData.name,
-				avatar: userData.picture,
-				refreshToken: tokenData.refresh_token
+	if (!userRecord) {
+		console.log('User not found, not authorized');
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: '/'
 			}
 		});
-
-		userRecord = newUser;
-	}
-	if (user) {
-		userRecord = user;
 	}
 
 	if (userRecord === undefined || userRecord === null) {
