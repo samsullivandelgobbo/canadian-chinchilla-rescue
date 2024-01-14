@@ -65,6 +65,7 @@ export async function GET({ cookies, url, locals }) {
 		userData.email !== 'canadianchinchillarescue@gmail.com' ||
 		userData.email !== 'sam.sullivan150@gmail.com'
 	) {
+		console.log('Email not in list of approved emails');
 		return new Response(null, {
 			status: 302,
 			headers: {
