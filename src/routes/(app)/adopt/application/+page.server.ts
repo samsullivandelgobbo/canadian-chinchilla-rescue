@@ -100,79 +100,79 @@ export const actions: Actions = {
 			console.log('message sent');
 
 			// send email using sendgrid api
-			// const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
-			// 	method: 'POST',
-			// 	headers: {
-			// 		'Content-Type': 'application/json',
-			// 		Authorization: `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
-			// 	},
-			// 	body: JSON.stringify({
-			// 		personalizations: [
-			// 			{
-			// 				to: [
-			// 					{
-			// 						email: form.data.email,
-			// 						name: `${form.data.firstName} ${form.data.lastName}`
-			// 					}
-			// 				],
-			// 				subject: 'Thank you for your application!'
-			// 			}
-			// 		],
-			// 		from: {
-			// 			email: 'no-reply@canadianchinchilla.ca',
-			// 			name: 'Canadian Chinchilla Rescue'
-			// 		},
-			// 		content: [
-			// 			{
-			// 				type: 'text/html',
-			// 				value: `<p>Thank you for your application ${form.data.firstName}! We will review your application and contact you shortly.</p>`
-			// 			}
-			// 		]
-			// 	})
-			// });
+			const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
+				},
+				body: JSON.stringify({
+					personalizations: [
+						{
+							to: [
+								{
+									email: form.data.email,
+									name: `${form.data.firstName} ${form.data.lastName}`
+								}
+							],
+							subject: 'Thank you for your application!'
+						}
+					],
+					from: {
+						email: 'no-reply@canadianchinchilla.ca',
+						name: 'Canadian Chinchilla Rescue'
+					},
+					content: [
+						{
+							type: 'text/html',
+							value: `<p>Thank you for your application ${form.data.firstName}! We will review your application and contact you shortly.</p>`
+						}
+					]
+				})
+			});
 
-			// const json = await res.json();
+			const json = await res.json();
 
-			// console.log(json);
+			console.log(json);
 
 			// send email to rescue
-			// const res2 = await fetch('https://api.sendgrid.com/v3/mail/send', {
-			// 	method: 'POST',
-			// 	headers: {
-			// 		'Content-Type': 'application/json',
-			// 		Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`
-			// 	},
-			// 	body: JSON.stringify({
-			// 		personalizations: [
-			// 			{
-			// 				to: [
-			// 					{
-			// 						email: 'canadianchinchillarescue@gmail.com',
-			// 						name: 'Canadian Chinchilla Rescue'
-			// 					}
-			// 				],
-			// 				subject: 'New adoption application!'
-			// 			}
-			// 		],
-			// 		from: {
-			// 			email: 'no-reply@canadianchinchilla.ca',
-			// 			name: 'Canadian Chinchilla Rescue Web Application'
-			// 		},
-			// 		content: [
-			// 			{
-			// 				type: 'text/html',
-			// 				value: `<p>There is a new adoption application from ${form.data.firstName} ${form.data.lastName}! Please log in to the admin panel to view it.</p>`
-			// 			}
-			// 		]
-			// 	})
-			// });
+			const res2 = await fetch('https://api.sendgrid.com/v3/mail/send', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`
+				},
+				body: JSON.stringify({
+					personalizations: [
+						{
+							to: [
+								{
+									email: 'canadianchinchillarescue@gmail.com',
+									name: 'Canadian Chinchilla Rescue'
+								}
+							],
+							subject: 'New adoption application!'
+						}
+					],
+					from: {
+						email: 'no-reply@canadianchinchilla.ca',
+						name: 'Canadian Chinchilla Rescue Web Application'
+					},
+					content: [
+						{
+							type: 'text/html',
+							value: `<p>There is a new adoption application from ${form.data.firstName} ${form.data.lastName}! Please log in to the admin panel to view it.</p>`
+						}
+					]
+				})
+			});
 
-			// if (res2.status !== 202) {
-			// 	console.error(await res2.json());
-			// 	return fail(500, {
-			// 		form
-			// 	});
-			// }
+			if (res2.status !== 202) {
+				console.error(await res2.json());
+				return fail(500, {
+					form
+				});
+			}
 
 			return {
 				form
