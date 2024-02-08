@@ -149,6 +149,10 @@ export const actions: Actions = {
 								{
 									email: 'canadianchinchillarescue@gmail.com',
 									name: 'Canadian Chinchilla Rescue'
+								},
+								{
+									email: 'sam.sullivan150@gmail.com',
+									name: 'Sam Sullivan'
 								}
 							],
 							subject: 'New adoption application!'
