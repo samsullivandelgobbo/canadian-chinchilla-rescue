@@ -4,7 +4,6 @@
 	export let data: PageData;
 
 	const application = data.application;
-	console.log(application);
 </script>
 
 {#if application}
@@ -112,8 +111,9 @@
 										</div>
 									</div>
 									<div class="ml-4 flex-shrink-0">
-										<a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"
-											>Download</a
+										<a
+											href={application.cageImage}
+											class="font-medium text-red-600 hover:text-red-500">Download</a
 										>
 									</div>
 								</li>

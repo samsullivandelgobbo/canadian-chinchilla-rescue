@@ -11,7 +11,6 @@ export const actions: Actions = {
 		const formData = await request.formData();
 
 		const form = await superValidate(formData, applicationSchema);
-		console.log('form', form);
 
 		if (!form.valid) {
 			return fail(400, {
@@ -20,24 +19,20 @@ export const actions: Actions = {
 		}
 
 		try {
+			let cageImage = '';
 			// grab the 'image' field from the formdata
 			const image = formData.get('file') as File;
-			let cageImage;
 
 			if (image && image.size > 0) {
 				// read the file contents
-				const buffer = await image.arrayBuffer();
-
-				const base64 = Buffer.from(buffer).toString('base64');
 
 				// save the buffer to vercel blob
-				const { url } = await put(image.name, base64, {
+				const { url } = await put(`rescue-applications/${form.data.email}/${image.name}`, image, {
 					access: 'public'
 				});
 
 				cageImage = url;
 			}
-
 			// create application in database
 			function parseCsv(csv: string) {
 				return csv.split(',').map((item) => item.trim());
@@ -97,86 +92,14 @@ export const actions: Actions = {
 			});
 
 			message(form, { success: 'Success! Your application has been submitted.' });
-			console.log('message sent');
 
 			// send email using sendgrid api
-			const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
-				},
-				body: JSON.stringify({
-					personalizations: [
-						{
-							to: [
-								{
-									email: form.data.email,
-									name: `${form.data.firstName} ${form.data.lastName}`
-								}
-							],
-							subject: 'Thank you for your application!'
-						}
-					],
-					from: {
-						email: 'no-reply@canadianchinchilla.ca',
-						name: 'Canadian Chinchilla Rescue'
-					},
-					content: [
-						{
-							type: 'text/html',
-							value: `<p>Thank you for your application ${form.data.firstName}! We will review your application and contact you shortly.</p>`
-						}
-					]
-				})
-			});
+			const userEmailSuccess = await sendUserConfirmEmail(
+				form.data.email,
+				form.data.firstName + ' ' + form.data.lastName
+			);
 
-			const json = await res.json();
-
-			console.log(json);
-
-			// send email to rescue
-			const res2 = await fetch('https://api.sendgrid.com/v3/mail/send', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${process.env.SENDGRID_API_KEY}`
-				},
-				body: JSON.stringify({
-					personalizations: [
-						{
-							to: [
-								{
-									email: 'canadianchinchillarescue@gmail.com',
-									name: 'Canadian Chinchilla Rescue'
-								},
-								{
-									email: 'sam.sullivan150@gmail.com',
-									name: 'Sam Sullivan'
-								}
-							],
-							subject: 'New adoption application!'
-						}
-					],
-					from: {
-						email: 'no-reply@canadianchinchilla.ca',
-						name: 'Canadian Chinchilla Rescue Web Application'
-					},
-					content: [
-						{
-							type: 'text/html',
-							value: `<p>There is a new adoption application from ${form.data.firstName} ${form.data.lastName}! Please log in to the admin panel to view it.</p>`
-						}
-					]
-				})
-			});
-
-			if (res2.status !== 202) {
-				console.error(await res2.json());
-				return fail(500, {
-					form
-				});
-			}
+			const adminEmailSuccess = await sendAdminEmail();
 
 			return {
 				form
@@ -193,12 +116,100 @@ export const actions: Actions = {
 	}
 };
 
-// export const actions: Actions = {
-// 	default: submitApplication
-// };
+async function sendAdminEmail() {
+	const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
+		},
+		body: JSON.stringify({
+			personalizations: [
+				{
+					to: [
+						{
+							email: 'canadianchinchillarescue@gmail.com',
+							name: 'Canadian Chinchilla Rescue'
+						},
+						{
+							email: 'sam.sullivan150@gmail.com',
+							name: 'Sam Sullivan'
+						}
+					],
+					subject: 'New adoption application!'
+				}
+			],
+			from: {
+				email: 'no-reply@canadianchinchilla.ca',
+				name: 'Canadian Chinchilla Rescue'
+			},
+			content: [
+				{
+					type: 'text/html',
+					value: `<p>There is a new adoption application! Please <a href="https://canadianchinchilla.ca/login">login</a> to the admin panel to view it.</p>`
+				}
+			]
+		})
+	});
+
+	if (res.status === 202) {
+		console.log('Admin email sent');
+		return true;
+	} else {
+		console.log(`Error sending admin email: ${res.status} ${res.statusText}`);
+		return false;
+	}
+}
+
+async function sendParentEmail(email: string, name: string) {}
+
+async function sendUserConfirmEmail(email: string, name: string) {
+	const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
+		},
+		body: JSON.stringify({
+			personalizations: [
+				{
+					to: [
+						{
+							email: email,
+							name: name
+						}
+					],
+					subject: 'Thank you for your application!'
+				}
+			],
+			from: {
+				email: 'no-reply@canadianchinchilla.ca',
+				name: 'Canadian Chinchilla Rescue'
+			},
+			content: [
+				{
+					type: 'text/html',
+					value: `<p>Thank you for your application ${
+						name.split(' ')[0]
+					}! We will review your application and contact you shortly.</p>`
+				}
+			]
+		})
+	});
+
+	if (res.status === 202) {
+		console.log('User email sent');
+		return true;
+	} else {
+		console.log(`Error sending user email: ${res.status} ${res.statusText}`);
+		return false;
+	}
+}
 
 export const load: PageServerLoad = () => {
 	return {
 		form: superValidate(applicationSchema)
 	};
 };
+
+// async function saveCageImage() {}
