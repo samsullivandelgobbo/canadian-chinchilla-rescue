@@ -74,7 +74,9 @@
 						<p class="mt-6">
 							We have a lot of chinchillas to take care of, and we need your help to do it. We are a
 							non-profit organization, and we rely on donations to keep our chinchillas happy and
-							healthy. We appreciate any amount you can give.
+							healthy. We appreciate any amount you can give. We are currently accepting donations
+							throug our Canada Helps page. Please click the button below to start the donation
+							process.
 						</p>
 						<p class="mt-8">
 							There are many ways you can donate. You can donate money, food, toys, or even your
@@ -87,11 +89,18 @@
 						</p>
 						<p class="mt-8">
 							<a
+								target="_blank"
+								href="https://www.canadahelps.org/gp/18298/"
+								class="text-base font-semibold leading-6 text-red-400/80 hover:text-red-400"
+							>
+								Donate &rarr;
+							</a>
+							<!-- <a
 								href="/donate/checkout"
 								class="text-base font-semibold leading-6 text-red-400/80 hover:text-red-400"
 							>
 								Get started &rarr;
-							</a>
+							</a> -->
 						</p>
 					</div>
 				</div>
