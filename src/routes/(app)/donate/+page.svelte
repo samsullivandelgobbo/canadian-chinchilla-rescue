@@ -75,7 +75,7 @@
 							We have a lot of chinchillas to take care of, and we need your help to do it. We are a
 							non-profit organization, and we rely on donations to keep our chinchillas happy and
 							healthy. We appreciate any amount you can give. We are currently accepting donations
-							throug our Canada Helps page. Please click the button below to start the donation
+							through our Canada Helps page. Please click the button below to start the donation
 							process.
 						</p>
 						<p class="mt-8">
