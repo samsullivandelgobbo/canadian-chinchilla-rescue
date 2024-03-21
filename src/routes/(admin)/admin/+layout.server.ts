@@ -4,6 +4,6 @@ import type { LayoutServerLoad } from './$types';
 export const load: LayoutServerLoad = async ({ request, locals, cookies }) => {
 	// check if locals.user exists
 	if (!locals.user) {
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 };

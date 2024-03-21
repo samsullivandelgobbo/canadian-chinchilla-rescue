@@ -3,39 +3,39 @@ import { fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import { applicationSchema } from './schema';
 import { put } from '@vercel/blob';
-
+import { zod } from 'sveltekit-superforms/adapters';
 import { db } from '$lib/data/db';
 
 export const actions: Actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();
 
-		const form = await superValidate(formData, applicationSchema);
+		const form = await superValidate(formData, zod(applicationSchema));
 
 		if (!form.valid) {
 			return fail(400, {
 				form
 			});
 		}
+		console.log('Form Submitted', form.data);
 
 		try {
-			let cageImage = '';
-			// grab the 'image' field from the formdata
-			const image = formData.get('file') as File;
-
+			const image = form.data.cageImage;
+			let cageImageUrl = null;
 			if (image && image.size > 0) {
 				// read the file contents
 
+				const fileExt = image.name.split('.').pop();
 				// save the buffer to vercel blob
-				const { url } = await put(`rescue-applications/${form.data.email}/${image.name}`, image, {
-					access: 'public'
-				});
+				const { url } = await put(
+					`rescue-applications-${form.data.email}-cage-${Date.now()}.${fileExt}`,
+					image,
+					{
+						access: 'public'
+					}
+				);
 
-				cageImage = url;
-			}
-			// create application in database
-			function parseCsv(csv: string) {
-				return csv.split(',').map((item) => item.trim());
+				cageImageUrl = url;
 			}
 
 			// check if the user has already submitted an application within the last 30 days
@@ -48,6 +48,7 @@ export const actions: Actions = {
 				}
 			});
 
+			console.log('existingApplication', existingApplication);
 			if (existingApplication) {
 				message(form, {
 					warning:
@@ -70,12 +71,12 @@ export const actions: Actions = {
 
 					hasCage: form.data.hasCage,
 					cageType: form.data.cageType,
-					cageImage: cageImage,
+					cageImage: cageImageUrl,
 
 					hasChildren: form.data.hasChildren,
 					hasAllergies: form.data.hasAllergies,
 					hasPets: form.data.hasPets,
-					petTypes: form.data.petTypes ? parseCsv(form.data.petTypes) : [],
+					petTypes: form.data.petTypes ? form.data.petTypes : [],
 					hasChinchillaVet: form.data.hasChinchillaVet,
 					hasChinchilla: form.data.hasChinchilla,
 					chinchillaName: form.data.chinchillaName,
@@ -90,6 +91,8 @@ export const actions: Actions = {
 					whyChinchilla: form.data.whyChinchilla
 				}
 			});
+
+			console.log('Application created', application);
 
 			message(form, { success: 'Success! Your application has been submitted.' });
 
@@ -206,10 +209,8 @@ async function sendUserConfirmEmail(email: string, name: string) {
 	}
 }
 
-export const load: PageServerLoad = () => {
+export const load: PageServerLoad = async () => {
 	return {
-		form: superValidate(applicationSchema)
+		form: await superValidate(zod(applicationSchema))
 	};
 };
-
-// async function saveCageImage() {}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getForm } from 'formsnap';
+	// import { getForm } from 'formsnap';
 	import { ArrowRight } from 'lucide-svelte';
 
 	const { submitting, delayed, timeout } = getForm();

@@ -25,12 +25,14 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
 	import ChinchillaForm from './chinchilla-form.svelte';
-	import RescueChinCard from '$lib/components/RescueChinCard.svelte';
+
 	import type { Chinchilla } from '@prisma/client';
 	import { onMount } from 'svelte';
 
 	import * as Drawer from '$lib/components/ui/drawer';
 	import { Input } from '$lib/components/ui/input';
+
+	import RescueChinCard from './rescue-chin-card.svelte';
 	import { Label } from '$lib/components/ui/label';
 
 	import { mediaQuery } from 'svelte-legos';
@@ -86,6 +88,8 @@
 			toast.success('Chinchilla archived successfully');
 		}
 	}
+
+	export let data: PageData;
 </script>
 
 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -171,35 +175,20 @@
 							</Button>
 						</Dialog.Trigger>
 
-						<Dialog.Content class=" max-w-4xl  max-h-screen">
+						<Dialog.Content class=" max-w-4xl max-h-screen ">
 							<Dialog.Title class="text-center text-2xl">
 								{editChinchilla ? 'Update Chinchilla' : 'Add Chinchilla'}
 							</Dialog.Title>
 							<Separator class="my-4" />
 
-							<div class="flex flex-col px-4">
-								{#if editChinchilla}
-									<ChinchillaForm
-										chinchillas={$chinchillas}
-										{editChinchilla}
-										on:success={() => {
-											open = false;
-											revalidate();
-											toast.success('Chinchilla successfully updated');
-										}}
-									/>
-								{:else}
-									<ChinchillaForm
-										chinchillas={$chinchillas}
-										editChinchilla={null}
-										on:success={() => {
-											open = false;
-											revalidate();
-											toast.success('Chinchilla added successfully');
-										}}
-									/>
-								{/if}
-							</div>
+							<ChinchillaForm
+								on:success={() => {
+									open = false;
+									revalidate();
+								}}
+								data={data.form}
+								chinchillas={$chinchillas}
+							/>
 						</Dialog.Content>
 					</Dialog.Root>
 				{:else}
@@ -216,29 +205,14 @@
 								</Drawer.Title>
 							</Drawer.Header>
 
-							<div class="flex flex-col px-4">
-								{#if editChinchilla}
-									<ChinchillaForm
-										chinchillas={$chinchillas}
-										{editChinchilla}
-										on:success={() => {
-											open = false;
-											revalidate();
-											toast.success('Chinchilla successfully updated');
-										}}
-									/>
-								{:else}
-									<ChinchillaForm
-										chinchillas={$chinchillas}
-										editChinchilla={null}
-										on:success={() => {
-											open = false;
-											revalidate();
-											toast.success('Chinchilla added successfully');
-										}}
-									/>
-								{/if}
-							</div>
+							<ChinchillaForm
+								on:success={() => {
+									open = false;
+									revalidate();
+								}}
+								data={data.form}
+								chinchillas={$chinchillas}
+							/>
 						</Drawer.Content>
 					</Drawer.Root>
 				{/if}
@@ -262,94 +236,14 @@
 					</div>
 				</div>
 			</div>
-		{/if}
-		{#if $chinchillas && !$isLoading}
-			<Card.Content>
+		{:else if $chinchillas && $chinchillas.length}
+			<div class="flex items-center space-x-4 px-8 py-8">
 				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-					{#each $chinchillas as chinchilla}
-						<div class=" overflow-hidden relative">
-							<!-- {#if selectedChinchillas.includes(chinchilla)}
-								<div class="absolute top-0 right-0 m-2 rounded-full p-1 bg-red-400">
-									<Check class="h-4 w-4 text-white" />
-								</div>
-							{/if} -->
-							<div
-								class="absolute top-0 right-0 m-2 rounded-full z-50"
-								id={`dropdown-${chinchilla.id}`}
-							>
-								<DropdownMenu.Root preventScroll={false}>
-									<DropdownMenu.Trigger asChild let:builder>
-										<Button builders={[builder]} variant="outline" size="icon">
-											<MoreHorizontal class="h-4 w-4 text-gray-700" />
-										</Button>
-									</DropdownMenu.Trigger>
-									<DropdownMenu.Content class="w-56">
-										<DropdownMenu.Label>
-											{chinchilla.name}
-										</DropdownMenu.Label>
-										<DropdownMenu.Separator />
-										<DropdownMenu.Group>
-											<DropdownMenu.Item>
-												<Eye class="mr-2 h-4 w-4" />
-												<span> View </span>
-											</DropdownMenu.Item>
-											<DropdownMenu.Item
-												on:click={() => {
-													editChinchilla = chinchilla;
-
-													open = true;
-												}}
-											>
-												<Edit class="mr-2 h-4 w-4" />
-												<span> Edit </span>
-											</DropdownMenu.Item>
-
-											<DropdownMenu.Item
-												on:click={() => {
-													console.log(chinchilla);
-													selectedChinchilla = chinchilla;
-													deleteAlertOpen = true;
-												}}
-												class="text-red-500 hover:bg-red-100"
-											>
-												<Archive class="mr-2 h-4 w-4" />
-
-												<span> Delete </span>
-											</DropdownMenu.Item>
-										</DropdownMenu.Group>
-									</DropdownMenu.Content>
-								</DropdownMenu.Root>
-							</div>
-
-							<RescueChinCard {chinchilla} />
-						</div>
+					{#each $chinchillas as chinchilla (chinchilla.id)}
+						<RescueChinCard {chinchilla} formData={data.form} id={chinchilla.id} />
 					{/each}
 				</div>
-
-				<!-- <Overview /> -->
-			</Card.Content>
+			</div>
 		{/if}
 	</Card.Root>
 </div>
-
-<AlertDialog.Root bind:open={deleteAlertOpen}>
-	<AlertDialog.Trigger asChild />
-	<AlertDialog.Content>
-		<AlertDialog.Header>
-			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-			<AlertDialog.Description>
-				This action cannot be undone. This will permanently delete
-				{selectedChinchilla?.name} from the database.
-			</AlertDialog.Description>
-		</AlertDialog.Header>
-		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<AlertDialog.Action
-				on:click={() => {
-					handleChinchillaDelete(selectedChinchilla?.id);
-				}}
-				>Delete
-			</AlertDialog.Action>
-		</AlertDialog.Footer>
-	</AlertDialog.Content>
-</AlertDialog.Root>

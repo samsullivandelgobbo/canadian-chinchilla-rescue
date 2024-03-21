@@ -1,133 +1,142 @@
-// import type { PageServerLoad, Actions, Action } from './$types';
-// import { fail } from '@sveltejs/kit';
-// import { db } from '$lib/data/db';
-// import { put, del } from '@vercel/blob';
-// import { superValidate } from 'sveltekit-superforms/server';
+import type { PageServerLoad, Actions, Action } from './$types';
+import { fail } from '@sveltejs/kit';
+import { db } from '$lib/data/db';
+import { put, del } from '@vercel/blob';
+import { message, superValidate, withFiles } from 'sveltekit-superforms/server';
+import { formSchema } from './schema';
+import { zod } from 'sveltekit-superforms/adapters';
+import type { Chinchilla } from '@prisma/client';
 
-// // export const load: PageServerLoad = async (event) => {
-// // 	try {
-// // 		const chinchillas = await db.chinchilla.findMany();
+export const load: PageServerLoad = async () => {
+	return {
+		form: await superValidate(zod(formSchema))
+	};
+};
 
-// // 		return {
-// // 			props: {
-// // 				initialChinchillas: chinchillas
-// // 			}
-// // 		};
-// // 	} catch (error) {
-// // 		throw fail(400, {});
-// // 	}
-// // };
+async function addChinchilla(event: any) {
+	// validate the form data
 
-// async function addChinchilla(event) {
-// 	const formData = await event.request.formData();
+	const form = await superValidate(event, zod(formSchema));
 
-// 	try {
-// 		// validate the form data
+	try {
+		if (!form.valid) {
+			return fail(400, withFiles({ form }));
+		}
 
-// 		const form = await superValidate(formData, formSchema);
-// 		if (!form.valid) {
-// 			console.log(form.errors);
-// 			throw fail(400, {
-// 				form
-// 			});
-// 		}
+		console.log('form', form.data);
+		if (form.data.id) {
+			const updatedChinchilla = await updateChinchilla(form.data);
+			console.log('updatedChinchilla', updatedChinchilla);
 
-// 		const files = formData.getAll('images');
-// 		console.log(files);
+			message(form, {
+				success: 'Chinchilla updated'
+			});
+			return withFiles({ form });
+		}
 
-// 		console.log(form);
+		// handle image uploads
+		const image = form.data.image;
+		let imageUrl = null;
 
-// 		// handle updating chinchilla
-// 		if (form.data.updateChinchillaId) {
-// 			// delete the old photos
-// 			const oldChinchilla = await db.chinchilla.findUnique({
-// 				where: {
-// 					id: form.data.updateChinchillaId
-// 				}
-// 			});
+		if (image && image.size > 0) {
+			const fileExtension = image.name.split('.').pop();
+			const { url } = await put(
+				`chinchilla-${form.data.name}-${Date.now()}.${fileExtension}`,
+				image,
+				{
+					access: 'public'
+				}
+			);
+			imageUrl = url;
+		}
 
-// 			if (!oldChinchilla) {
-// 				throw Error('Chinchilla not found');
-// 			}
+		// add the chinchilla to the database
+		const chinchilla = await db.chinchilla.create({
+			data: {
+				name: form.data.name,
+				gender: form.data.gender as 'MALE' | 'FEMALE',
+				age: form.data.age,
+				color: form.data.color,
+				description: form.data.description,
+				friendly: form.data.friendly,
+				photos: imageUrl ? [imageUrl] : []
+			}
+		});
 
-// 			const oldPhotos = oldChinchilla.photos;
+		message(form, {
+			success: 'Chinchilla added'
+		});
+		return withFiles({ form });
+	} catch (error) {
+		console.error(error);
+		message(form, {
+			error: 'An error occurred'
+		});
 
-// 			// check if any images were uploaded
+		return fail(400, withFiles({ form }));
+	}
+}
 
-// 			await del(oldPhotos);
+export const actions: Actions = {
+	default: addChinchilla
+};
 
-// 			// create the new photos
-// 			const imageUrls = await Promise.all(
-// 				files.map(async (image) => {
-// 					const { url } = await put(image.name, image, {
-// 						access: 'public'
-// 					});
-// 					return url;
-// 				})
-// 			);
-// 			console.log(form.data.bondedWith);
+async function updateChinchilla(data) {
+	try {
+		const existingChinchilla = await db.chinchilla.findUnique({
+			where: {
+				id: parseInt(data.id)
+			}
+		});
 
-// 			// update the chinchilla
-// 			const updatedChinchilla = await db.chinchilla.update({
-// 				where: {
-// 					id: form.data.updateChinchillaId
-// 				},
-// 				data: {
-// 					name: form.data.name,
-// 					gender: form.data.gender,
-// 					age: form.data.age,
-// 					color: form.data.color,
-// 					description: form.data.description,
-// 					friendly: form.data.friendly,
-// 					photos: imageUrls,
-// 					bondedWith: {
-// 						connect: form.data.bondedWith ? form.data.bondedWith : []
-// 					}
-// 				}
-// 			});
+		if (!existingChinchilla) {
+			throw Error('Chinchilla not found');
+		}
 
-// 			return {
-// 				updatedChinchilla
-// 			};
-// 		}
+		let imageUrl = null;
 
-// 		const imageUrls = await Promise.all(
-// 			files.map(async (image) => {
-// 				const { url } = await put(image.name, image, {
-// 					access: 'public'
-// 				});
-// 				return url;
-// 			})
-// 		);
+		if (data.image && data.image.size > 0) {
+			await Promise.all(
+				existingChinchilla.photos.map((photo) => {
+					return del(photo);
+				})
+			);
 
-// 		// add the chinchilla to the database
-// 		const chinchilla = await db.chinchilla.create({
-// 			data: {
-// 				name: form.data.name,
-// 				gender: form.data.gender,
-// 				age: form.data.age,
-// 				color: form.data.color,
-// 				description: form.data.description,
-// 				friendly: form.data.friendly,
-// 				bondedWith: {
-// 					connect: form.data.bondedWith ? form.data.bondedWith : []
-// 				},
+			const image = data.image;
+			const fileExtension = image.name.split('.').pop();
+			const { url } = await put(`chinchilla-${data.name}-${Date.now()}.${fileExtension}`, image, {
+				access: 'public'
+			});
+			imageUrl = url;
+		}
 
-// 				photos: imageUrls
-// 			}
-// 		});
+		// update the chinchilla
+		const updatedChinchilla = await db.chinchilla.update({
+			where: {
+				id: parseInt(data.id)
+			},
+			data: {
+				name: data.name,
+				gender: data.gender as Chinchilla['gender'],
+				age: data.age,
+				color: data.color,
+				description: data.description,
+				friendly: data.friendly,
+				photos: imageUrl ? [imageUrl] : undefined
+			}
+		});
 
-// 		console.log(chinchilla);
+		if (!updatedChinchilla) {
+			throw Error('Chinchilla not updated');
+		}
 
-// 		return {
-// 			form
-// 		};
-// 	} catch (error) {
-// 		console.log(error);
-// 		// throw fail(400, { form });
-// 	}
-// }
+		console.log('updatedChinchilla', updatedChinchilla);
 
-// export const actions: Actions = {
-// 	default: addChinchilla
-// };
+		return updatedChinchilla;
+	} catch (error) {
+		console.error(error);
+		message(data, {
+			error: 'An error occurred'
+		});
+	}
+}

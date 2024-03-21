@@ -14,8 +14,9 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.20.4",
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.10",
 		"@types/node": "^20.8.4",
 		"autoprefixer": "^10.4.16",
@@ -32,12 +33,13 @@
 		"tailwindcss": "^3.3.3",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.2.2",
-		"vite": "^4.4.2",
-		"vite-imagetools": "^6.1.0"
+		"vite": "^5.0.0",
+		"vite-imagetools": "^6.1.0",
+		"zod": "^3.22.4"
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "^5.4.2",
+		"@prisma/client": "^5.11.0",
 		"@shopify/shopify-api": "^8.0.2",
 		"@stripe/stripe-js": "^2.1.7",
 		"@tailwindcss/forms": "^0.5.6",
@@ -48,17 +50,17 @@
 		"@toast-ui/editor": "^3.2.2",
 		"@toast-ui/editor-plugin-color-syntax": "^3.1.0",
 		"@vercel/analytics": "^1.1.0",
-		"@vercel/blob": "^0.14.1",
+		"@vercel/blob": "^0.22.1",
 		"@vercel/speed-insights": "^1.0.2",
 		"bcrypt": "^5.1.1",
-		"bits-ui": "^0.9.9",
+		"bits-ui": "^0.19.7",
 		"canvas-confetti": "^1.9.2",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.11",
 		"codemirror": "^6.0.1",
 		"cuid": "^3.0.0",
 		"debounce": "^2.0.0",
-		"formsnap": "^0.4.1",
+		"formsnap": "^0.5.1",
 		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.292.0",
 		"markdown-it": "^13.0.2",
@@ -69,10 +71,8 @@
 		"stripe": "^13.9.0",
 		"svelte-legos": "^0.2.2",
 		"svelte-sonner": "^0.3.10",
-		"sveltekit-superforms": "^1.11.0",
-		"tailwind-merge": "^2.2.0",
+		"tailwind-merge": "^2.2.2",
 		"tailwind-variants": "^0.1.20",
-		"vaul-svelte": "^0.0.4",
-		"zod": "^3.22.4"
+		"vaul-svelte": "^0.0.4"
 	}
 }

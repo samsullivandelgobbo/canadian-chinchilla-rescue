@@ -20,6 +20,6 @@ export const load: PageServerLoad = async ({ url, cookies, locals }) => {
 		cancel_url: `${domain}/donate`
 	});
 	if (session && session.url) {
-		throw redirect(302, session.url);
+		redirect(302, session.url);
 	}
 };

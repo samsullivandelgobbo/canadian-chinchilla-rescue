@@ -43,5 +43,5 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	const checkout = data.cart.checkoutUrl;
 	console.log('checkout', checkout);
 
-	throw redirect(302, checkout);
+	redirect(302, checkout);
 };

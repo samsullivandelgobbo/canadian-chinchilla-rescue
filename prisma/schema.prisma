@@ -109,15 +109,3 @@ enum Gender {
   MALE
   FEMALE
 }
-
-// model Product {
-//   id        Int      @id @default(autoincrement())
-//   name      String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   stripeId  String
-//   quantity  Int
-//   price     Int
-//   category  String
-//   photos    String[]
-// }

@@ -41,7 +41,7 @@ export const applicationSchema = z
 		hasChildren: z.boolean(),
 		hasAllergies: z.boolean(),
 		hasPets: z.boolean(),
-		petTypes: z.any().optional(),
+		petTypes: z.string().array().optional(),
 		hasChinchillaVet: z.boolean(),
 
 		selectedChinchillas: z.any().optional(),
