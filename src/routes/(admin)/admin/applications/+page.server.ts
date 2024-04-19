@@ -1,5 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/data/db';
+import type { Actions } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	if (!locals.user) {
@@ -10,14 +11,30 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	}
 	const userId = locals.user.id;
 	try {
-		// const user = await db.user.findUnique({
-		//   where: {
-		//     id: userId
-		//   }
-		// });
+	
 
-		const applications = await db.rescueApplication.findMany();
+		const applications = await db.rescueApplication.findMany({
+			include: {
+				readBy: {
+					select: {
+						id: true
+					}
+				}
+			}
+		});
+
+		applications.forEach((application) => {
+			application.status = application.readBy.some((user) => user.id === userId)
+				? application.archived
+					? 'archived'
+					: 'read'
+				: application.archived
+				? 'archived'
+				: 'unread';
+		});
+
 		console.log('applications', applications);
+
 		return {
 			applications
 		};

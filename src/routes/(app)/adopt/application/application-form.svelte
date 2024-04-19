@@ -27,6 +27,22 @@
 	import { browser } from '$app/environment';
 	import { toast } from 'svelte-sonner';
 
+	const provinces = [
+		{ value: 'AB', label: 'Alberta' },
+		{ value: 'BC', label: 'British Columbia' },
+		{ value: 'MB', label: 'Manitoba' },
+		{ value: 'NB', label: 'New Brunswick' },
+		{ value: 'NL', label: 'Newfoundland and Labrador' },
+		{ value: 'NS', label: 'Nova Scotia' },
+		{ value: 'NT', label: 'Northwest Territories' },
+		{ value: 'NU', label: 'Nunavut' },
+		{ value: 'ON', label: 'Ontario' },
+		{ value: 'PE', label: 'Prince Edward Island' },
+		{ value: 'QC', label: 'Quebec' },
+		{ value: 'SK', label: 'Saskatchewan' },
+		{ value: 'YT', label: 'Yukon' }
+	];
+
 	let data: SuperValidated<Infer<FormSchema>>;
 	export { data as form };
 
@@ -102,31 +118,27 @@
 		enctype="multipart/form-data"
 		action="/adopt/application"
 	>
-		<!-- <Sucess /> -->
-
-		<div class="grid grid-cols-2 gap-x-8 gap-y-6">
+		<div class="grid lg:grid-cols-2 gap-x-8 gap-y-6">
 			<Form.Field {form} name="firstName">
 				<Form.Control let:attrs>
-					<Form.Label>First Name</Form.Label>
+					<Form.Label>First name</Form.Label>
 					<Input {...attrs} bind:value={$formData.firstName} />
 				</Form.Control>
-				<Form.Description>This is your public display name.</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
 			<Form.Field {form} name="lastName">
 				<Form.Control let:attrs>
-					<Form.Label>First Name</Form.Label>
+					<Form.Label>First name</Form.Label>
 					<Input {...attrs} bind:value={$formData.lastName} />
 				</Form.Control>
-				<Form.Description>This is your public display name.</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
+
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Form.Label>Email</Form.Label>
 					<Input {...attrs} bind:value={$formData.email} />
 				</Form.Control>
-				<Form.Description>This is your public display name.</Form.Description>
 				<Form.FieldErrors />
 			</Form.Field>
 
@@ -135,38 +147,53 @@
 					<Form.Label>Age</Form.Label>
 					<Input {...attrs} bind:value={$formData.age} />
 				</Form.Control>
-				<Form.Description>This is your public display name.</Form.Description>
+
 				<Form.FieldErrors />
 			</Form.Field>
 
-			{#if $formData.age < 18 && $formData.age > 11}
-				<Form.Field {form} name="parentFirstName">
-					<Form.Control let:attrs>
-						<Form.Label>Parent's first name</Form.Label>
-						<Input {...attrs} bind:value={$formData.parentFirstName} />
-					</Form.Control>
-					<Form.Description>This is your public display name.</Form.Description>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Field {form} name="parentLastName">
-					<Form.Control let:attrs>
-						<Form.Label>Parent's last name</Form.Label>
-						<Input {...attrs} bind:value={$formData.parentLastName} />
-					</Form.Control>
-					<Form.Description>This is your public display name.</Form.Description>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Field {form} name="parentEmail">
-					<Form.Control let:attrs>
-						<Form.Label>Parent's email</Form.Label>
-						<Input {...attrs} bind:value={$formData.parentEmail} />
-					</Form.Control>
-					<Form.Description>This is your public display name.</Form.Description>
-					<Form.FieldErrors />
-				</Form.Field>
-			{/if}
+			<Form.Field {form} name="city">
+				<Form.Control let:attrs>
+					<Form.Label>City</Form.Label>
+					<Input {...attrs} bind:value={$formData.city} />
+				</Form.Control>
 
-			<div class="flex w-full col-span-2 justify-between">
+				<Form.FieldErrors />
+			</Form.Field>
+			<Form.Field {form} name="province">
+				<Form.Control let:attrs>
+					<Form.Label>Province</Form.Label>
+					<input name={attrs.name} value={$formData.province} hidden />
+
+					<Select.Root
+						portal={null}
+						preventScroll={false}
+						onSelectedChange={(s) => {
+							if (s) {
+								$formData.province = s.value;
+							}
+						}}
+					>
+						<Select.Trigger>
+							<Select.Value placeholder="Province" />
+						</Select.Trigger>
+						<Select.Content>
+							<Select.Group>
+								<Select.Label>Provinces</Select.Label>
+								{#each provinces as province}
+									<Select.Item value={province.value} label={province.label}
+										>{province.label}</Select.Item
+									>
+								{/each}
+							</Select.Group>
+						</Select.Content>
+						<Select.Input name="favoriteFruit" />
+					</Select.Root>
+				</Form.Control>
+
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field {form} name="readCareGuide" class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -185,7 +212,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field {form} name="hasCage" class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -200,7 +227,7 @@
 				</Form.Field>
 			</div>
 			{#if $formData.hasCage}
-				<div class="flex w-full col-span-2 justify-between">
+				<div class="flex w-full lg:col-span-2 justify-between">
 					<Form.Field {form} name="cageType" class="flex w-full justify-between">
 						<Form.Control let:attrs>
 							<!-- <input type="hidden" bind:value={$formData.cageType} {...attrs} /> -->
@@ -228,7 +255,7 @@
 						</Form.Control>
 					</Form.Field>
 				</div>
-				<div class="flex w-full col-span-2 justify-between">
+				<div class="flex w-full lg:col-span-2 justify-between">
 					<Form.Field {form} name="cageImage" class="w-full flex justify-between">
 						<Form.Control let:attrs>
 							<div class="flex flex-col gap-2 w-full">
@@ -243,7 +270,7 @@
 				</div>
 			{/if}
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="hasChildren" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -258,7 +285,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="hasPets" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -275,7 +302,7 @@
 			</div>
 
 			{#if $formData.hasPets}
-				<div class="flex w-full col-span-2 justify-between">
+				<div class="flex w-full lg:col-span-2 justify-between">
 					<Form.Field {form} name="petTypes" class="flex w-full justify-between">
 						<Form.Control let:attrs>
 							<div class="flex flex-col gap-2 w-full">
@@ -317,7 +344,7 @@
 					</Form.Field>
 				</div>
 			{/if}
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="hasAllergies" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -332,7 +359,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="surrenderedPets" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -348,7 +375,7 @@
 			</div>
 
 			{#if $formData.surrenderedPets}
-				<div class="flex w-full col-span-2 justify-between">
+				<div class="flex w-full lg:col-span-2 justify-between">
 					<Form.Field {form} name="surrenderedPetType" class="flex w-full justify-between">
 						<Form.Control let:attrs>
 							<div class="flex flex-col gap-2 w-full">
@@ -381,7 +408,7 @@
 					</Form.Field>
 				</div>
 
-				<div class="flex w-full col-span-2 justify-between">
+				<div class="flex w-full lg:col-span-2 justify-between">
 					<Form.Field {form} name="surrenderedPetReason" class="w-full">
 						<Form.Control let:attrs>
 							<Form.Label>Reason for surrender</Form.Label>
@@ -393,7 +420,7 @@
 					</Form.Field>
 				</div>
 			{/if}
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="ownedChinchillas" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -409,7 +436,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="hasChinchilla" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -501,7 +528,7 @@
 				</Form.Field>
 			{/if}
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="hasChinchillaVet" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -527,7 +554,7 @@
       </Form.Field>
     {/if} -->
 
-			<div class="flex w-full col-span-2">
+			<div class="flex w-full lg:col-span-2">
 				<Form.Field name="whyChinchilla" {form} class="w-full">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -542,14 +569,14 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex flex-col w-full col-span-2">
+			<div class="flex flex-col w-full lg:col-span-2">
 				<h3 class="text-lg leading-6 font-medium text-gray-900 mt-6">Acknowledgements</h3>
 				<p class="mt-2 text-sm text-gray-500">
 					Please read and acknowledge the following statements. You must be able to agree and abide
 					by all of the statements below to adopt a chinchilla.
 				</p>
 			</div>
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="hasAirConditioning"
 					{form}
@@ -574,7 +601,7 @@
 					</Form.Control>
 				</Form.Field>
 			</div>
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="financialResponsibility"
 					{form}
@@ -599,7 +626,7 @@
 					</Form.Control>
 				</Form.Field>
 			</div>
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="timeResponsibility"
 					{form}
@@ -624,7 +651,7 @@
 					</Form.Control>
 				</Form.Field>
 			</div>
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="hasSpace" {form} class="w-full flex justify-between items-center gap-2">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -647,7 +674,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field name="cleaningResponsibility" {form} class="w-full flex justify-between">
 					<Form.Control let:attrs>
 						<div class="flex flex-col gap-2 w-full">
@@ -668,7 +695,7 @@
 					</Form.Control>
 				</Form.Field>
 			</div>
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="playtimeResponsibility"
 					{form}
@@ -694,7 +721,7 @@
 					</Form.Control>
 				</Form.Field>
 			</div>
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="breedingAcknowledgement"
 					{form}
@@ -720,7 +747,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="handlingAcknowledgement"
 					{form}
@@ -746,7 +773,7 @@
 				</Form.Field>
 			</div>
 
-			<div class="flex w-full col-span-2 justify-between">
+			<div class="flex w-full lg:col-span-2 justify-between">
 				<Form.Field
 					name="factuallyAccurate"
 					{form}
@@ -779,10 +806,10 @@
 				</div>
 			{/if} -->
 
-			<!-- <div class="flex w-full col-span-2 justify-between">
+			<!-- <div class="flex w-full lg:col-span-2 justify-between">
         <Form.Field name="hasCommitment" {config}> -->
 
-			<Form.Button class="col-span-2 w-full mt-8 gap-2 inline-flex"
+			<Form.Button class="lg:col-span-2 w-full mt-8 gap-2 inline-flex"
 				>Submit Application
 
 				<!-- <Loading /> -->

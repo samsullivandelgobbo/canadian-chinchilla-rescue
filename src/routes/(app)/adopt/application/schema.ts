@@ -5,7 +5,6 @@ export const applicationSchema = z
 		firstName: z
 			.string({})
 			.min(2, 'First name must be at least 2 characters long')
-
 			.max(50, 'First name must be less than 50 characters long'),
 
 		lastName: z
@@ -13,7 +12,21 @@ export const applicationSchema = z
 			.min(1, 'Last name must be at least 1 character long')
 			.max(50, 'Last name must be less than 50 characters long'),
 		email: z.string().email(),
-		age: z.coerce.number().positive().min(12),
+		age: z.coerce
+			.number()
+			.min(18, {
+				message: 'You must be at least 18 years old to adopt a chinchilla.'
+			})
+			.positive('Age must be a positive number')
+			.default(''),
+
+		city: z.string({
+			required_error: 'City is required'
+		}),
+
+		province: z.string({
+			required_error: 'Province is required'
+		}),
 
 		// if age under 18, require parent/guardian info
 		parentFirstName: z

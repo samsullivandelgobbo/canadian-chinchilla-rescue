@@ -68,7 +68,7 @@ export const actions: Actions = {
 					parentFirstName: form.data.parentFirstName,
 					parentLastName: form.data.parentLastName,
 					parentEmail: form.data.parentEmail,
-
+					location: form.data.city + ', ' + form.data.province,
 					hasCage: form.data.hasCage,
 					cageType: form.data.cageType,
 					cageImage: cageImageUrl,

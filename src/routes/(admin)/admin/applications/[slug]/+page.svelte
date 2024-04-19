@@ -1,5 +1,9 @@
 <script lang="ts">
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { Archive, Mail } from 'lucide-svelte';
 	import type { PageData } from './$types';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
 
@@ -8,11 +12,56 @@
 
 {#if application}
 	<div>
-		<div class="px-4 sm:px-0">
-			<h3 class="text-base font-semibold leading-7 text-gray-900">Applicant Information</h3>
-			<p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-				Personal details and application.
-			</p>
+		<div class="px-4 sm:px-0 flex justify-between w-full">
+			<div>
+				<h3 class="text-base font-semibold leading-7 text-gray-900">Applicant Information</h3>
+				<p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+					Personal details and application.
+				</p>
+			</div>
+
+			<div class="flex flex-row gap-2 items-center">
+				<Button variant="outline" href={`mailto:${application.email}`}>
+					<Mail class="w-4 h-4 mr-2" />
+					Reply
+				</Button>
+
+				{#if application.archived}
+					<form action={`/admin/applications/${application.id}?/unarchive`} method="POST">
+						<button>
+							<Button variant="outline">
+								<Archive class="w-4 h-4 mr-2" />
+								Unarchive
+							</Button>
+						</button>
+					</form>
+				{:else}
+					<AlertDialog.Root>
+						<AlertDialog.Trigger asChild let:builder>
+							<Button builders={[builder]} variant="destructive">
+								<Archive class="w-4 h-4 mr-2" />
+								Archive</Button
+							>
+						</AlertDialog.Trigger>
+						<AlertDialog.Content>
+							<AlertDialog.Header>
+								<AlertDialog.Title>Are you sure?</AlertDialog.Title>
+								<AlertDialog.Description>
+									Are you sure you want to archive this application?
+								</AlertDialog.Description>
+							</AlertDialog.Header>
+							<AlertDialog.Footer>
+								<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+								<form action={`/admin/applications/${application.id}?/archive`} method="POST">
+									<button>
+										<Button>Continue</Button>
+									</button>
+								</form>
+							</AlertDialog.Footer>
+						</AlertDialog.Content>
+					</AlertDialog.Root>
+				{/if}
+			</div>
 		</div>
 		<div class="mt-6 border-t border-gray-100">
 			<dl class="divide-y divide-gray-100">
@@ -33,6 +82,12 @@
 					<dt class="text-sm font-medium leading-6 text-gray-900">Age</dt>
 					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 						{application?.age}
+					</dd>
+				</div>
+				<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+					<dt class="text-sm font-medium leading-6 text-gray-900">Location</dt>
+					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+						{application?.location}
 					</dd>
 				</div>
 
